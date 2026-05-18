@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Conveyor Belt</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600;800&display=swap" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── HOME SCREEN ─────────────────────────────── -->
+  <div id="screen-home" class="screen active">
+    <div class="home-wrap">
+      <div class="home-icon">🛡️</div>
+      <h1>THE CONVEYOR BELT</h1>
+      <p class="home-sub">A fast-paced arcade game about data privacy.<br>Sort the data before time runs out!</p>
+
+      <div class="home-cards">
+        <div class="home-card share-card">
+          <span class="home-arrow">←</span>
+          <strong>SHARE IT</strong>
+          <p>Press LEFT for data that's safe to share online.</p>
+        </div>
+        <div class="home-card private-card">
+          <span class="home-arrow">→</span>
+          <strong>KEEP PRIVATE</strong>
+          <p>Press RIGHT to protect sensitive personal info.</p>
+        </div>
+      </div>
+
+      <button id="btn-start" class="btn-coin">INSERT COIN TO START</button>
+    </div>
+  </div>
+
+  <!-- ── GAME SCREEN ─────────────────────────────── -->
+  <div id="screen-game" class="screen">
+
+    <!-- HUD -->
+    <div class="hud">
+      <div class="hud-stat">
+        <span class="hud-label">Score</span>
+        <span id="hud-score" class="hud-val green">0 XP</span>
+      </div>
+
+      <div class="hud-mid">
+        <div class="hud-meta">
+          <span id="hud-num">Packet 1 of 10</span>
+          <span id="hud-time">60s left</span>
+        </div>
+        <div class="timer-track">
+          <div id="timer-fill" class="timer-fill"></div>
+        </div>
+      </div>
+
+      <div class="hud-stat right">
+        <span class="hud-label">Streak</span>
+        <span id="hud-streak" class="hud-val pink">0</span>
+      </div>
+    </div>
+
+    <!-- Feedback toast -->
+    <div id="toast" class="toast hidden">
+      <div id="toast-title" class="toast-title"></div>
+      <div id="toast-body"  class="toast-body"></div>
+    </div>
+
+    <!-- Game area -->
+    <div class="game-area">
+
+      <!-- Progress dots -->
+      <div id="dots" class="dots"></div>
+
+      <!-- Belt labels -->
+      <div class="belt-labels">
+        <span>← SHARE THIS WAY</span>
+        <span>KEEP PRIVATE THIS WAY →</span>
+      </div>
+
+      <!-- Belt -->
+      <div class="belt" id="belt">
+        <div class="belt-stripes"></div>
+        <div class="belt-shadow left"></div>
+        <div class="belt-shadow right"></div>
+        <!-- Packet lives here -->
+        <div id="packet" class="packet">
+          <div class="packet-sub">Data Packet</div>
+          <div id="packet-label" class="packet-label">FULL NAME 👤</div>
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="actions">
+        <button id="btn-share" class="act-btn share">
+          <span class="act-arrow">←</span>
+          <span class="act-name">Share</span>
+          <span class="act-hint">press LEFT arrow</span>
+        </button>
+        <button id="btn-private" class="act-btn private">
+          <span class="act-arrow">→</span>
+          <span class="act-name">Keep Private</span>
+          <span class="act-hint">press RIGHT arrow</span>
+        </button>
+      </div>
+
+      <!-- Hint -->
+      <p id="hint" class="hint">Packet is loading onto the belt...</p>
+
+    </div>
+  </div>
+
+  <!-- ── RESULTS SCREEN ──────────────────────────── -->
+  <div id="screen-results" class="screen">
+    <div class="results-wrap">
+      <h2 class="results-title">GAME OVER!</h2>
+
+      <div class="results-score-box">
+        <span class="results-score-label">Final Score</span>
+        <span id="final-score" class="results-score-val">0 XP</span>
+      </div>
+
+      <div id="results-list" class="results-list"></div>
+
+      <button id="btn-again" class="btn-coin">PLAY AGAIN</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
