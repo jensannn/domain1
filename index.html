@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Cyber Tanod: Barangay Defense Force</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div id="scanlines"></div>
+    <div id="crt-vignette"></div>
+    <div id="app">
+
+      <!-- BOOT SCREEN -->
+      <div id="boot-screen" style="display:none">
+        <div id="boot-content">
+          <pre id="boot-logo">
+  ____  _  _  ____  ____  ____     ____  __   __ _   __  ____
+ / ___)( \/ )(  _ \( ___)(  _ \   (_  _)/ _\ (  ( \ /  \(    \
+( (__   )  /  ) _ &lt; )__)  )   /    )( /    \/    /(  O ) ) D (
+ \___) (__/  (____/(____)(__)__)  (__)\_/\_/\_)__)  \__/(____/</pre>
+          <div class="boot-subtitle">BARANGAY DEFENSE FORCE v1.0</div>
+          <div id="boot-log"></div>
+          <div id="boot-bar-wrap">
+            <div id="boot-bar"><div id="boot-bar-fill"></div></div>
+            <div id="boot-bar-label">LOADING...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TEAM ENTRY SCREEN -->
+      <div id="team-entry" style="display:none">
+        <div id="team-entry-box">
+          <div class="retro-tag">[ CYBER TANOD SYSTEM — INITIALIZE ]</div>
+          <div class="team-entry-title">ENTER TEAM NAME</div>
+          <div class="input-row">
+            <span class="prompt">&gt;&gt;&gt;&nbsp;</span>
+            <input type="text" id="team-name-input" maxlength="18" placeholder="TEAM AGILA" autocomplete="off" spellcheck="false" />
+            <span class="cursor-blink">█</span>
+          </div>
+          <button id="start-btn" class="retro-btn btn-primary">[ LAUNCH MISSION ]</button>
+          <div class="enter-hint">— Press ENTER or click the button —</div>
+        </div>
+      </div>
+
+      <!-- INTRO COMIC -->
+      <div id="intro-comic" style="display:none">
+        <div id="comic-container">
+          <div class="comic-panel" id="cp1">
+            <div class="comic-speaker">KAPITAN DELA CRUZ</div>
+            <div class="comic-art">👮</div>
+            <div class="comic-bubble">"Mga ka-barangay! Ang ating computer shop ay inaatake ng mga hacker! Kailangan natin ng mga CYBER TANOD na mag-depensa!"</div>
+            <div class="comic-beat">PANEL 1 / 3</div>
+          </div>
+          <div class="comic-panel" id="cp2" style="display:none">
+            <div class="comic-speaker">THE HACKERS</div>
+            <div class="comic-art">💀</div>
+            <div class="comic-bubble">"MWAHAHA! Phishing... Malware... Password hacks... Ang inyong data ay AMIN NA!"</div>
+            <div class="comic-beat">PANEL 2 / 3</div>
+          </div>
+          <div class="comic-panel" id="cp3" style="display:none">
+            <div class="comic-speaker">IKAW — ANG CYBER TANOD!</div>
+            <div class="comic-art">🛡️</div>
+            <div class="comic-bubble">"HANDA NA KAMI! Ipaglalaban namin ang ating barangay sa digital na mundo! CYBER TANOD — ACTIVATE!"</div>
+            <div class="comic-beat">PANEL 3 / 3</div>
+          </div>
+          <div id="comic-timer-bar"><div id="comic-timer-fill"></div></div>
+        </div>
+
+            <!-- CHARACTER SELECT SCREEN -->
+        <div id="char-select" style="display:none">
+        <div id="char-select-box">
+        <div class="retro-tag">[ CYBER TANOD SYSTEM — CHOOSE YOUR TANOD ]</div>
+        <div class="char-select-title">PILIIN ANG IYONG TANOD</div>
+        <div id="char-options">
+
+            <div class="char-card" id="char-boy">
+            <div class="char-emoji">👮‍♂️</div>
+            <div class="char-name">TANOD CARLO</div>
+            <div class="char-tag">LALAKI</div>
+            <button class="retro-btn btn-primary char-btn" data-gender="boy" data-emoji="👮‍♂️" data-name="TANOD CARLO">
+                PILIIN
+            </button>
+            </div>
+
+            <div class="char-card" id="char-girl">
+            <div class="char-emoji">👮‍♀️</div>
+            <div class="char-name">TANOD MARIA</div>
+            <div class="char-tag">BABAE</div>
+            <button class="retro-btn btn-pink char-btn" data-gender="girl" data-emoji="👮‍♀️" data-name="TANOD MARIA">
+                PILIIN
+            </button>
+            </div>
+
+        </div>
+        <div class="char-hint">— ang inyong tanod ang mag-depensa sa barangay! —</div>
+        </div>
+        </div>
+      </div>
+
+      <!-- MAIN GAME SCREEN -->
+      <div id="game-screen" style="display:none">
+
+        <!-- TOP BAR -->
+        <div id="top-bar">
+          <div id="top-team">
+            <span class="top-label"></span>
+            <span id="disp-team">---</span>
+          </div>
+          <div id="top-xp">
+            <div id="xp-row">
+              <span class="top-label">XP</span>
+              <span id="disp-xp">0</span>
+              <span id="disp-tier" class="tier-badge">ROOKIE TANOD</span>
+            </div>
+            <div id="xp-bar-wrap">
+              <div id="xp-bar-inner"></div>
+            </div>
+          </div>
+          <div id="top-streak">
+            <span class="top-label">STREAK</span>
+            <span id="disp-streak">0</span>
+            <span class="streak-fire">🔥</span>
+          </div>
+        </div>
+
+        <!-- BODY: SIDEBAR + MAIN -->
+        <div id="game-body">
+
+          <!-- SIDEBAR -->
+          <div id="sidebar">
+            <div class="sidebar-header">[ MISSIONS ]</div>
+            <div id="level-list">
+              <div class="lvl-item" data-lv="1"><span class="lvl-num">01</span><span class="lvl-name">CONVEYOR BELT</span><span class="lvl-dot">○</span></div>
+              <div class="lvl-item" data-lv="2"><span class="lvl-num">02</span><span class="lvl-name">SPOT THE PHISH</span><span class="lvl-dot">○</span></div>
+              <div class="lvl-item" data-lv="3"><span class="lvl-num">03</span><span class="lvl-name">PASSWORD POWER</span><span class="lvl-dot">○</span></div>
+              <div class="lvl-item" data-lv="4"><span class="lvl-num">04</span><span class="lvl-name">SPEED ROUND</span><span class="lvl-dot">○</span></div>
+              <div class="lvl-item" data-lv="5"><span class="lvl-num">05</span><span class="lvl-name">LINK INSPECTOR</span><span class="lvl-dot">○</span></div>
+              <div class="lvl-item" data-lv="6"><span class="lvl-num">06</span><span class="lvl-name">SCAM INBOX</span><span class="lvl-dot">○</span></div>
+              <div class="lvl-item" data-lv="7"><span class="lvl-num">07</span><span class="lvl-name">SAFE PROFILE</span><span class="lvl-dot">○</span></div>
+              <div class="lvl-item boss" data-lv="8"><span class="lvl-num">08</span><span class="lvl-name">⚡ BOSS LEVEL</span><span class="lvl-dot">○</span></div>
+            </div>
+            <div id="sidebar-tanod">
+              <div class="sidebar-header">[ ACTIVE TANOD ]</div>
+                <div id="active-tanod-display">
+                <span id="tanod-emoji-disp">🛡️</span>
+                <span id="tanod-name-disp">PLAYER 1</span>
+                </div>
+              <div id="rotation-hint">Rotate every 2 levels</div>
+            </div>
+          </div>
+
+          <!-- MAIN CONTENT AREA -->
+          <div id="main-area">
+
+            <!-- LEVEL TRANSITION SPLASH -->
+            <div id="level-splash" style="display:none">
+              <div id="splash-inner">
+                <div id="splash-lvl"></div>
+                <div id="splash-name"></div>
+                <div id="splash-desc"></div>
+                <div id="splash-count"></div>
+              </div>
+            </div>
+
+            <!-- LIVE LEVEL CONTENT -->
+            <div id="level-content"></div>
+
+            <!-- WRONG ANSWER FEEDBACK POPUP -->
+            <div id="feedback-overlay" style="display:none">
+              <div id="feedback-box">
+                <div id="fb-icon"></div>
+                <div id="fb-title"></div>
+                <div id="fb-msg"></div>
+                <div id="fb-count"></div>
+              </div>
+            </div>
+
+            <!-- XP FLOAT ANIMATION -->
+            <div id="xp-float" style="display:none"></div>
+
+            <!-- SCREEN FLASH -->
+            <div id="screen-flash"></div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- FINAL SCORE SCREEN -->
+      <div id="final-screen" style="display:none">
+        <div id="final-box">
+          <div class="final-header">★ MISSION COMPLETE ★</div>
+          <div id="final-team"></div>
+          <div id="final-badge">
+            <div id="final-badge-icon"></div>
+            <div id="final-badge-label"></div>
+          </div>
+          <div id="final-xp"></div>
+          <div id="final-xp-bar-wrap"><div id="final-xp-bar-fill"></div></div>
+          <div id="final-quote"></div>
+          <div class="final-footer-note">[ HALL OF HONOR — SCREENSHOT THIS SCREEN FOR DOCUMENTATION ]</div>
+          <button id="play-again-btn" class="retro-btn btn-secondary">[ PLAY AGAIN ]</button>
+        </div>
+      </div>
+
+    </div>
+    <script src="main.js"></script>
+  </body>
+</html>
