@@ -52,26 +52,15 @@ html, body {
 }
 #app {
   position: fixed; inset: 0; overflow: hidden;
-  background: radial-gradient(ellipse at 30% 20%, #1e0a40 0%, #0D0922 60%, #060412 100%);
+  background: transparent;
 }
 
-/* ── STAR BACKGROUND ── */
+/* ── GENERATED BACKGROUND ── */
 #app::before {
   content: '';
-  position: absolute; inset: 0; pointer-events: none; z-index: 0;
-  background-image:
-    radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.7) 0%, transparent 100%),
-    radial-gradient(1px 1px at 25% 40%, rgba(255,200,255,0.6) 0%, transparent 100%),
-    radial-gradient(1px 1px at 40% 8%,  rgba(200,255,255,0.7) 0%, transparent 100%),
-    radial-gradient(1px 1px at 60% 25%, rgba(255,255,200,0.7) 0%, transparent 100%),
-    radial-gradient(1px 1px at 75% 10%, rgba(255,255,255,0.6) 0%, transparent 100%),
-    radial-gradient(1px 1px at 88% 35%, rgba(200,200,255,0.7) 0%, transparent 100%),
-    radial-gradient(1px 1px at 15% 65%, rgba(255,180,255,0.5) 0%, transparent 100%),
-    radial-gradient(1px 1px at 50% 80%, rgba(180,255,255,0.5) 0%, transparent 100%),
-    radial-gradient(1px 1px at 90% 70%, rgba(255,255,180,0.5) 0%, transparent 100%),
-    radial-gradient(2px 2px at 35% 55%, rgba(255,100,255,0.4) 0%, transparent 100%),
-    radial-gradient(2px 2px at 80% 85%, rgba(100,200,255,0.4) 0%, transparent 100%),
-    radial-gradient(1px 1px at 5%  90%, rgba(255,255,255,0.5) 0%, transparent 100%);
+  position: absolute; inset: -5%; pointer-events: none; z-index: 0;
+  background: url('background.png') center/cover no-repeat;
+  filter: blur(12px) brightness(0.35);
 }
 
 /* ── RAINBOW BORDER UTIL ── */
@@ -797,63 +786,87 @@ html, body {
 
 #belt-arena {
   flex: 1;
-  display: flex; align-items: center;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(255,255,255,0.015) 0px,
-      rgba(255,255,255,0.015) 28px,
-      rgba(255,63,255,0.04)   28px,
-      rgba(255,63,255,0.04)   30px
-    );
+  background: var(--bg3);
   border: 3px solid var(--pink)44;
   position: relative;
   overflow: hidden;
-  min-height: 130px;
+  min-height: 250px;
 }
-#belt-arena::before {
-  content:'';
-  position:absolute; inset:0; pointer-events: none;
-  background: repeating-linear-gradient(
-    90deg,
-    transparent 0px, transparent 38px,
-    rgba(255,63,255,0.06) 38px, rgba(255,63,255,0.06) 40px
-  );
-  animation: belt-scroll 1.6s linear infinite;
+#belt-camera {
+  position: absolute;
+  inset: 0;
+  perspective: 800px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-@keyframes belt-scroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-40px); }
+#belt-scene {
+  width: 320px;
+  height: 800px;
+  transform-style: preserve-3d;
+  transform: rotateX(65deg) translateY(-50px);
+  position: relative;
+}
+#belt-track {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-color: rgba(15, 8, 30, 0.8);
+  border-left: 4px solid var(--pink);
+  border-right: 4px solid var(--pink);
+  box-shadow: 0 0 30px var(--pink)55, inset 0 0 30px var(--pink)33;
+  background-image:
+    linear-gradient(to top, transparent 0%, var(--bg3) 80%),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px, transparent 38px,
+      rgba(255,63,255,0.5) 38px, rgba(255,63,255,0.5) 40px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px, transparent 38px,
+      rgba(255,63,255,0.2) 38px, rgba(255,63,255,0.2) 40px
+    );
+  background-position: 0 0, 0 0, 0 0;
+  animation: belt-scroll-3d 1.5s linear infinite;
+  z-index: 0;
+}
+@keyframes belt-scroll-3d {
+  from { background-position: 0 0, 0 -40px, 0 0; }
+  to   { background-position: 0 0, 0 0, 0 0; }
 }
 #belt-dir-left {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
   font-family: var(--font-pixel);
   font-size: clamp(7px, 1vw, 10px);
   color: var(--lime);
   text-shadow: 0 0 10px var(--lime);
   letter-spacing: 1px;
-  padding: 0 14px;
-  flex-shrink: 0;
-  z-index: 1;
+  z-index: 2;
   line-height: 1.6;
 }
 #belt-dir-right {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
   font-family: var(--font-pixel);
   font-size: clamp(7px, 1vw, 10px);
   color: var(--purple);
   text-shadow: 0 0 10px var(--purple);
   letter-spacing: 1px;
-  padding: 0 14px;
-  flex-shrink: 0;
-  z-index: 1;
+  z-index: 2;
   line-height: 1.6;
   text-align: right;
 }
-#belt-center {
-  flex: 1;
-  display: flex; align-items: center; justify-content: center;
-  z-index: 1;
-}
 #belt-packet-card {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  margin-left: -140px;
   display: flex; flex-direction: column; align-items: center; gap: 6px;
   border: 3px solid var(--pink);
   background: rgba(22,13,48,0.92);
@@ -862,6 +875,7 @@ html, body {
   animation: packet-pulse 1.4s ease-in-out infinite;
   min-width: 220px;
   text-align: center;
+  transform-origin: bottom center;
 }
 @keyframes packet-pulse {
   0%,100% { box-shadow: 0 0 20px var(--pink)66, 0 0 40px var(--purple)33; }
@@ -890,12 +904,13 @@ html, body {
   0%,100% { transform: translateY(0); }
   50%     { transform: translateY(5px); }
 }
-@keyframes packet-roll {
-  from { transform: translateX(120px); }
-  to   { transform: translateX(-120px); }
+@keyframes packet-roll-3d {
+  from { transform: translateY(-100px) rotateX(-65deg); opacity: 0; }
+  10%  { opacity: 1; }
+  to   { transform: translateY(500px) rotateX(-65deg); opacity: 1; }
 }
-.packet-rolling {
-  animation: packet-roll 40s linear infinite;
+#belt-packet-card.packet-rolling {
+  animation: packet-roll-3d 5s linear forwards, packet-pulse 1.4s ease-in-out infinite;
 }
 #belt-action-buttons {
   display: flex; gap: 16px;

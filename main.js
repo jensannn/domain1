@@ -470,14 +470,17 @@ function startLevel1() {
         ${items.map((_,i) => `<div class="belt-dot" id="bdot-${i}"></div>`).join('')}
       </div>
       <div id="belt-arena">
-        <div id="belt-dir-left">← SHARE THIS WAY</div>
-        <div id="belt-center">
-          <div id="belt-packet-card">
-            <div class="packet-label">DATA PACKET</div>
-            <div class="packet-name" id="packet-name-el"></div>
-            <div class="packet-arrow">↓</div>
+        <div id="belt-camera">
+          <div id="belt-scene">
+            <div id="belt-track"></div>
+            <div id="belt-packet-card">
+              <div class="packet-label">DATA PACKET</div>
+              <div class="packet-name" id="packet-name-el"></div>
+              <div class="packet-arrow">↓</div>
+            </div>
           </div>
         </div>
+        <div id="belt-dir-left">← SHARE THIS WAY</div>
         <div id="belt-dir-right">KEEP PRIVATE THIS WAY →</div>
       </div>
       <div id="belt-action-buttons">
@@ -516,6 +519,7 @@ function startLevel1() {
     updateDots(idx);
     // start rolling animation across the belt
     packetCard.classList.remove('packet-rolling');
+    packetCard.style.transition = 'none';
     packetCard.style.transform = 'none';
     void packetCard.offsetWidth;
     packetCard.classList.add('packet-rolling');
@@ -527,11 +531,15 @@ function startLevel1() {
     answering = true;
     const item = items[currentIdx];
 
-    // stop rolling and fly the packet off in chosen direction
+    const computed = window.getComputedStyle(packetCard).transform;
     packetCard.classList.remove('packet-rolling');
+    packetCard.style.transform = computed;
+    void packetCard.offsetWidth;
+
+    // stop rolling and fly the packet off in chosen direction
     const flyDir = choice === 'share' ? '-220px' : '220px';
     packetCard.style.transition = 'transform 0.25s ease, opacity 0.25s ease';
-    packetCard.style.transform = `translateX(${flyDir})`;
+    packetCard.style.transform = computed === 'none' ? `translateX(${flyDir})` : `${computed} translateX(${flyDir})`;
     packetCard.style.opacity = '0';
 
     if (choice === item.answer) {
