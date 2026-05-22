@@ -3,6 +3,11 @@
 // Pure Vanilla JavaScript Game Engine
 // ═══════════════════════════════════════════════════
 
+// ── DEV / TEST MODE ──────────────────────────────
+// Set to true to show the Test Mode section in Options.
+// Set to false before deploying to players.
+const DEV_MODE = false;
+
 // ── AUDIO ENGINE ──────────────────────────────────
 const AC = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -32,6 +37,7 @@ function bossSound(){
 }
 
 // ── GAME STATE ────────────────────────────────────
+// ── GAME STATE ────────────────────────────────────
 const GS = {
   teamName: '',
   xp: 0,
@@ -39,8 +45,176 @@ const GS = {
   level: 0,          // 1-8
   levelsDone: [],
   playerIndex: 0,    // 0-3, rotates every 2 levels
-  character: { gender: 'boy', emoji: '👮‍♂️', name: 'TANOD CARLO' },
+  character: { gender: 'boy', name: 'TANOD CARLO' },
 };
+
+// ═══════════════════════════════════════════════════
+// GAME LEVEL DATABASES (MODIFIABLE BY CREATOR)
+// ═══════════════════════════════════════════════════
+
+// ── LEVEL 1: CONVEYOR BELT ──
+const LEVEL1_ITEMS = [
+  { label: '📛 Full Name',        answer: 'private', xp: 10, recap: 'Keep your full name private as scammers can use it for identity theft and impersonation.' },
+  { label: '🎨 Favorite Color',   answer: 'share',   xp: 10, recap: 'Sharing your favorite color is safe since it cannot be used to compromise your security.' },
+  { label: '🏠 Home Address',     answer: 'private', xp: 10, recap: 'Your home address must be private to prevent physical safety risks and targeted scams.' },
+  { label: '🏫 School Name',      answer: 'share',   xp: 10, recap: 'Sharing your school name is generally safe but avoid posting it alongside specific schedules.' },
+  { label: '🔑 Password',         answer: 'private', xp: 10, recap: 'Your password must remain absolutely private and never shared with anyone under any circumstances.' },
+  { label: '🐾 Pet\'s Name',      answer: 'share',   xp: 10, recap: 'Sharing your pet\'s name is safe but avoid using it as your password or security question answer.' },
+  { label: '📅 Birthday (Full)',  answer: 'private', xp: 10, recap: 'Your full birthday should be private since it is a crucial piece of information used for account recovery.' },
+  { label: '👤 Username',         answer: 'share',   xp: 10, recap: 'Your username is safe to share as it is public-facing, but ensure it does not contain sensitive details.' },
+  { label: '📞 Phone Number',     answer: 'private', xp: 10, recap: 'Your phone number should remain private to protect you from spam calls and SMS phishing attacks.' },
+  { label: '🎮 Hobby',            answer: 'share',   xp: 10, recap: 'Sharing your hobbies is a great and safe way to connect with others online without exposing personal data.' },
+];
+
+// ── LEVEL 2: SPOT THE PHISH ──
+const PHISH_EMAILS = [
+  {
+    from:    'kapitan@brgy-sanjose.c0m',
+    fromRecap: 'The email address kapitan@brgy-sanjose.c0m uses the number "0" instead of the letter "o" to impersonate the official Barangay Kapitan.',
+    to:      'tanod@barangay.ph',
+    subject: 'URGENT: Verify Your Account NOW!!!',
+    body: [
+      { text: 'Dear Resident,', click: false },
+      { text: ' Your account has been COMPROMISED!!! Click here NOW to verify:', click: false },
+      { text: ' CLICK HERE NOW →', click: true, hint: '"Click here NOW" urgency link', recap: 'Urgent calls to action like "CLICK HERE NOW" are classic pressure tactics used to induce panic and hasty actions.' },
+      { text: ' Or visit: ', click: false },
+      { text: 'http://brgy-sanjose-verify.freesite.net', click: true, hint: 'Suspicious link — not official .gov.ph', recap: 'Official government websites use ".gov.ph" domains, not free hosting services like "freesite.net".' },
+      { text: ' Failure to comply will result in IMMEDIATE SUSPENSION!!!', click: false },
+      { text: ' — Kap. dela Cruz', click: false },
+    ],
+    susItems: [0,1], // indices of click:true that are suspicious (sender + link + urgency)
+    allBad: 3,       // total bad elements including sender
+    notes: 'Red flags: fake sender, urgency language, suspicious link'
+  },
+  {
+    from:    'gcash-support@gcash-rewards-ph.xyz',
+    fromRecap: 'Official GCash support will never email you from a random ".xyz" domain address.',
+    to:      'you@email.com',
+    subject: 'You have won 5000 PESOS! Claim now!',
+    body: [
+      { text: 'Congratulations!!!', click: false },
+      { text: ' You have been selected for a SPECIAL REWARD of ₱5,000!', click: false },
+      { text: ' To claim, send your ', click: false },
+      { text: 'full name, birthday, and PIN', click: true, hint: 'Asking for personal info + PIN — NEVER share!', recap: 'Legitimate services like GCash will never ask for your personal PIN or sensitive account details via email.' },
+      { text: ' to this number: 09XX-XXX-XXXX.', click: false },
+      { text: ' Act fast — offer expires in 1 HOUR!!!', click: true, hint: 'Artificial urgency tactic', recap: 'Creating artificial urgency is a psychological trick scammers use to stop you from verifying their claims.' },
+      { text: ' Claim here: ', click: false },
+      { text: 'http://gcash-promo.free.nf/claim', click: true, hint: 'Fake GCash site — not gcash.com.ph', recap: 'Always check the address bar, as fake GCash domains hosted on "free.nf" are designed to steal your credentials.' },
+    ],
+    allBad: 4,
+    notes: 'Red flags: asking for PIN, fake domain, unrealistic prize'
+  },
+];
+
+// ── LEVEL 3: PASSWORD POWER-UP ──
+const PW_ROUNDS = [
+  {
+    question: 'Which password is STRONGEST?',
+    options:  ['12345', 'MySunshine', 'M@ri0_2024!', 'password'],
+    correct:  2,
+    explanation: 'M@ri0_2024! has uppercase, numbers, symbols, and length!',
+    recap: 'The strongest passwords combine uppercase and lowercase letters, numbers, and special symbols for maximum complexity.'
+  },
+  {
+    question: 'Pick the STRONGEST password:',
+    options:  ['Juan123', 'Br@y_SanJose#9', 'hello', 'CAPITALONLY'],
+    correct:  1,
+    explanation: 'Br@y_SanJose#9 combines letters, symbols, numbers!',
+    recap: 'A mixture of character types makes a password resilient against automated brute-force hacking attempts.'
+  },
+  {
+    question: 'Which one would HACKERS hate most?',
+    options:  ['iloveyou', 'Pass1234', 'qwerty!', 'T@nd@7_Brgy#2024'],
+    correct:  3,
+    explanation: 'T@nd@7_Brgy#2024 is long, random, and complex!',
+    recap: 'Longer passwords with custom symbols and numbers take significantly more time and resources for hackers to crack.'
+  },
+];
+
+// ── LEVEL 4: SPEED ROUND ──
+const SPEED_SCENARIOS = [
+  { text: 'A stranger online asks for your school address.', icon:'👤', answer:'unsafe', xp:5, recap: 'Sharing physical details like school address with strangers on the internet exposes you to severe offline safety hazards.' },
+  { text: 'You use HTTPS websites for research.', icon:'🔒', answer:'safe', xp:5, recap: 'HTTPS encrypts your connection, ensuring that the data sent between your browser and the website cannot be intercepted.' },
+  { text: 'You use the same password for ALL your apps.', icon:'🔑', answer:'unsafe', xp:5, recap: 'Reusing passwords across multiple accounts creates a single point of failure if one of those apps gets breached.' },
+  { text: 'You log out of shared computers after use.', icon:'💻', answer:'safe', xp:5, recap: 'Logging out of public or shared computers prevents subsequent users from accessing your personal accounts.' },
+  { text: 'You click a link from an unknown email.', icon:'📧', answer:'unsafe', xp:5, recap: 'Unsolicited email links can lead to malicious cloning sites or initiate automatic downloads of malware.' },
+  { text: 'You enable 2-factor authentication on GCash.', icon:'📱', answer:'safe', xp:5, recap: 'Two-factor authentication adds an essential second layer of security, blocking access even if someone knows your password.' },
+  { text: 'You share your OTP code with a "GCash agent".', icon:'💬', answer:'unsafe', xp:5, recap: 'Official support agents will never ask for your OTP, which grants direct access to authorize transactions.' },
+  { text: 'You update your apps when notified.', icon:'🔄', answer:'safe', xp:5, recap: 'Keeping your software updated ensures that known security loopholes and system vulnerabilities are patched immediately.' },
+  { text: 'You save passwords in a shared notebook.', icon:'📓', answer:'unsafe', xp:5, recap: 'Physical notebooks containing credentials are easily lost, stolen, or viewed by unauthorized people nearby.' },
+  { text: 'You use a strong password with symbols and numbers.', icon:'🛡️', answer:'safe', xp:5, recap: 'High-entropy passwords with letters, numbers, and symbols are the first and best line of defense for your digital accounts.' },
+  { text: 'You post your full birthday on social media.', icon:'🎂', answer:'unsafe', xp:5, recap: 'Scammers can harvest publicly shared birth dates to answer security questions and verify identity for account takeovers.' },
+  { text: 'You check URLs before clicking links.', icon:'🔍', answer:'safe', xp:5, recap: 'Checking destination URLs helps you spot deceptive spelling tricks and confirm you are visiting the authentic site.' },
+  { text: 'You download apps from unofficial websites.', icon:'⬇️', answer:'unsafe', xp:5, recap: 'Third-party marketplaces often host modified applications containing embedded spyware and Trojans.' },
+  { text: 'You use a VPN on public Wi-Fi.', icon:'📡', answer:'safe', xp:5, recap: 'A Virtual Private Network encrypts your internet traffic on open networks, protecting it from local eavesdroppers.' },
+  { text: 'You share your home address in a public chat group.', icon:'🏠', answer:'unsafe', xp:5, recap: 'Public chat rooms allow anyone to view your location, making you vulnerable to real-world threats and social engineering.' },
+];
+
+// ── LEVEL 5: LINK INSPECTOR ──
+const URL_ITEMS = [
+  { url: 'https://deped.gov.ph',                    answer: 'safe', reason: '✅ Official .gov.ph domain = SAFE!', recap: 'Genuine Philippine government portals always end in the official ".gov.ph" domain extension.' },
+  { url: 'http://depd-ph.weebly.com',               answer: 'fake', reason: '❌ Fake: misspelled + weebly.com = NOT official', recap: 'Misspelled domains and free blog hosting platforms like "weebly.com" are telltale signs of a malicious clone.' },
+  { url: 'https://gcash-rewards.ph.freesite.net',   answer: 'fake', reason: '❌ Fake: gcash is NOT on freesite.net', recap: 'Scammers use nested domains on free web hosts like "freesite.net" to disguise phishing sites as official portals.' },
+  { url: 'https://www.bsp.gov.ph',                  answer: 'safe', reason: '✅ Official BSP government site', recap: 'Checking for ".gov.ph" is the most reliable way to verify the authenticity of a government institution online.' },
+  { url: 'https://fb-security-update.xyz',          answer: 'fake', reason: '❌ Fake: Facebook never uses .xyz domain', recap: 'Major tech corporations like Facebook will never contact you using cheap, suspicious extensions like ".xyz".' },
+];
+
+// ── LEVEL 6: SCAM INBOX MEMORY ──
+const MEMORY_EMAILS = [
+  {
+    from: 'prizes@win-gcash-now.xyz',
+    subject: 'YOU WON ₱10,000! CLAIM NOW!',
+    body: 'You have been selected! Send your full name, birthday, and bank details to claim your prize. Offer expires TONIGHT!'
+  },
+  {
+    from: 'admin@brgy-sanjose.free.nf',
+    subject: 'URGENT: Account Verification Required',
+    body: 'Your barangay ID is about to expire. Click the link below to verify. Failure to comply = account suspended.'
+  },
+  {
+    from: 'support@gcash-ph-official.com',
+    subject: 'Security Alert: Unauthorized Login',
+    body: 'Someone tried to access your GCash. Send your OTP immediately to: 09XX-XXX-XXXX to secure your account.'
+  },
+];
+
+const MEMORY_QUESTIONS = [
+  { text: 'One sender\'s email ended in .gov.ph', answer: false, recap: 'None of the suspicious scam emails ended in the legitimate ".gov.ph" government domain.' },
+  { text: 'One email offered free prizes (₱10,000)', answer: true, recap: 'Unsolicited lottery claims and cash rewards are common bait used in financial phishing campaigns.' },
+  { text: 'One subject line said "URGENT"', answer: true, recap: 'Urgent alerts are deliberately designed to trigger immediate panic and override your logical thinking.' },
+  { text: 'All 3 emails asked for your OTP', answer: false, recap: 'While not all asked for an OTP, any request for an One-Time Password is a massive security red flag.' },
+  { text: 'One email mentioned a barangay ID', answer: true, recap: 'Scammers frequently reference local community elements like Barangay IDs to build a false sense of trust.' },
+  { text: 'One email was from gcash.com.ph', answer: false, recap: 'None of the emails originated from real GCash channels, relying instead on deceptive, look-alike domains.' },
+];
+
+// ── LEVEL 7: SAFE PROFILE ──
+const PROFILE_FIELDS = [
+  { name: '👤 Full Name',       correct: 'private', desc: 'Your official first name and family surname.', recap: 'Hiding your full name protects you from public tracking and identity theft schemes.' },
+  { name: '😎 Nickname',        correct: 'public',  desc: 'A casual name or gaming alias your friends use.', recap: 'Nicknames are safe for public display since they do not expose your legal identity.' },
+  { name: '🏫 School',          correct: 'public',  desc: 'The name of the school or campus you attend.', recap: 'School name is public-level information, but keep specific class schedules private.' },
+  { name: '📚 Grade Level',     correct: 'private', desc: 'Your current year level (e.g., Grade 7).', recap: 'Keeping your grade level private adds a layer of protection against online child profiling.' },
+  { name: '🎂 Birthday',        correct: 'private', desc: 'Your full month, day, and year of birth.', recap: 'Birthdays are commonly used as security questions and identity verification points, so keep them private.' },
+  { name: '📞 Phone Number',    correct: 'private', desc: 'Your private 11-digit mobile contact number.', recap: 'Your phone number must remain private to prevent SMS scams, unsolicited calls, and direct contact.' },
+  { name: '❤️ Favorite Subject',correct: 'public',  desc: 'School topics you enjoy learning about.', recap: 'Sharing educational interests is safe and excellent for positive community interaction.' },
+  { name: '🏘️ Home Barangay',   correct: 'private', desc: 'The specific neighborhood or area where you reside.', recap: 'Your home barangay should be private to prevent malicious actors from mapping your physical location.' },
+];
+
+// ── LEVEL 8: BOSS CHALLENGES ──
+const BOSS_STEP1_ITEMS = [
+  { label: '📛 Full Name', answer: 'private', recap: 'Full names must be kept private online to prevent cybercriminals from mining your personal data.' },
+  { label: '🎮 Gaming Username', answer: 'share', recap: 'Gaming usernames are safe to share but should never match your real names or passwords.' },
+  { label: '🏠 Home Address', answer: 'private', recap: 'Your home address must be private to secure your physical home and personal privacy.' },
+];
+
+const BOSS_STEP2_ITEMS = [
+  { text: 'support@gcash-update-now.xyz', isBad: true, recap: 'Fake domains like "gcash-update-now.xyz" are hosted by scammers to harvest your account credentials.' },
+  { text: 'CLICK HERE to secure your account NOW!', isBad: true, recap: 'Impulsive warnings demanding immediate action are classic social engineering tricks designed to deceive.' },
+  { text: 'Dear Customer', isBad: false, recap: 'Generic greetings can sometimes be generic, but always look out for suspicious domains and links.' },
+];
+
+const BOSS_STEP3_ITEMS = [
+  { question: 'CHOOSE THE STRONGEST PASSWORD!', options: ['password123', 'Brgy@Tanod#9', 'hello', 'qwerty'], correct: 1, recap: 'A strong password with mixed character types protects your system against hacking attempts.' }
+];
 
 // ── DOM REFS ──────────────────────────────────────
 const $ = id => document.getElementById(id);
@@ -67,14 +241,34 @@ const xpBarInner     = $('xp-bar-inner');
 const dispStreak     = $('disp-streak');
 const activeTanodDisp= $('active-tanod-display');
 
-// ── TIMERS ───────────────────────────────────────
+// ── TIMERS & MAP STATE ─────────────────────────────
 let timerInterval = null;
 let feedbackTimeout = null;
+let mapLoopId = null;
+let isPaused = false;
 
 function clearAllTimers() {
   clearInterval(timerInterval); timerInterval = null;
   clearTimeout(feedbackTimeout); feedbackTimeout = null;
+  cancelAnimationFrame(mapLoopId);
 }
+
+// ── INPUT HANDLING ────────────────────────────────
+const Input = { up: false, down: false, left: false, right: false, space: false };
+document.addEventListener('keydown', e => {
+  if(e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') Input.up = true;
+  if(e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') Input.down = true;
+  if(e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') Input.left = true;
+  if(e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') Input.right = true;
+  if(e.key === ' ' || e.key === 'Enter') Input.space = true;
+});
+document.addEventListener('keyup', e => {
+  if(e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') Input.up = false;
+  if(e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') Input.down = false;
+  if(e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') Input.left = false;
+  if(e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') Input.right = false;
+  if(e.key === ' ' || e.key === 'Enter') Input.space = false;
+});
 
 // ═══════════════════════════════════════════════════
 // BOOT SEQUENCE
@@ -102,7 +296,7 @@ function runBootSequence() {
       labelEl.textContent = '[ SYSTEM READY ]';
       fillEl.style.width = '100%';
       beep(880,'sine',0.2,0.2);
-      setTimeout(showTeamEntry, 600);
+      setTimeout(showMainMenu, 600);
       return;
     }
     const span = document.createElement('span');
@@ -119,18 +313,174 @@ function runBootSequence() {
 }
 
 // ═══════════════════════════════════════════════════
-// TEAM ENTRY
+// MAIN & PAUSE MENUS
 // ═══════════════════════════════════════════════════
-function showTeamEntry() {
-  const bootEl = document.getElementById('boot-screen');
-  const teamEl = document.getElementById('team-entry');
+function showMainMenu() {
+  $('boot-screen').style.display = 'none';
+  $('main-menu-screen').style.display = 'flex';
+  
   const inputEl = document.getElementById('team-name-input');
-  if (bootEl) bootEl.style.display = 'none';
-  if (teamEl) teamEl.style.display = 'flex';
   setTimeout(() => { if (inputEl) inputEl.focus(); }, 100);
+
+  $('btn-play').onclick = () => {
+    submitTeam();
+  };
+  $('btn-options').onclick = openOptions;
+  $('btn-exit').onclick = () => {
+    document.body.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100vh;color:red;font-family:monospace;font-size:24px;">SYSTEM SHUTDOWN INITIATED...</div>';
+  };
 }
 
-if (startBtn) startBtn.addEventListener('click', submitTeam);
+// ═══════════════════════════════════════════════════
+// OPTIONS MODAL
+// ═══════════════════════════════════════════════════
+let sfxEnabled = true;
+
+// Helper: update a toggle switch's visual state
+function setOptSwitch(switchEl, labelEl, isOn, colors) {
+  switchEl.dataset.on = isOn ? 'true' : 'false';
+  labelEl.textContent = isOn ? 'ON' : 'OFF';
+  switchEl.classList.toggle('opt-switch--active', isOn);
+}
+
+function openOptions() {
+  select_s();
+  const modal = $('options-modal');
+  if (!modal) return;
+
+  // Show dev section only if DEV_MODE flag is true
+  const devSection = $('dev-mode-section');
+  if (devSection) devSection.style.display = DEV_MODE ? 'block' : 'none';
+
+  modal.style.display = 'flex';
+}
+
+function closeOptions() {
+  const modal = $('options-modal');
+  if (modal) modal.style.display = 'none';
+  select_s();
+}
+
+// ── Wire up all options controls immediately (script is at bottom of body) ──
+const optBtn = $('btn-options');
+if (optBtn) optBtn.onclick = openOptions;
+
+// Close button
+const closeBtn = $('opt-close-btn');
+if (closeBtn) closeBtn.onclick = closeOptions;
+
+// Close on backdrop click
+const modal = $('options-modal');
+if (modal) modal.onclick = e => {
+  if (e.target === modal) closeOptions();
+};
+
+// ── SFX Toggle ──
+const sfxSwitch = $('opt-sfx-switch');
+const sfxLabel  = $('sfx-label');
+if (sfxSwitch) {
+  // Set initial visual
+  setOptSwitch(sfxSwitch, sfxLabel, sfxEnabled);
+  sfxSwitch.onclick = () => {
+    sfxEnabled = !sfxEnabled;
+    setOptSwitch(sfxSwitch, sfxLabel, sfxEnabled);
+    if (sfxEnabled) select_s();
+  };
+}
+
+// ── Unlock All Levels Toggle (DEV only) ──
+const unlockSwitch = $('opt-unlock-switch');
+const unlockLabel  = $('unlock-label');
+if (unlockSwitch) {
+  unlockSwitch.onclick = () => {
+    if (!DEV_MODE) return;
+    const isOn = unlockSwitch.dataset.on !== 'true';
+    setOptSwitch(unlockSwitch, unlockLabel, isOn);
+    if (isOn) {
+      GS.levelsDone = [1, 2, 3, 4, 5, 6, 7];
+      GS.currentNode = 8;
+      select_s();
+      // Refresh map if visible
+      const wm = document.getElementById('world-map-view');
+      if (wm && wm.style.display !== 'none') showWorldMap();
+    } else {
+      GS.levelsDone = [];
+      GS.currentNode = 1;
+      select_s();
+    }
+  };
+}
+
+// ── Reset Progress Toggle (DEV only) ──
+const resetSwitch = $('opt-reset-switch');
+const resetLabel  = $('reset-label');
+if (resetSwitch) {
+  resetSwitch.onclick = () => {
+    if (!DEV_MODE) return;
+    const isOn = resetSwitch.dataset.on !== 'true';
+    setOptSwitch(resetSwitch, resetLabel, isOn);
+    if (isOn) {
+      GS.levelsDone = [];
+      GS.xp = 0;
+      GS.streak = 0;
+      GS.currentNode = 1;
+      // Also reset unlock toggle
+      if (unlockSwitch) setOptSwitch(unlockSwitch, unlockLabel, false);
+      updateHUD();
+      buzzer();
+      // Auto-flip back off after 1s to show it as a momentary action
+      setTimeout(() => setOptSwitch(resetSwitch, resetLabel, false), 1000);
+    }
+  };
+}
+
+// ── ESCAPE KEY HANDLER ───────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  // Close Options modal first if open
+  const modal = $('options-modal');
+  if (modal && modal.style.display === 'flex') {
+    closeOptions();
+    return;
+  }
+  // Otherwise toggle pause during a level
+  const mainArea = document.getElementById('main-area');
+  if (mainArea && mainArea.style.display === 'block' && $('feedback-overlay').style.display !== 'flex' && $('level-splash').style.display !== 'flex') {
+    togglePause();
+  }
+});
+
+
+function togglePause() {
+  isPaused = !isPaused;
+  const pauseOverlay = $('pause-overlay');
+  if (isPaused) {
+    pauseOverlay.style.display = 'flex';
+  } else {
+    pauseOverlay.style.display = 'none';
+  }
+}
+
+$('btn-resume').onclick = () => {
+  togglePause();
+};
+
+$('btn-restart').onclick = () => {
+  togglePause();
+  clearAllTimers();
+  showLevelTransition(GS.level);
+};
+
+$('btn-quit').onclick = () => {
+  togglePause();
+  clearAllTimers();
+  showWorldMap();
+};
+
+// ═══════════════════════════════════════════════════
+// TEAM ENTRY
+// ═══════════════════════════════════════════════════
+
 if (teamInput) teamInput.addEventListener('keydown', e => { if (e.key === 'Enter') submitTeam(); });
 
 function showCharacterSelect() {
@@ -143,7 +493,7 @@ function showCharacterSelect() {
     btn.addEventListener('click', () => {
       GS.character = {
         gender: btn.dataset.gender,
-        emoji:  btn.dataset.emoji,
+        img:    btn.dataset.img,
         name:   btn.dataset.name,
       };
       select_s();
@@ -158,7 +508,7 @@ function submitTeam() {
   if (!name) { teamInput.style.borderColor = 'var(--red)'; setTimeout(()=>teamInput.style.borderColor='',600); return; }
   GS.teamName = name;
   select_s();
-  teamEntry.style.display = 'none';
+  $('main-menu-screen').style.display = 'none';
   showCharacterSelect(); // ← changed from showIntroComic()
 }
 
@@ -199,10 +549,19 @@ function startGame() {
   dispTeam.textContent = GS.teamName;
   updateHUD();
   GS.level = 1;
-  GS.levelsDone = [];
   GS.streak = 0;
   GS.xp = 0;
-  showLevelTransition(1);
+  
+  const unlockSwitch = document.getElementById('opt-unlock-switch');
+  if (DEV_MODE && unlockSwitch && unlockSwitch.dataset.on === 'true') {
+    GS.levelsDone = [1, 2, 3, 4, 5, 6, 7];
+    GS.currentNode = 8;
+  } else {
+    GS.levelsDone = [];
+    GS.currentNode = 1;
+  }
+  
+  showWorldMap();
 }
 
 function updateHUD() {
@@ -223,19 +582,152 @@ function updateHUD() {
   const player = GS.playerIndex + 1;
   const emojiEl = document.getElementById('tanod-emoji-disp');
   const nameEl  = document.getElementById('tanod-name-disp');
-    if (emojiEl) emojiEl.textContent = GS.character ? GS.character.emoji : '🛡️';
+    if (emojiEl) emojiEl.textContent = '';
     if (nameEl)  nameEl.textContent  = GS.character ? GS.character.name  : 'PLAYER ' + player;
 }
 
-function updateLevelSidebar() {
-  document.querySelectorAll('.lvl-item').forEach(el => {
-    const lv = +el.dataset.lv;
-    el.classList.remove('active','done');
-    const dotEl = el.querySelector('.lvl-dot');
-    if (GS.levelsDone.includes(lv)) { el.classList.add('done'); dotEl.textContent = '●'; }
-    else if (lv === GS.level) { el.classList.add('active'); dotEl.textContent = '►'; }
-    else { dotEl.textContent = '○'; }
+function showWorldMap() {
+  clearAllTimers();
+  const mainArea = document.getElementById('main-area');
+  const mapNodes = document.querySelectorAll('.map-node');
+  const playerSprite = document.getElementById('player-sprite');
+  const playerImg = document.getElementById('player-sprite-img');
+  const promptEl = document.getElementById('interaction-prompt');
+  
+  if (mainArea) mainArea.style.display = 'none';
+  if (promptEl) promptEl.style.display = 'none';
+  if (playerImg && GS.character) playerImg.src = GS.character.img;
+
+  const highestCompleted = GS.levelsDone.length > 0 ? Math.max(...GS.levelsDone) : 0;
+  
+  mapNodes.forEach(node => {
+    const lv = parseInt(node.dataset.lv);
+    node.classList.remove('completed', 'locked');
+    
+    if (GS.levelsDone.includes(lv)) {
+      node.classList.add('completed');
+    }
+    
+    // Sequential locking: node is locked if it's strictly greater than highest completed + 1
+    if (lv > highestCompleted + 1) {
+      node.classList.add('locked');
+    }
   });
+
+  // Reveal Boss Level 8 only if all 7 previous levels are completed
+  const bossNode = document.getElementById('node-8');
+  const bossPath = document.getElementById('path-to-boss');
+  if (GS.levelsDone.length >= 7) {
+    if (bossNode) {
+      bossNode.style.display = 'flex';
+      bossNode.classList.remove('locked');
+    }
+    if (bossPath) {
+      bossPath.style.display = 'block';
+    }
+  } else {
+    if (bossNode) bossNode.style.display = 'none';
+    if (bossPath) bossPath.style.display = 'none';
+  }
+
+  // place player at highest completed + 1, or 1 (only if not already placed)
+  if (GS.currentNode === undefined) {
+    let targetLv = 1;
+    if (GS.levelsDone.length > 0) {
+       targetLv = Math.min(8, Math.max(...GS.levelsDone) + 1);
+       if (targetLv === 8 && GS.levelsDone.length < 7) {
+         targetLv = Math.max(...GS.levelsDone); // stay on last if boss locked
+       }
+    }
+    GS.currentNode = targetLv;
+  }
+
+  // Update sprite position to current node
+  const updatePlayerPos = (nodeId) => {
+    const targetNode = document.querySelector(`.map-node[data-lv="${nodeId}"]`);
+    if (targetNode && playerSprite) {
+      playerSprite.style.left = targetNode.style.left;
+      playerSprite.style.top = targetNode.style.top;
+    }
+  };
+  
+  // Disable transition initially to snap to position
+  if (playerSprite) {
+    playerSprite.style.transition = 'none';
+    updatePlayerPos(GS.currentNode);
+    void playerSprite.offsetWidth; // trigger reflow
+    playerSprite.style.transition = 'left 0.3s linear, top 0.3s linear';
+  }
+
+  let isMoving = false;
+  let spaceWasPressed = false;
+  
+  const Graph = {
+    1: { right: 2 },
+    2: { left: 1, right: 3 },
+    3: { left: 2, down: 4 },
+    4: { up: 3, left: 5 },
+    5: { right: 4, left: 6 },
+    6: { right: 5, down: 7 },
+    7: { up: 6, right: 8 },
+    8: { left: 7 }
+  };
+
+  function mapLoop() {
+    if (!isMoving) {
+      let dir = null;
+      if (Input.up) dir = 'up';
+      else if (Input.down) dir = 'down';
+      else if (Input.left) dir = 'left';
+      else if (Input.right) dir = 'right';
+
+      if (dir) {
+        const nextNodeId = Graph[GS.currentNode]?.[dir];
+        if (nextNodeId) {
+          const nextNodeEl = document.querySelector(`.map-node[data-lv="${nextNodeId}"]`);
+          if (nextNodeEl && !nextNodeEl.classList.contains('locked')) {
+            isMoving = true;
+            GS.currentNode = nextNodeId;
+            updatePlayerPos(GS.currentNode);
+            if (promptEl) promptEl.style.display = 'none';
+            
+            if (dir === 'left' && playerImg) playerImg.style.transform = 'scaleX(-1)';
+            if (dir === 'right' && playerImg) playerImg.style.transform = 'scaleX(1)';
+            
+            setTimeout(() => {
+              isMoving = false;
+            }, 300); // match CSS transition duration
+          }
+        }
+      }
+      
+      // Update prompt when stationary
+      if (!isMoving) {
+         const currentNodeEl = document.querySelector(`.map-node[data-lv="${GS.currentNode}"]`);
+         if (currentNodeEl && !currentNodeEl.classList.contains('locked')) {
+           if (promptEl) promptEl.style.display = 'block';
+           
+           if (Input.space && !spaceWasPressed) {
+             spaceWasPressed = true;
+             select_s();
+             cancelAnimationFrame(mapLoopId);
+             if (promptEl) promptEl.style.display = 'none';
+             if (mainArea) mainArea.style.display = 'block';
+             showLevelTransition(GS.currentNode);
+             return;
+           }
+         } else {
+           if (promptEl) promptEl.style.display = 'none';
+         }
+      }
+    }
+    
+    if (!Input.space) spaceWasPressed = false;
+    mapLoopId = requestAnimationFrame(mapLoop);
+  }
+
+  // Start loop
+  mapLoop();
 }
 
 // ═══════════════════════════════════════════════════
@@ -383,11 +875,13 @@ function completeLevel(lvNum) {
   feedbackOverlay.style.display = 'none';
 
   if (lvNum >= 8) {
-    showFinalScreen();
+    showLevelRecap(8, () => {
+      showFinalScreen();
+    });
     return;
   }
 
-  // Show brief success splash then auto-advance
+  // Show brief success splash then advance to recap screen
   levelSplash.style.display = 'flex';
   $('splash-lvl').textContent  = '✅ LEVEL ' + lvNum + ' COMPLETE!';
   $('splash-name').textContent = 'LEVEL UP!';
@@ -395,7 +889,130 @@ function completeLevel(lvNum) {
   $('splash-count').textContent = '';
   $('splash-name').className = '';
   levelUp();
-  setTimeout(() => showLevelTransition(lvNum + 1), 2000);
+  setTimeout(() => {
+    levelSplash.style.display = 'none';
+    showLevelRecap(lvNum, () => {
+      showWorldMap();
+    });
+  }, 2000);
+}
+
+function showLevelRecap(lvNum, onContinue) {
+  const recapOverlay = $('level-recap');
+  const recapTitle = $('recap-title');
+  const recapList = $('recap-list');
+  const continueBtn = $('recap-continue-btn');
+
+  recapTitle.textContent = `LEVEL ${lvNum} RECAP: SECURITY SECRETS`;
+  recapList.innerHTML = '';
+
+  let recapData = [];
+
+  if (lvNum === 1) {
+    recapData = LEVEL1_ITEMS.map(item => ({
+      question: item.label,
+      badge: item.answer,
+      recap: item.recap
+    }));
+  } else if (lvNum === 2) {
+    PHISH_EMAILS.forEach((email, idx) => {
+      recapData.push({
+        question: `EMAIL ${idx+1} SENDER: ${email.from}`,
+        badge: 'fake',
+        recap: email.fromRecap
+      });
+      email.body.forEach(seg => {
+        if (seg.click) {
+          recapData.push({
+            question: `Email Segment: "${seg.text.trim()}"`,
+            badge: 'suspicious',
+            recap: seg.recap
+          });
+        }
+      });
+    });
+  } else if (lvNum === 3) {
+    recapData = PW_ROUNDS.map(round => ({
+      question: round.question,
+      badge: 'strong',
+      recap: round.recap
+    }));
+  } else if (lvNum === 4) {
+    recapData = SPEED_SCENARIOS.map(sc => ({
+      question: sc.text,
+      badge: sc.answer,
+      recap: sc.recap
+    }));
+  } else if (lvNum === 5) {
+    recapData = URL_ITEMS.map(item => ({
+      question: item.url,
+      badge: item.answer,
+      recap: item.recap
+    }));
+  } else if (lvNum === 6) {
+    recapData = MEMORY_QUESTIONS.map(q => ({
+      question: q.text,
+      badge: q.answer ? 'true' : 'false',
+      recap: q.recap
+    }));
+  } else if (lvNum === 7) {
+    recapData = PROFILE_FIELDS.map(f => ({
+      question: f.name,
+      badge: f.correct,
+      recap: f.recap
+    }));
+  } else if (lvNum === 8) {
+    BOSS_STEP1_ITEMS.forEach(item => {
+      recapData.push({
+        question: `STEP 1 PACKET: ${item.label}`,
+        badge: item.answer,
+        recap: item.recap
+      });
+    });
+    BOSS_STEP2_ITEMS.forEach(item => {
+      recapData.push({
+        question: `STEP 2 Segment: "${item.text.trim()}"`,
+        badge: item.isBad ? 'unsafe' : 'safe',
+        recap: item.recap
+      });
+    });
+    BOSS_STEP3_ITEMS.forEach(item => {
+      recapData.push({
+        question: `STEP 3 QUESTION: ${item.question}`,
+        badge: 'strong',
+        recap: item.recap
+      });
+    });
+  }
+
+  recapData.forEach(data => {
+    const itemEl = document.createElement('div');
+    itemEl.className = 'recap-item';
+    
+    let badgeClass = data.badge.toLowerCase();
+    if (badgeClass.includes('private')) badgeClass = 'private';
+    else if (badgeClass.includes('share') || badgeClass.includes('public') || badgeClass.includes('safe') || badgeClass.includes('true')) badgeClass = 'safe';
+    else if (badgeClass.includes('unsafe') || badgeClass.includes('fake') || badgeClass.includes('suspicious') || badgeClass.includes('false')) badgeClass = 'unsafe';
+
+    itemEl.innerHTML = `
+      <div class="recap-item-header">
+        <span class="recap-question">${data.question}</span>
+        <span class="recap-badge ${badgeClass}">${data.badge}</span>
+      </div>
+      <div class="recap-subtext-box">
+        <span>${data.recap}</span>
+      </div>
+    `;
+    recapList.appendChild(itemEl);
+  });
+
+  recapOverlay.style.display = 'flex';
+
+  continueBtn.onclick = () => {
+    select_s();
+    recapOverlay.style.display = 'none';
+    onContinue();
+  };
 }
 
 // ═══════════════════════════════════════════════════
@@ -419,18 +1036,7 @@ function startLevel(n) {
 // LEVEL 1 — CONVEYOR BELT (Data Classification)
 // ═══════════════════════════════════════════════════
 function startLevel1() {
-  let items = [
-    { label: '📛 Full Name',        answer: 'private', xp: 10 },
-    { label: '🎨 Favorite Color',   answer: 'share',   xp: 10 },
-    { label: '🏠 Home Address',     answer: 'private', xp: 10 },
-    { label: '🏫 School Name',      answer: 'share',   xp: 10 },
-    { label: '🔑 Password',         answer: 'private', xp: 10 },
-    { label: '🐾 Pet\'s Name',      answer: 'share',   xp: 10 },
-    { label: '📅 Birthday (Full)',  answer: 'private', xp: 10 },
-    { label: '👤 Username',         answer: 'share',   xp: 10 },
-    { label: '📞 Phone Number',     answer: 'private', xp: 10 },
-    { label: '🎮 Hobby',            answer: 'share',   xp: 10 },
-  ];
+  let items = LEVEL1_ITEMS.map(item => ({ ...item }));
 
   // shuffle items so packets appear in random order
   (function shuffle(a){
@@ -550,7 +1156,6 @@ function startLevel1() {
       wrong++;
       $('l1-wrong').textContent = wrong;
       loseXP(5);
-      showFeedback(false, '⚠ MALI!', item.answer === 'private' ? '🔒 Dapat PRIVATE yan!' : '📤 Pwede nang i-SHARE yan!', '', 2);
     }
     blip();
     currentIdx++;
@@ -576,6 +1181,7 @@ function startLevel1() {
   }
 
   timerInterval = setInterval(() => {
+    if (isPaused) return;
     timeLeft--;
     const pct = (timeLeft / TOTAL_TIME * 100);
     timerFill.style.width = pct + '%';
@@ -586,8 +1192,8 @@ function startLevel1() {
       done = true;
       clearAllTimers();
       document.removeEventListener('keydown', l1Key);
-      showFeedback(false, 'TIME IS UP!', `Nasagot: ${correct}/${items.length}`, '', 2);
-      setTimeout(() => completeLevel(1), 3000);
+      flashScreen('red');
+      setTimeout(() => completeLevel(1), 1000);
     }
   }, 1000);
 
@@ -598,42 +1204,6 @@ function startLevel1() {
 // ═══════════════════════════════════════════════════
 // LEVEL 2 — SPOT THE PHISH
 // ═══════════════════════════════════════════════════
-const PHISH_EMAILS = [
-  {
-    from:    'kapitan@brgy-sanjose.c0m',
-    to:      'tanod@barangay.ph',
-    subject: 'URGENT: Verify Your Account NOW!!!',
-    body: [
-      { text: 'Dear Resident,', click: false },
-      { text: ' Your account has been COMPROMISED!!! Click here NOW to verify:', click: false },
-      { text: ' CLICK HERE NOW →', click: true, hint: '"Click here NOW" urgency link' },
-      { text: ' Or visit: ', click: false },
-      { text: 'http://brgy-sanjose-verify.freesite.net', click: true, hint: 'Suspicious link — not official .gov.ph' },
-      { text: ' Failure to comply will result in IMMEDIATE SUSPENSION!!!', click: false },
-      { text: ' — Kap. dela Cruz', click: false },
-    ],
-    susItems: [0,1], // indices of click:true that are suspicious (sender + link + urgency)
-    allBad: 3,       // total bad elements including sender
-    notes: 'Red flags: fake sender, urgency language, suspicious link'
-  },
-  {
-    from:    'gcash-support@gcash-rewards-ph.xyz',
-    to:      'you@email.com',
-    subject: 'You have won 5000 PESOS! Claim now!',
-    body: [
-      { text: 'Congratulations!!!', click: false },
-      { text: ' You have been selected for a SPECIAL REWARD of ₱5,000!', click: false },
-      { text: ' To claim, send your ', click: false },
-      { text: 'full name, birthday, and PIN', click: true, hint: 'Asking for personal info + PIN — NEVER share!' },
-      { text: ' to this number: 09XX-XXX-XXXX.', click: false },
-      { text: ' Act fast — offer expires in 1 HOUR!!!', click: true, hint: 'Artificial urgency tactic' },
-      { text: ' Claim here: ', click: false },
-      { text: 'http://gcash-promo.free.nf/claim', click: true, hint: 'Fake GCash site — not gcash.com.ph' },
-    ],
-    allBad: 3,
-    notes: 'Red flags: asking for PIN, fake domain, unrealistic prize'
-  },
-];
 
 function startLevel2() {
   let emailIdx = 0;
@@ -664,6 +1234,7 @@ function startLevel2() {
   `;
 
   timerInterval = setInterval(() => {
+    if (isPaused) return;
     timeLeft--;
     $('l2-timer-num').textContent = timeLeft;
     $('l2-timer-fill').style.width = (timeLeft / TOTAL_TIME * 100) + '%';
@@ -675,34 +1246,54 @@ function startLevel2() {
 
   function renderEmail(idx) {
     const email = PHISH_EMAILS[idx];
+    const headerEl = document.querySelector('#phish-wrap .level-header');
+    if (headerEl) {
+      headerEl.textContent = 'CLICK ALL SUSPICIOUS ELEMENTS!';
+      headerEl.style.color = '';
+    }
     $('phish-round-info').textContent = `EMAIL ${idx+1} / 2`;
     const container = $('phish-email-container');
     container.innerHTML = `
       <div class="phish-email-header">
-        <div class="phish-field"><span class="phish-label">FROM: </span><span id="phish-from" class="phish-clickable" data-type="sender">${email.from}</span></div>
-        <div class="phish-field"><span class="phish-label">TO: </span>${email.to}</div>
-        <div class="phish-field"><span class="phish-label">SUBJECT: </span>${email.subject}</div>
+        <div class="phish-field">
+          <span id="phish-from-label" class="phish-clickable phish-label">FROM: </span>
+          <span id="phish-from" class="phish-clickable" data-type="sender">${email.from}</span>
+        </div>
+        <div class="phish-field">
+          <span id="phish-to-label" class="phish-clickable phish-label">TO: </span>
+          <span id="phish-to" class="phish-clickable">${email.to}</span>
+        </div>
+        <div class="phish-field">
+          <span id="phish-subject-label" class="phish-clickable phish-label">SUBJECT: </span>
+          <span id="phish-subject" class="phish-clickable">${email.subject}</span>
+        </div>
       </div>
       <div class="phish-body" id="phish-body"></div>
     `;
     const bodyEl = $('phish-body');
     email.body.forEach((seg, si) => {
+      const sp = document.createElement('span');
+      sp.className = 'phish-clickable';
+      sp.textContent = seg.text;
+      sp.dataset.seg = si;
+
+      // Realistically style links and buttons in the email body
+      if (seg.text.toLowerCase().includes('http') || seg.text.toLowerCase().includes('click here')) {
+        sp.classList.add('is-link');
+      }
+
       if (seg.click) {
-        const sp = document.createElement('span');
-        sp.className = 'phish-clickable';
-        sp.textContent = seg.text;
-        sp.dataset.seg = si;
         sp.dataset.hint = seg.hint;
         sp.addEventListener('click', () => clickSegment(sp, idx, si, true));
-        bodyEl.appendChild(sp);
       } else {
-        bodyEl.appendChild(document.createTextNode(seg.text));
+        sp.addEventListener('click', () => clickSegment(sp, idx, si, false));
       }
+      bodyEl.appendChild(sp);
     });
     // Sender is always suspicious
     $('phish-from').addEventListener('click', () => {
       const el = $('phish-from');
-      if (el.classList.contains('found')) return;
+      if (el.classList.contains('found') || el.classList.contains('wrong')) return;
       el.classList.add('found');
       totalFound++;
       emailDone[idx]++;
@@ -710,14 +1301,46 @@ function startLevel2() {
       blip();
       floatXPCenter('+10 XP');
       GS.xp += 10; updateHUD();
-      if (emailDone[idx] >= email.allBad || emailDone[idx] >= email.body.filter(s=>s.click).length + 1) {
-        setTimeout(() => nextEmail(idx), 800);
+      
+      const headerEl = document.querySelector('#phish-wrap .level-header');
+      if (headerEl) {
+        headerEl.textContent = `SENDER ADDRESS IS FAKE/SUSPICIOUS!`;
+        headerEl.style.color = 'var(--lime)';
+      }
+      flashScreen('green');
+
+      if (emailDone[idx] >= email.allBad) {
+        setTimeout(() => nextEmail(idx), 1500);
+      }
+    });
+
+    // Make other header elements and labels clickable but wrong (triggers wrong feedback/penalty)
+    const wrongHeaderEls = ['phish-from-label', 'phish-to-label', 'phish-to', 'phish-subject-label', 'phish-subject'];
+    wrongHeaderEls.forEach(id => {
+      const el = $(id);
+      if (el) {
+        el.addEventListener('click', () => {
+          if (el.classList.contains('wrong') || el.classList.contains('found')) return;
+          el.classList.add('wrong');
+          wrongClicks++;
+          loseXP(5);
+          if (headerEl) {
+            headerEl.textContent = `❌ NOT SUSPICIOUS!`;
+            headerEl.style.color = 'var(--red)';
+            setTimeout(() => {
+              headerEl.textContent = 'CLICK ALL SUSPICIOUS ELEMENTS!';
+              headerEl.style.color = '';
+            }, 2000);
+          }
+          setTimeout(() => el.classList.remove('wrong'), 400);
+        });
       }
     });
   }
 
   function clickSegment(el, emailIdx, segIdx, isBad) {
-    if (el.classList.contains('found')) return;
+    if (el.classList.contains('found') || el.classList.contains('wrong')) return;
+    const headerEl = document.querySelector('#phish-wrap .level-header');
     if (isBad) {
       el.classList.add('found');
       totalFound++;
@@ -727,14 +1350,26 @@ function startLevel2() {
       floatXPCenter('+10 XP');
       GS.xp += 10; updateHUD();
       const hint = el.dataset.hint || 'Suspicious element!';
-      showFeedback(true, '🎯 FOUND IT!', hint, '', 1);
+      if (headerEl) {
+        headerEl.textContent = hint.toUpperCase();
+        headerEl.style.color = 'var(--lime)';
+      }
+      flashScreen('green');
       if (emailDone[emailIdx] >= PHISH_EMAILS[emailIdx].allBad) {
-        setTimeout(() => nextEmail(emailIdx), 1200);
+        setTimeout(() => nextEmail(emailIdx), 1500);
       }
     } else {
       el.classList.add('wrong');
       wrongClicks++;
       loseXP(5);
+      if (headerEl) {
+        headerEl.textContent = `❌ NOT SUSPICIOUS!`;
+        headerEl.style.color = 'var(--red)';
+        setTimeout(() => {
+          headerEl.textContent = 'CLICK ALL SUSPICIOUS ELEMENTS!';
+          headerEl.style.color = '';
+        }, 2000);
+      }
       setTimeout(() => el.classList.remove('wrong'), 400);
     }
   }
@@ -761,26 +1396,6 @@ function startLevel2() {
 // ═══════════════════════════════════════════════════
 // LEVEL 3 — PASSWORD POWER-UP (MCQ)
 // ═══════════════════════════════════════════════════
-const PW_ROUNDS = [
-  {
-    question: 'Which password is STRONGEST?',
-    options:  ['12345', 'MySunshine', 'M@ri0_2024!', 'password'],
-    correct:  2,
-    explanation: 'M@ri0_2024! has uppercase, numbers, symbols, and length!'
-  },
-  {
-    question: 'Pick the STRONGEST password:',
-    options:  ['Juan123', 'Br@y_SanJose#9', 'hello', 'CAPITALONLY'],
-    correct:  1,
-    explanation: 'Br@y_SanJose#9 combines letters, symbols, numbers!'
-  },
-  {
-    question: 'Which one would HACKERS hate most?',
-    options:  ['iloveyou', 'Pass1234', 'qwerty!', 'T@nd@7_Brgy#2024'],
-    correct:  3,
-    explanation: 'T@nd@7_Brgy#2024 is long, random, and complex!'
-  },
-];
 
 function startLevel3() {
   let roundIdx = 0;
@@ -852,6 +1467,7 @@ function startLevel3() {
 
     clearInterval(timerInterval);
     timerInterval = setInterval(() => {
+      if (isPaused) return;
       timeLeft--;
       $('l3-timer-num').textContent = timeLeft;
       $('l3-timer-fill').style.width = (timeLeft / timePerRound * 100) + '%';
@@ -862,7 +1478,7 @@ function startLevel3() {
           clearInterval(timerInterval);
           const fbEl = $('l3-feedback');
           if (!fbEl) return;
-          fbEl.textContent = '⏰ TIME! ' + round.explanation;
+          fbEl.textContent = 'TIME! ' + round.explanation;
           optionsEl.querySelectorAll('.pw-option')[round.correct].classList.add('correct');
           loseXP(5);
           setTimeout(()=>{
@@ -880,23 +1496,6 @@ function startLevel3() {
 // ═══════════════════════════════════════════════════
 // LEVEL 4 — SAFE OR UNSAFE SPEED ROUND
 // ═══════════════════════════════════════════════════
-const SPEED_SCENARIOS = [
-  { text: 'A stranger online asks for your school address.', icon:'👤', answer:'unsafe', xp:5 },
-  { text: 'You use HTTPS websites for research.', icon:'🔒', answer:'safe', xp:5 },
-  { text: 'You use the same password for ALL your apps.', icon:'🔑', answer:'unsafe', xp:5 },
-  { text: 'You log out of shared computers after use.', icon:'💻', answer:'safe', xp:5 },
-  { text: 'You click a link from an unknown email.', icon:'📧', answer:'unsafe', xp:5 },
-  { text: 'You enable 2-factor authentication on GCash.', icon:'📱', answer:'safe', xp:5 },
-  { text: 'You share your OTP code with a "GCash agent".', icon:'💬', answer:'unsafe', xp:5 },
-  { text: 'You update your apps when notified.', icon:'🔄', answer:'safe', xp:5 },
-  { text: 'You save passwords in a shared notebook.', icon:'📓', answer:'unsafe', xp:5 },
-  { text: 'You use a strong password with symbols and numbers.', icon:'🛡️', answer:'safe', xp:5 },
-  { text: 'You post your full birthday on social media.', icon:'🎂', answer:'unsafe', xp:5 },
-  { text: 'You check URLs before clicking links.', icon:'🔍', answer:'safe', xp:5 },
-  { text: 'You download apps from unofficial websites.', icon:'⬇️', answer:'unsafe', xp:5 },
-  { text: 'You use a VPN on public Wi-Fi.', icon:'📡', answer:'safe', xp:5 },
-  { text: 'You share your home address in a public chat group.', icon:'🏠', answer:'unsafe', xp:5 },
-];
 
 function startLevel4() {
   let idx = 0;
@@ -921,8 +1520,8 @@ function startLevel4() {
         <span id="speed-text"></span>
       </div>
       <div id="speed-buttons">
-        <button class="retro-btn btn-safe" id="btn-speed-safe" style="font-size:20px;padding:20px 40px">✅ SAFE</button>
-        <button class="retro-btn btn-unsafe" id="btn-speed-unsafe" style="font-size:20px;padding:20px 40px">⛔ UNSAFE</button>
+        <button class="retro-btn btn-safe" id="btn-speed-safe" style="font-size:20px;padding:20px 40px">SAFE</button>
+        <button class="retro-btn btn-unsafe" id="btn-speed-unsafe" style="font-size:20px;padding:20px 40px">UNSAFE</button>
       </div>
     </div>
   `;
@@ -945,6 +1544,7 @@ function startLevel4() {
 
     clearInterval(timerInterval);
     timerInterval = setInterval(() => {
+      if (isPaused) return;
       timeLeft--;
       $('l4-timer-num').textContent = timeLeft;
       $('l4-timer-fill').style.width = (timeLeft / 5 * 100) + '%';
@@ -956,7 +1556,6 @@ function startLevel4() {
         multiplier = 1;
         $('speed-multiplier').textContent = '×' + multiplier;
         loseXP(5);
-        showFeedback(false,'⏰ TOO SLOW!', sc.answer === 'safe' ? 'Ito ay SAFE!' : 'Ito ay UNSAFE!', '', 1);
         setTimeout(() => showScenario(i+1), 1500);
       }
     }, 1000);
@@ -981,7 +1580,6 @@ function startLevel4() {
       multiplier = 1;
       $('speed-multiplier').textContent = '×' + multiplier;
       loseXP(5);
-      showFeedback(false, '❌ MALI!', sc.answer === 'safe' ? '✅ Ito ay SAFE.' : '⛔ Ito ay UNSAFE.', '', 1);
       flashScreen('red');
     }
     idx++;
@@ -997,13 +1595,6 @@ function startLevel4() {
 // ═══════════════════════════════════════════════════
 // LEVEL 5 — SUSPICIOUS LINK / URL INSPECTOR
 // ═══════════════════════════════════════════════════
-const URL_ITEMS = [
-  { url: 'https://deped.gov.ph',                    answer: 'safe', reason: '✅ Official .gov.ph domain = SAFE!' },
-  { url: 'http://depd-ph.weebly.com',               answer: 'fake', reason: '❌ Fake: misspelled + weebly.com = NOT official' },
-  { url: 'https://gcash-rewards.ph.freesite.net',   answer: 'fake', reason: '❌ Fake: gcash is NOT on freesite.net' },
-  { url: 'https://www.bsp.gov.ph',                  answer: 'safe', reason: '✅ Official BSP government site' },
-  { url: 'https://fb-security-update.xyz',          answer: 'fake', reason: '❌ Fake: Facebook never uses .xyz domain' },
-];
 
 function startLevel5() {
   let idx = 0;
@@ -1034,8 +1625,8 @@ function startLevel5() {
         Read the URL carefully with your team!
       </div>
       <div id="url-buttons">
-        <button class="retro-btn btn-safe" id="btn-url-safe" style="font-size:18px;padding:18px 36px">✅ SAFE</button>
-        <button class="retro-btn btn-unsafe" id="btn-url-fake" style="font-size:18px;padding:18px 36px">⛔ FAKE</button>
+        <button class="retro-btn btn-safe" id="btn-url-safe" style="font-size:18px;padding:18px 36px">SAFE</button>
+        <button class="retro-btn btn-unsafe" id="btn-url-fake" style="font-size:18px;padding:18px 36px">FAKE</button>
       </div>
     </div>
   `;
@@ -1054,6 +1645,7 @@ function startLevel5() {
 
     clearInterval(timerInterval);
     timerInterval = setInterval(() => {
+      if (isPaused) return;
       timeLeft--;
       $('l5-timer-num').textContent = timeLeft;
       $('l5-timer-fill').style.width = (timeLeft / 10 * 100) + '%';
@@ -1063,7 +1655,7 @@ function startLevel5() {
         clearInterval(timerInterval);
         loseXP(5);
         $('url-browser-content').textContent = item.reason;
-        showFeedback(false, '⏰ TIME!', item.reason, '', 2);
+        flashScreen('red');
         setTimeout(() => showURL(i+1), 3000);
       }
     }, 1000);
@@ -1076,12 +1668,10 @@ function startLevel5() {
         score++;
         registerCorrect(15, $('btn-url-safe'));
         $('url-browser-content').textContent = item.reason;
-        showFeedback(true, '🎯 TAMA!', item.reason, '', 2);
         flashScreen('green');
       } else {
         loseXP(5);
         $('url-browser-content').textContent = item.reason;
-        showFeedback(false, '❌ MALI!', item.reason, '', 2);
         flashScreen('red');
       }
       setTimeout(() => showURL(i+1), 3000);
@@ -1097,31 +1687,6 @@ function startLevel5() {
 // ═══════════════════════════════════════════════════
 // LEVEL 6 — SCAM INBOX MEMORY
 // ═══════════════════════════════════════════════════
-const MEMORY_EMAILS = [
-  {
-    from: 'prizes@win-gcash-now.xyz',
-    subject: 'YOU WON ₱10,000! CLAIM NOW!',
-    body: 'You have been selected! Send your full name, birthday, and bank details to claim your prize. Offer expires TONIGHT!'
-  },
-  {
-    from: 'admin@brgy-sanjose.free.nf',
-    subject: 'URGENT: Account Verification Required',
-    body: 'Your barangay ID is about to expire. Click the link below to verify. Failure to comply = account suspended.'
-  },
-  {
-    from: 'support@gcash-ph-official.com',
-    subject: 'Security Alert: Unauthorized Login',
-    body: 'Someone tried to access your GCash. Send your OTP immediately to: 09XX-XXX-XXXX to secure your account.'
-  },
-];
-const MEMORY_QUESTIONS = [
-  { text: 'One sender\'s email ended in .gov.ph', answer: false },
-  { text: 'One email offered free prizes (₱10,000)', answer: true },
-  { text: 'One subject line said "URGENT"', answer: true },
-  { text: 'All 3 emails asked for your OTP', answer: false },
-  { text: 'One email mentioned a barangay ID', answer: true },
-  { text: 'One email was from gcash.com.ph', answer: false },
-];
 
 function startLevel6() {
   let phase = 'flash'; // 'flash' or 'quiz'
@@ -1133,7 +1698,7 @@ function startLevel6() {
     <div id="memory-wrap">
       <div class="level-header">MEMORIZE THE EMAILS — THEN ANSWER!</div>
       <div id="memory-phase-label" style="font-family:var(--font-pixel);font-size:14px;color:var(--gold);text-align:center">
-        📧 MEMORIZING... ${flashTimeLeft}s
+        MEMORIZING... ${flashTimeLeft}s
       </div>
       <div style="display:flex;gap:16px;align-items:center">
         <div class="level-timer-bar" style="flex:1">
@@ -1160,10 +1725,11 @@ function startLevel6() {
   });
 
   timerInterval = setInterval(() => {
+    if (isPaused) return;
     flashTimeLeft--;
     $('l6-timer-num').textContent = flashTimeLeft;
     $('l6-timer-fill').style.width = (flashTimeLeft / 12 * 100) + '%';
-    $('memory-phase-label').textContent = `📧 MEMORIZING... ${flashTimeLeft}s`;
+    $('memory-phase-label').textContent = `MEMORIZING... ${flashTimeLeft}s`;
     if (flashTimeLeft <= 0) {
       clearInterval(timerInterval);
       flashArea.style.display = 'none';
@@ -1172,7 +1738,7 @@ function startLevel6() {
   }, 1000);
 
   function startQuizPhase() {
-    $('memory-phase-label').textContent = '🧠 ANSWER FROM MEMORY!';
+    $('memory-phase-label').textContent = 'ANSWER FROM MEMORY!';
     $('l6-timer-fill').style.width = '100%';
     const quizEl = $('memory-questions');
     quizEl.style.display = 'flex';
@@ -1199,6 +1765,7 @@ function startLevel6() {
             GS.xp += 15; GS.streak++; updateHUD();
             floatXPCenter('+15 XP');
             blip();
+            flashScreen('green');
           } else {
             btn.classList.add('wrong-ans');
             const correctBtn = [...div.querySelectorAll('.mem-btn')].find(b => (b.dataset.ans === 'true') === q.answer);
@@ -1221,27 +1788,35 @@ function startLevel6() {
 // ═══════════════════════════════════════════════════
 // LEVEL 7 — BUILD-A-SAFE-PROFILE
 // ═══════════════════════════════════════════════════
-const PROFILE_FIELDS = [
-  { name: '👤 Full Name',       correct: 'private' },
-  { name: '😎 Nickname',        correct: 'public'  },
-  { name: '🏫 School',          correct: 'public'  },
-  { name: '📚 Grade Level',     correct: 'private' },
-  { name: '🎂 Birthday',        correct: 'private' },
-  { name: '📞 Phone Number',    correct: 'private' },
-  { name: '❤️ Favorite Subject',correct: 'public'  },
-  { name: '🏘️ Home Barangay',   correct: 'private' },
-];
 
 function startLevel7() {
   const states = new Array(PROFILE_FIELDS.length).fill('unset');
+  
+  // Grab current system time dynamically for status bar
+  const now = new Date();
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const formattedTime = `${hours}:${minutes}`;
 
   levelContent.innerHTML = `
     <div id="profile-wrap">
-      <div class="level-header">SET EACH FIELD: PUBLIC OR PRIVATE?</div>
-      <div style="font-family:var(--font-mono);font-size:14px;color:var(--gray);text-align:center">
-        Click each field to toggle. Submit when ready!
+      <!-- SMARTPHONE MOCKUP -->
+      <div id="phone-container">
+        <div id="phone-notch"></div>
+        <div id="phone-status-bar">
+          <span id="phone-status-time">${formattedTime}</span>
+          <span id="phone-status-icons">📶 📶 🔋 100%</span>
+        </div>
+        <div id="phone-screen">
+          <div class="phone-app-header">
+            <div class="phone-app-title">⚙️ SETTINGS</div>
+            <div class="phone-app-subtitle">Profile Privacy Configurator</div>
+          </div>
+          <div id="profile-grid"></div>
+        </div>
+        <div id="phone-home-indicator"></div>
       </div>
-      <div id="profile-grid"></div>
+
       <div id="profile-submit-row">
         <span id="profile-score" style="font-family:var(--font-pixel);font-size:12px;color:var(--gray)">Set all fields first</span>
         <button class="retro-btn btn-primary" id="profile-submit-btn" style="font-size:12px;padding:12px 20px">[ SUBMIT PROFILE ]</button>
@@ -1252,32 +1827,92 @@ function startLevel7() {
   const grid = $('profile-grid');
   PROFILE_FIELDS.forEach((f, fi) => {
     const div = document.createElement('div');
-    div.className = 'profile-field';
+    div.className = 'profile-field unset';
+    div.id = `profile-field-${fi}`;
     div.innerHTML = `
-      <span class="pf-name">${f.name}</span>
-      <span class="pf-status unset" id="pf-status-${fi}">? UNSET</span>
+      <div class="pf-info">
+        <div class="pf-name-large">${f.name}</div>
+        <div class="pf-subheading">${f.desc}</div>
+      </div>
+      <div class="toggle-switch-container">
+        <span class="toggle-label-text private-label" id="toggle-label-private-${fi}">PRIVATE</span>
+        <div class="custom-switch unset" id="custom-switch-${fi}">
+          <div class="custom-slider"></div>
+        </div>
+        <span class="toggle-label-text public-label" id="toggle-label-public-${fi}">PUBLIC</span>
+      </div>
     `;
-    div.addEventListener('click', () => {
-      if (states[fi] === 'unset') states[fi] = 'public';
-      else if (states[fi] === 'public') states[fi] = 'private';
-      else states[fi] = 'public';
 
-      div.className = 'profile-field ' + states[fi];
-      const statusEl = $(`pf-status-${fi}`);
-      if (states[fi] === 'public')  { statusEl.textContent = '📤 PUBLIC';  statusEl.className = 'pf-status public-tag'; }
-      else                           { statusEl.textContent = '🔒 PRIVATE'; statusEl.className = 'pf-status private-tag'; }
+    const switchEl = div.querySelector(`#custom-switch-${fi}`);
+    const privateLabel = div.querySelector(`#toggle-label-private-${fi}`);
+    const publicLabel = div.querySelector(`#toggle-label-public-${fi}`);
+
+    function setToggleState(state) {
+      states[fi] = state;
       blip();
+
+      // Update classes
+      div.className = `profile-field ${state}`;
+      switchEl.className = `custom-switch ${state}-state`;
+      
+      if (state === 'public') {
+        privateLabel.classList.remove('active');
+        publicLabel.classList.add('active');
+      } else if (state === 'private') {
+        privateLabel.classList.add('active');
+        publicLabel.classList.remove('active');
+      }
 
       const setCount = states.filter(s => s !== 'unset').length;
       $('profile-score').textContent = `${setCount} / ${PROFILE_FIELDS.length} fields set`;
+    }
+
+    // Toggle switch click
+    switchEl.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const current = states[fi];
+      if (current === 'unset' || current === 'public') {
+        setToggleState('private');
+      } else {
+        setToggleState('public');
+      }
     });
+
+    // Label clicks
+    privateLabel.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setToggleState('private');
+    });
+
+    publicLabel.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setToggleState('public');
+    });
+
+    // Click anywhere on the row toggles
+    div.addEventListener('click', () => {
+      const current = states[fi];
+      if (current === 'unset' || current === 'public') {
+        setToggleState('private');
+      } else {
+        setToggleState('public');
+      }
+    });
+
     grid.appendChild(div);
   });
 
   $('profile-submit-btn').addEventListener('click', () => {
     const unset = states.filter(s=>s==='unset').length;
     if (unset > 0) {
-      showFeedback(false,'⚠ INCOMPLETE!', `Please set all ${PROFILE_FIELDS.length} fields first!`, '', 2);
+      $('profile-score').textContent = '⚠️ SET ALL FIELDS FIRST!';
+      $('profile-score').style.color = 'var(--red)';
+      flashScreen('red');
+      setTimeout(() => {
+        $('profile-score').style.color = '';
+        const setCount = states.filter(s => s !== 'unset').length;
+        $('profile-score').textContent = `${setCount} / ${PROFILE_FIELDS.length} fields set`;
+      }, 2000);
       return;
     }
     let correct = 0;
@@ -1287,14 +1922,12 @@ function startLevel7() {
     });
     if (correct === PROFILE_FIELDS.length) xpEarned += 20;
     addXP(xpEarned, null);
-    showFeedback(
-      correct >= 6,
-      correct === 8 ? '🏆 PERPEKTO!' : correct >= 6 ? '✅ MAGALING!' : '📝 KAYA PA!',
-      `${correct} / ${PROFILE_FIELDS.length} correct!`,
-      correct < 8 ? 'Full Name, Birthday, Phone, Barangay = PRIVATE. Nickname, School, Favorite Subject = PUBLIC.' : '',
-      2
-    );
-    setTimeout(()=>completeLevel(7), 3500);
+    if (correct >= 6) {
+      flashScreen('green');
+    } else {
+      flashScreen('red');
+    }
+    setTimeout(()=>completeLevel(7), 1000);
   });
 }
 
@@ -1310,7 +1943,7 @@ function startLevel8() {
 
   levelContent.innerHTML = `
     <div id="boss-wrap">
-      <div id="boss-header">⚡ BOSS LEVEL: NETWORK DEFENDER ⚡</div>
+      <div id="boss-header">BOSS LEVEL: NETWORK DEFENDER</div>
       <div style="display:flex;gap:16px;align-items:center;width:100%">
         <div class="level-timer-bar" style="flex:1">
           <div class="level-timer-bar-fill" id="l8-timer-fill" style="background:var(--red);transition:width 1s linear"></div>
@@ -1327,6 +1960,7 @@ function startLevel8() {
   `;
 
   timerInterval = setInterval(() => {
+    if (isPaused) return;
     timeLeft--;
     $('l8-timer-num').textContent = timeLeft;
     $('l8-timer-fill').style.width = (timeLeft / totalTime * 100) + '%';
@@ -1339,16 +1973,8 @@ function startLevel8() {
   function showBreach(callback) {
     mistakes++;
     bossSound();
-    const bossContent = $('boss-content');
-    const breachDiv = document.createElement('div');
-    breachDiv.id = 'boss-breach';
-    breachDiv.innerHTML = `💀 BREACH! 💀<div id="boss-breach-subtitle">RECOVER BY ANSWERING CORRECTLY!</div>`;
-    bossContent.appendChild(breachDiv);
     flashScreen('red');
-    setTimeout(() => {
-      breachDiv.remove();
-      callback();
-    }, 2000);
+    setTimeout(callback, 300);
   }
 
   function updateStepIndicator(step) {
@@ -1363,11 +1989,7 @@ function startLevel8() {
   function showStep0() {
     bossStep = 0;
     updateStepIndicator(0);
-    const items = [
-      { label: '📛 Full Name', answer: 'private' },
-      { label: '🎮 Gaming Username', answer: 'share' },
-      { label: '🏠 Home Address', answer: 'private' },
-    ];
+    const items = BOSS_STEP1_ITEMS;
     let itemIdx = 0;
 
     function showItem() {
@@ -1381,13 +2003,14 @@ function startLevel8() {
           ${item.label}
         </div>
         <div style="display:flex;gap:20px;justify-content:center">
-          <button class="retro-btn btn-safe" id="boss-private" style="font-size:16px;padding:16px 28px">🔒 PRIVATE</button>
-          <button class="retro-btn btn-unsafe" id="boss-share" style="background:var(--cyan);border-color:var(--cyan);color:var(--bg);font-size:16px;padding:16px 28px">📤 SHARE</button>
+          <button class="retro-btn btn-safe" id="boss-private" style="font-size:16px;padding:16px 28px">PRIVATE</button>
+          <button class="retro-btn btn-unsafe" id="boss-share" style="background:var(--cyan);border-color:var(--cyan);color:var(--bg);font-size:16px;padding:16px 28px">SHARE</button>
         </div>
       `;
       function ans(choice) {
         if (choice === item.answer) {
           addXP(10, $('boss-private'));
+          flashScreen('green');
           itemIdx++;
           showItem();
         } else {
@@ -1404,11 +2027,7 @@ function startLevel8() {
   function showStep1() {
     bossStep = 1;
     updateStepIndicator(1);
-    const suspiciousItems = [
-      { text: 'support@gcash-update-now.xyz', isBad: true },
-      { text: 'CLICK HERE to secure your account NOW!', isBad: true },
-      { text: 'Dear Customer', isBad: false },
-    ];
+    const suspiciousItems = BOSS_STEP2_ITEMS;
     let found = 0;
     const needed = suspiciousItems.filter(s=>s.isBad).length;
 
@@ -1432,6 +2051,7 @@ function startLevel8() {
           found++;
           $('boss-found').textContent = found;
           addXP(10, el);
+          flashScreen('green');
           if (found >= needed) { stepDone[1]=true; setTimeout(showStep2, 800); }
         } else {
           showBreach(() => { /* same step */ });
@@ -1444,8 +2064,8 @@ function startLevel8() {
   function showStep2() {
     bossStep = 2;
     updateStepIndicator(2);
-    const options = ['password123','Brgy@Tanod#9','hello','qwerty'];
-    const correct = 1;
+    const options = BOSS_STEP3_ITEMS[0].options;
+    const correct = BOSS_STEP3_ITEMS[0].correct;
 
     $('boss-content').innerHTML = `
       <div style="font-family:var(--font-pixel);font-size:clamp(12px,1.5vw,16px);color:var(--gold);text-align:center;margin-bottom:12px">
@@ -1464,6 +2084,7 @@ function startLevel8() {
           stepDone[2] = true;
           updateStepIndicator(2);
           addXP(10, btn);
+          flashScreen('green');
           clearInterval(timerInterval);
           setTimeout(finishBoss, 1000);
         } else {
@@ -1533,8 +2154,7 @@ function showFinalScreen() {
   $('play-again-btn').addEventListener('click', () => {
     finalScreen.style.display = 'none';
     GS.xp = 0; GS.streak = 0; GS.level = 0; GS.levelsDone = []; GS.playerIndex = 0;
-    teamEntry.style.display = 'flex';
-    setTimeout(() => teamInput.focus(), 100);
+    showMainMenu();
   });
 }
 
@@ -1542,5 +2162,5 @@ function showFinalScreen() {
 // INIT
 // ═══════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
-  showTeamEntry();
+  showMainMenu();
 });

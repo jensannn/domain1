@@ -31,18 +31,26 @@
         </div>
       </div>
 
-      <!-- TEAM ENTRY SCREEN -->
-      <div id="team-entry" style="display:none">
-        <div id="team-entry-box">
-          <div class="retro-tag">[ CYBER TANOD SYSTEM — INITIALIZE ]</div>
-          <div class="team-entry-title">ENTER TEAM NAME</div>
-          <div class="input-row">
+      <!-- MAIN MENU SCREEN -->
+      <div id="main-menu-screen" style="display:none">
+        <div id="main-menu-box">
+          <div class="retro-tag">[ SYSTEM READY ]</div>
+          <div class="menu-title" style="font-family: var(--font-pixel); font-size: 32px; color: var(--gold); text-shadow: 0 0 10px var(--orange); text-align: center; margin-bottom: 10px;">CYBER TANOD</div>
+          <div class="menu-subtitle" style="font-family: var(--font-mono); font-size: 18px; color: var(--white); text-align: center; margin-bottom: 25px; letter-spacing: 2px;">BARANGAY DEFENSE FORCE</div>
+          
+          <div class="team-entry-title" style="font-size: 16px; margin-bottom: 10px; text-align: center;">ENTER TEAM NAME</div>
+          <div class="input-row" style="margin-bottom: 25px; justify-content: center;">
             <span class="prompt">&gt;&gt;&gt;&nbsp;</span>
             <input type="text" id="team-name-input" maxlength="18" placeholder="TEAM AGILA" autocomplete="off" spellcheck="false" />
             <span class="cursor-blink">█</span>
           </div>
-          <button id="start-btn" class="retro-btn btn-primary">[ LAUNCH MISSION ]</button>
-          <div class="enter-hint">— Press ENTER or click the button —</div>
+
+          <div class="menu-options" style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
+            <button id="btn-play" class="retro-btn btn-primary" style="width: 250px;">[ PLAY GAME ]</button>
+            <button id="btn-options" class="retro-btn btn-warning" style="width: 250px;">[ OPTIONS ]</button>
+            <button id="btn-exit" class="retro-btn btn-danger" style="width: 250px;">[ EXIT ]</button>
+          </div>
+          <div id="menu-msg" class="enter-hint" style="margin-top: 20px; height: 20px;"></div>
         </div>
       </div>
 
@@ -78,19 +86,19 @@
         <div id="char-options">
 
             <div class="char-card" id="char-boy">
-            <div class="char-emoji">👮‍♂️</div>
+            <div class="char-img"><img src="char_boy.png" alt="Boy Sprite"></div>
             <div class="char-name">TANOD CARLO</div>
             <div class="char-tag">LALAKI</div>
-            <button class="retro-btn btn-primary char-btn" data-gender="boy" data-emoji="👮‍♂️" data-name="TANOD CARLO">
+            <button class="retro-btn btn-primary char-btn" data-gender="boy" data-img="char_boy.png" data-name="TANOD CARLO">
                 PILIIN
             </button>
             </div>
 
             <div class="char-card" id="char-girl">
-            <div class="char-emoji">👮‍♀️</div>
+            <div class="char-img"><img src="char_girl.png" alt="Girl Sprite"></div>
             <div class="char-name">TANOD MARIA</div>
             <div class="char-tag">BABAE</div>
-            <button class="retro-btn btn-pink char-btn" data-gender="girl" data-emoji="👮‍♀️" data-name="TANOD MARIA">
+            <button class="retro-btn btn-pink char-btn" data-gender="girl" data-img="char_girl.png" data-name="TANOD MARIA">
                 PILIIN
             </button>
             </div>
@@ -127,34 +135,53 @@
           </div>
         </div>
 
-        <!-- BODY: SIDEBAR + MAIN -->
+        <!-- BODY: WORLD MAP + TASK OVERLAY -->
         <div id="game-body">
 
-          <!-- SIDEBAR -->
-          <div id="sidebar">
-            <div class="sidebar-header">[ MISSIONS ]</div>
-            <div id="level-list">
-              <div class="lvl-item" data-lv="1"><span class="lvl-num">01</span><span class="lvl-name">CONVEYOR BELT</span><span class="lvl-dot">○</span></div>
-              <div class="lvl-item" data-lv="2"><span class="lvl-num">02</span><span class="lvl-name">SPOT THE PHISH</span><span class="lvl-dot">○</span></div>
-              <div class="lvl-item" data-lv="3"><span class="lvl-num">03</span><span class="lvl-name">PASSWORD POWER</span><span class="lvl-dot">○</span></div>
-              <div class="lvl-item" data-lv="4"><span class="lvl-num">04</span><span class="lvl-name">SPEED ROUND</span><span class="lvl-dot">○</span></div>
-              <div class="lvl-item" data-lv="5"><span class="lvl-num">05</span><span class="lvl-name">LINK INSPECTOR</span><span class="lvl-dot">○</span></div>
-              <div class="lvl-item" data-lv="6"><span class="lvl-num">06</span><span class="lvl-name">SCAM INBOX</span><span class="lvl-dot">○</span></div>
-              <div class="lvl-item" data-lv="7"><span class="lvl-num">07</span><span class="lvl-name">SAFE PROFILE</span><span class="lvl-dot">○</span></div>
-              <div class="lvl-item boss" data-lv="8"><span class="lvl-num">08</span><span class="lvl-name">⚡ BOSS LEVEL</span><span class="lvl-dot">○</span></div>
+          <!-- WORLD MAP -->
+          <div id="world-map-view">
+            <div id="map-background"></div>
+            
+            <svg id="map-paths" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <!-- Animated arrows/paths linking nodes visually -->
+              <path class="map-path" d="M 20 20 L 50 20 L 80 20 L 80 50 L 50 50 L 20 50 L 20 80" fill="none" />
+              <path class="map-path" id="path-to-boss" d="M 20 80 L 50 80" fill="none" style="display:none;" />
+            </svg>
+
+            <div id="map-nodes">
+              <!-- Nodes positioned on a grid -->
+              <div class="map-node" id="node-1" data-lv="1" style="left:20%; top:20%;">01</div>
+              <div class="map-node" id="node-2" data-lv="2" style="left:50%; top:20%;">02</div>
+              <div class="map-node" id="node-3" data-lv="3" style="left:80%; top:20%;">03</div>
+              <div class="map-node" id="node-4" data-lv="4" style="left:80%; top:50%;">04</div>
+              <div class="map-node" id="node-5" data-lv="5" style="left:50%; top:50%;">05</div>
+              <div class="map-node" id="node-6" data-lv="6" style="left:20%; top:50%;">06</div>
+              <div class="map-node" id="node-7" data-lv="7" style="left:20%; top:80%;">07</div>
+              <div class="map-node boss-node locked" id="node-8" data-lv="8" style="left:50%; top:80%; display:none;">08</div>
             </div>
-            <div id="sidebar-tanod">
-              <div class="sidebar-header">[ ACTIVE TANOD ]</div>
-                <div id="active-tanod-display">
-                <span id="tanod-emoji-disp">🛡️</span>
-                <span id="tanod-name-disp">PLAYER 1</span>
-                </div>
-              <div id="rotation-hint">Rotate every 2 levels</div>
+
+            <!-- Player Sprite -->
+            <div id="player-sprite">
+              <img src="" alt="Player" id="player-sprite-img">
+            </div>
+            
+            <div id="interaction-prompt" style="display:none">[ PRESS SPACE TO START ]</div>
+            <div id="world-map-hint">USE ARROW KEYS OR WASD TO MOVE</div>
+          </div>
+          <!-- PAUSE OVERLAY -->
+          <div id="pause-overlay" style="display:none; position: absolute; inset: 0; background: rgba(0,0,0,0.85); z-index: 100; flex-direction: column; justify-content: center; align-items: center;">
+            <div class="pause-box" style="background: rgba(13,9,34,0.9); border: 3px solid var(--pink); padding: 40px; text-align: center; box-shadow: 0 0 20px var(--pink);">
+              <div class="retro-tag" style="margin-bottom: 30px; font-size: 20px;">[ SYSTEM PAUSED ]</div>
+              <div class="menu-options" style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
+                <button id="btn-resume" class="retro-btn btn-primary" style="width: 250px;">[ CONTINUE ]</button>
+                <button id="btn-restart" class="retro-btn btn-warning" style="width: 250px;">[ RESTART ]</button>
+                <button id="btn-quit" class="retro-btn btn-danger" style="width: 250px;">[ EXIT TO MAP ]</button>
+              </div>
             </div>
           </div>
 
-          <!-- MAIN CONTENT AREA -->
-          <div id="main-area">
+          <!-- TASK OVERLAY (MAIN CONTENT AREA) -->
+          <div id="main-area" style="display:none">
 
             <!-- LEVEL TRANSITION SPLASH -->
             <div id="level-splash" style="display:none">
@@ -185,6 +212,19 @@
             <!-- SCREEN FLASH -->
             <div id="screen-flash"></div>
 
+            <!-- LEVEL RECAP OVERLAY -->
+            <div id="level-recap" style="display:none">
+              <div id="recap-box">
+                <div class="retro-tag" id="recap-tag">[ LEVEL COMPLETE ]</div>
+                <div id="recap-title">LEVEL 1 RECAP</div>
+                <div id="recap-subtitle">Review what you have learned to defend the barangay!</div>
+                <div id="recap-scroll-area">
+                  <div id="recap-list"></div>
+                </div>
+                <button id="recap-continue-btn" class="retro-btn btn-primary">[ CONTINUE ]</button>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -205,6 +245,63 @@
           <button id="play-again-btn" class="retro-btn btn-secondary">[ PLAY AGAIN ]</button>
         </div>
       </div>
+
+      <!-- OPTIONS MODAL -->
+      <div id="options-modal">
+        <div id="options-box">
+          <div class="retro-tag" style="margin-bottom:24px; font-size:14px;">[ OPTIONS ]</div>
+          <div id="options-title">SYSTEM OPTIONS</div>
+
+          <!-- AUDIO SECTION -->
+          <div class="options-section">
+            <div class="options-section-label">AUDIO</div>
+            <div class="options-row">
+              <span class="options-row-label">Sound Effects</span>
+              <div class="opt-toggle-wrap">
+                <span class="opt-toggle-label" id="sfx-label">ON</span>
+                <div class="opt-switch" id="opt-sfx-switch" data-on="true">
+                  <div class="opt-switch-knob"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DEV MODE SECTION (shown by JS only when DEV_MODE = true) -->
+          <div id="dev-mode-section" style="display:none;">
+            <div class="options-section">
+              <div class="options-section-label" style="color:var(--gold); text-shadow:0 0 8px var(--orange);">⚙ DEV / TEST MODE</div>
+              <div class="options-row">
+                <div class="options-row-info">
+                  <span class="options-row-label" style="color:var(--gold);">Unlock All Levels</span>
+                  <span class="options-row-sub">Marks all levels as completed</span>
+                </div>
+                <div class="opt-toggle-wrap">
+                  <span class="opt-toggle-label" id="unlock-label">OFF</span>
+                  <div class="opt-switch opt-switch--gold" id="opt-unlock-switch" data-on="false">
+                    <div class="opt-switch-knob"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="options-row">
+                <div class="options-row-info">
+                  <span class="options-row-label" style="color:var(--gold);">Reset Progress</span>
+                  <span class="options-row-sub">Clears XP, streak &amp; levels</span>
+                </div>
+                <div class="opt-toggle-wrap">
+                  <span class="opt-toggle-label" id="reset-label">OFF</span>
+                  <div class="opt-switch opt-switch--red" id="opt-reset-switch" data-on="false">
+                    <div class="opt-switch-knob"></div>
+                  </div>
+                </div>
+              </div>
+              <div id="dev-mode-badge">🛠 DEV MODE ACTIVE</div>
+            </div>
+          </div>
+
+          <button id="opt-close-btn" class="retro-btn btn-danger" style="margin-top:28px; width:200px;">[ CLOSE ]</button>
+        </div>
+      </div>
+
 
     </div>
     <script src="main.js"></script>
