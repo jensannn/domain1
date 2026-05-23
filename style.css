@@ -3,25 +3,25 @@
    ───────────────────────────────────────────── */
 
 :root {
-  --bg:        #F5F5DC;
-  --bg2:       #FFFDD0;
-  --bg3:       #FAF9F6;
-  --cyan:      #8CBED6;
-  --cyan-dim:  #6A8FAF;
-  --blue:      #B0E0E6;
-  --pink:      #C8A2C8;
-  --pink-dim:  #997A8D;
-  --purple:    #E6E6FA;
-  --orange:    #D2B48C;
-  --orange-dim:#A89F91;
-  --gold:      #A8A5A6;
-  --gray:      #A8A5A6;
-  --red:       #997A8D;
-  --red-dim:   #7A6170;
-  --green:     #9DC183;
-  --lime:      #ADDFAD;
-  --white:     #4A4A4A;
-  --white-dim: #6B6B6B;
+  --bg:        #f0f4ff;
+  --bg2:       #dbe7ff;
+  --bg3:       #eef5ff;
+  --cyan:      #00d8ff;
+  --cyan-dim:  #009ac8;
+  --blue:      #3b82f6;
+  --pink:      #ff2d95;
+  --pink-dim:  #c41a72;
+  --purple:    #8b5cf6;
+  --orange:    #f59e0b;
+  --orange-dim:#ea580c;
+  --gold:      #facc15;
+  --gray:      #475569;
+  --red:       #ef4444;
+  --red-dim:   #b91c1c;
+  --green:     #22c55e;
+  --lime:      #a3e635;
+  --white:     #0f172a;
+  --white-dim: #334155;
   --font-pixel: 'Press Start 2P', monospace;
   --font-mono:  'Share Tech Mono', monospace;
 }
