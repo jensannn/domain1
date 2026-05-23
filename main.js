@@ -583,10 +583,10 @@ function updateHUD() {
   dispXP.textContent = GS.xp;
   dispStreak.textContent = GS.streak;
   const tiers = [
-    { min:0,   max:150, label:'ROOKIE TANOD',       bg:'#4a6080'   },
-    { min:151, max:250, label:'ACTIVE TANOD',        bg:'#00aacc'   },
-    { min:251, max:350, label:'SENIOR TANOD',        bg:'#9900cc'   },
-    { min:351, max:9999,label:'CYBER TANOD ELITE',   bg:'#FFD700', color:'#000' },
+    { min:0,   max:150, label:'ROOKIE TANOD',       bg:'#8CBED6'   },
+    { min:151, max:250, label:'ACTIVE TANOD',        bg:'#6D92A0'   },
+    { min:251, max:350, label:'SENIOR TANOD',        bg:'#C8A2C8'   },
+    { min:351, max:9999,label:'CYBER TANOD ELITE',   bg:'#A8A5A6', color:'#000' },
   ];
   const tier = tiers.find(t => GS.xp >= t.min && GS.xp <= t.max) || tiers[0];
   dispTier.textContent = tier.label;
@@ -2132,7 +2132,7 @@ function startLevel8() {
         <div class="level-timer-bar" style="flex:1">
           <div class="level-timer-bar-fill" id="l8-timer-fill" style="background:var(--red);transition:width 1s linear"></div>
         </div>
-        <span style="font-family:var(--font-pixel);font-size:22px;color:var(--red);text-shadow:0 0 10px var(--red);min-width:36px" id="l8-timer-num">${LEVEL_SETTINGS[8].countdown}</span>
+        <span style="font-family:var(--font-pixel);font-size:22px;color:var(--red);text-shadow: none;min-width:36px" id="l8-timer-num">${LEVEL_SETTINGS[8].countdown}</span>
       </div>
       <div id="boss-step-indicator">
         <div class="boss-step-dot active" id="bsd-0">STEP 1</div>
@@ -2183,10 +2183,7 @@ function startLevel8() {
         <div style="font-family:var(--font-pixel);font-size:clamp(12px,1.5vw,16px);color:var(--cyan);text-align:center;margin-bottom:16px">
           STEP 1: CLASSIFY THIS DATA PACKET
         </div>
-        <div style="font-family:var(--font-pixel);font-size:clamp(20px,3.5vw,32px);color:var(--gold);text-align:center;margin:20px 0;text-shadow:0 0 14px var(--gold)">
-          ${item.label}
-        </div>
-        <div style="display:flex;gap:20px;justify-content:center">
+        <div style="font-family:var(--font-pixel);font-size:clamp(20px,3.5vw,32px);color:var(--gold);text-align:center;margin:20px 0;text-shadow: none;gap:20px;justify-content:center">
           <button class="retro-btn btn-safe" id="boss-private" style="font-size:16px;padding:16px 28px">PRIVATE</button>
           <button class="retro-btn btn-unsafe" id="boss-share" style="background:var(--cyan);border-color:var(--cyan);color:var(--bg);font-size:16px;padding:16px 28px">SHARE</button>
         </div>
