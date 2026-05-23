@@ -612,6 +612,19 @@ function showWorldMap() {
     if (lv > highestCompleted + 1) {
       node.classList.add('locked');
     }
+
+    // Allow clicking the node to select and enter the level
+    node.onclick = () => {
+      if (node.classList.contains('locked')) return;
+      GS.currentNode = lv;
+      updatePlayerPos(GS.currentNode);
+      
+      select_s();
+      cancelAnimationFrame(mapLoopId);
+      if (promptEl) promptEl.style.display = 'none';
+      if (mainArea) mainArea.style.display = 'block';
+      showLevelTransition(GS.currentNode);
+    };
   });
 
   // Reveal Boss Level 8 only if all 7 previous levels are completed
