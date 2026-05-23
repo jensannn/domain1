@@ -586,12 +586,12 @@ function updateHUD() {
     { min:0,   max:150, label:'ROOKIE TANOD',       bg:'#8CBED6'   },
     { min:151, max:250, label:'ACTIVE TANOD',        bg:'#6D92A0'   },
     { min:251, max:350, label:'SENIOR TANOD',        bg:'#C8A2C8'   },
-    { min:351, max:9999,label:'CYBER TANOD ELITE',   bg:'#A8A5A6', color:'#000' },
+    { min:351, max:9999,label:'CYBER TANOD ELITE',   bg:'#A8A5A6', color:'var(--white)' },
   ];
   const tier = tiers.find(t => GS.xp >= t.min && GS.xp <= t.max) || tiers[0];
   dispTier.textContent = tier.label;
   dispTier.style.background = tier.bg;
-  dispTier.style.color = tier.color || '#fff';
+  dispTier.style.color = tier.color || 'var(--bg3)';
   const pct = Math.min((GS.xp / 400) * 100, 100);
   xpBarInner.style.width = pct + '%';
   const player = GS.playerIndex + 1;
