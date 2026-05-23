@@ -6,19 +6,19 @@
   --bg:        #E8E4F5;
   --bg2:       #F5F2FC;
   --bg3:       #FFFFFF;
-  --cyan:      #00B6C0;
-  --cyan-dim:  #007E85;
-  --pink:      #E60099;
-  --pink-dim:  #A3006B;
-  --orange:    #E66B00;
-  --orange-dim:#A34B00;
-  --red:       #D91E1E;
-  --red-dim:   #991111;
-  --gold:      #C88E00;
-  --green:     #1E9E1E;
-  --lime:      #7EA800;
-  --purple:    #9900E6;
-  --blue:      #0055FF;
+  --cyan:      #007B82;
+  --cyan-dim:  #004F54;
+  --pink:      #A3006B;
+  --pink-dim:  #6B0046;
+  --orange:    #A34B00;
+  --orange-dim:#6E3300;
+  --red:       #A81717;
+  --red-dim:   #731010;
+  --gold:      #996D00;
+  --green:     #167316;
+  --lime:      #5E7D00;
+  --purple:    #6B00A3;
+  --blue:      #0040C0;
   --white:     #120A2B; /* --white is used as the primary dark body text color in light theme */
   --white-dim: #5C4F80; /* --white-dim is used as the medium-dark gray-purple text color */
   --gray:      #8E81A8;
@@ -93,7 +93,7 @@ html, body {
 .retro-btn:active { transform: translate(2px, 2px); }
 
 .btn-primary {
-  color: #000;
+  color: #FFF;
   background: var(--cyan);
   border-color: var(--cyan);
   box-shadow: 0 0 18px var(--cyan), 4px 4px 0 var(--cyan-dim);
@@ -101,7 +101,7 @@ html, body {
 .btn-primary:hover { box-shadow: 0 0 32px var(--cyan), 4px 4px 0 var(--cyan-dim); filter: brightness(1.15); }
 
 .btn-danger {
-  color: #000;
+  color: #FFF;
   background: var(--red);
   border-color: var(--red);
   box-shadow: 0 0 18px var(--red), 4px 4px 0 var(--red-dim);
@@ -109,7 +109,7 @@ html, body {
 .btn-danger:hover { box-shadow: 0 0 32px var(--red), 4px 4px 0 var(--red-dim); filter: brightness(1.15); }
 
 .btn-warning {
-  color: #000;
+  color: #FFF;
   background: var(--gold);
   border-color: var(--gold);
   box-shadow: 0 0 18px var(--gold), 4px 4px 0 var(--orange);
@@ -125,7 +125,7 @@ html, body {
 .btn-secondary:hover { box-shadow: 0 0 28px var(--gold), 4px 4px 0 #886600; }
 
 .btn-safe {
-  color: #000;
+  color: #FFF;
   background: var(--lime);
   border-color: var(--lime);
   font-size: 18px; padding: 18px 36px;
@@ -134,7 +134,7 @@ html, body {
 .btn-safe:hover { box-shadow: 0 0 36px var(--lime), 4px 4px 0 #6a8800; filter: brightness(1.1); }
 
 .btn-unsafe {
-  color: #000;
+  color: #FFF;
   background: var(--red);
   border-color: var(--red);
   font-size: 18px; padding: 18px 36px;
@@ -143,7 +143,7 @@ html, body {
 .btn-unsafe:hover { box-shadow: 0 0 36px var(--red), 4px 4px 0 var(--red-dim); filter: brightness(1.1); }
 
 .btn-pink {
-  color: #000;
+  color: #FFF;
   background: var(--pink);
   border-color: var(--pink);
   box-shadow: 0 0 18px var(--pink)88, 4px 4px 0 var(--pink-dim);
@@ -512,7 +512,7 @@ html, body {
 .tier-badge {
   font-family: var(--font-pixel);
   font-size: 9px;
-  color: #000;
+  color: #FFF;
   background: var(--cyan);
   padding: 4px 10px;
   letter-spacing: 1px;

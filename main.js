@@ -46,6 +46,7 @@ const GS = {
   levelsDone: [],
   playerIndex: 0,    // 0-3, rotates every 2 levels
   character: { gender: 'boy', name: 'TANOD CARLO' },
+  recapResults: {},
 };
 
 // ═══════════════════════════════════════════════════
@@ -998,6 +999,14 @@ function showLevelRecap(lvNum, onContinue) {
     });
   }
 
+  let totalCorrect = 0;
+  const totalItems = recapData.length;
+  recapData.forEach(data => {
+    if (GS.recapResults[data.question]) totalCorrect++;
+  });
+
+  recapTitle.innerHTML = `LEVEL ${lvNum} RECAP: SECURITY SECRETS<br><span style="font-size:18px; color:var(--gold); display:block; margin-top:10px;">TOTAL CORRECT: ${totalCorrect} / ${totalItems}</span>`;
+
   recapData.forEach(data => {
     const itemEl = document.createElement('div');
     itemEl.className = 'recap-item';
@@ -1007,9 +1016,12 @@ function showLevelRecap(lvNum, onContinue) {
     else if (badgeClass.includes('share') || badgeClass.includes('public') || badgeClass.includes('safe') || badgeClass.includes('true')) badgeClass = 'safe';
     else if (badgeClass.includes('unsafe') || badgeClass.includes('fake') || badgeClass.includes('suspicious') || badgeClass.includes('false')) badgeClass = 'unsafe';
 
+    const isCorrect = GS.recapResults[data.question] === true;
+    const icon = isCorrect ? '✅' : '❌';
+
     itemEl.innerHTML = `
       <div class="recap-item-header">
-        <span class="recap-question">${data.question}</span>
+        <span class="recap-question">${icon} ${data.question}</span>
         <span class="recap-badge ${badgeClass}">${data.badge}</span>
       </div>
       <div class="recap-subtext-box">
@@ -1033,6 +1045,7 @@ function showLevelRecap(lvNum, onContinue) {
 // ═══════════════════════════════════════════════════
 function startLevel(n) {
   levelContent.innerHTML = '';
+  GS.recapResults = {};
   switch(n) {
     case 1: startLevel1(); break;
     case 2: startLevel2(); break;
@@ -1162,10 +1175,12 @@ function startLevel1() {
     packetCard.style.opacity = '0';
 
     if (choice === item.answer) {
+      GS.recapResults[item.label] = true;
       correct++;
       $('l1-correct').textContent = correct;
       registerCorrect(item.xp, packetCard);
     } else {
+      GS.recapResults[item.label] = false;
       wrong++;
       $('l1-wrong').textContent = wrong;
       loseXP(5);
@@ -1259,6 +1274,9 @@ function startLevel2() {
 
   function renderEmail(idx) {
     const email = PHISH_EMAILS[idx];
+    GS.recapResults[`EMAIL ${idx+1} SENDER: ${email.from}`] = false;
+    email.body.forEach(seg => { if (seg.click) GS.recapResults[`Email Segment: "${seg.text.trim()}"`] = false; });
+    
     const headerEl = document.querySelector('#phish-wrap .level-header');
     if (headerEl) {
       headerEl.textContent = 'CLICK ALL SUSPICIOUS ELEMENTS!';
@@ -1308,6 +1326,7 @@ function startLevel2() {
       const el = $('phish-from');
       if (el.classList.contains('found') || el.classList.contains('wrong')) return;
       el.classList.add('found');
+      GS.recapResults[`EMAIL ${idx+1} SENDER: ${email.from}`] = true;
       totalFound++;
       emailDone[idx]++;
       $('phish-found-count').textContent = `FOUND: ${totalFound} / ${totalNeeded}`;
@@ -1356,6 +1375,7 @@ function startLevel2() {
     const headerEl = document.querySelector('#phish-wrap .level-header');
     if (isBad) {
       el.classList.add('found');
+      GS.recapResults[`Email Segment: "${el.textContent.trim()}"`] = true;
       totalFound++;
       emailDone[emailIdx]++;
       $('phish-found-count').textContent = `FOUND: ${totalFound} / ${totalNeeded}`;
@@ -1454,6 +1474,7 @@ function startLevel3() {
         clearInterval(timerInterval);
         btn.classList.add(oi === round.correct ? 'correct' : 'wrong');
         if (oi === round.correct) {
+          GS.recapResults[round.question] = true;
           optionsEl.querySelectorAll('.pw-option')[round.correct].classList.add('correct');
           roundsCorrect++;
           const fastBonus = timeLeft >= (timePerRound - 8);
@@ -1462,6 +1483,7 @@ function startLevel3() {
           $('pw-feedback').textContent = '✅ ' + round.explanation;
           $('pw-feedback').style.color = 'var(--green)';
         } else {
+          GS.recapResults[round.question] = false;
           optionsEl.querySelectorAll('.pw-option')[round.correct].classList.add('correct');
           loseXP(5);
           $('pw-feedback').textContent = '❌ ' + round.explanation;
@@ -1488,6 +1510,7 @@ function startLevel3() {
       if (timeLeft <= 0) {
         if (!answered) {
           answered = true;
+          GS.recapResults[round.question] = false;
           clearInterval(timerInterval);
           const fbEl = $('l3-feedback');
           if (!fbEl) return;
@@ -1568,6 +1591,7 @@ function startLevel4() {
         streakForMultiplier = 0;
         multiplier = 1;
         $('speed-multiplier').textContent = '×' + multiplier;
+        GS.recapResults[sc.text] = false;
         loseXP(5);
         setTimeout(() => showScenario(i+1), 1500);
       }
@@ -1580,6 +1604,7 @@ function startLevel4() {
     clearInterval(timerInterval);
     const sc = SPEED_SCENARIOS[idx];
     if (choice === sc.answer) {
+      GS.recapResults[sc.text] = true;
       correct++;
       streakForMultiplier++;
       if (streakForMultiplier >= 5) multiplier = 2;
@@ -1588,6 +1613,7 @@ function startLevel4() {
       registerCorrect(earned, choice === 'safe' ? $('btn-speed-safe') : $('btn-speed-unsafe'));
       flashScreen('green');
     } else {
+      GS.recapResults[sc.text] = false;
       wrong++;
       streakForMultiplier = 0;
       multiplier = 1;
@@ -1666,6 +1692,7 @@ function startLevel5() {
       if (timeLeft <= 0 && !answered) {
         answered = true;
         clearInterval(timerInterval);
+        GS.recapResults[item.url] = false;
         loseXP(5);
         $('url-browser-content').textContent = item.reason;
         flashScreen('red');
@@ -1678,11 +1705,13 @@ function startLevel5() {
       answered = true;
       clearInterval(timerInterval);
       if (choice === item.answer) {
+        GS.recapResults[item.url] = true;
         score++;
         registerCorrect(15, $('btn-url-safe'));
         $('url-browser-content').textContent = item.reason;
         flashScreen('green');
       } else {
+        GS.recapResults[item.url] = false;
         loseXP(5);
         $('url-browser-content').textContent = item.reason;
         flashScreen('red');
@@ -1773,6 +1802,7 @@ function startLevel6() {
           div.querySelectorAll('.mem-btn').forEach(b => b.classList.add('answered'));
           answered++;
           if (userAns === q.answer) {
+            GS.recapResults[q.text] = true;
             correct++;
             btn.classList.add('correct-ans');
             GS.xp += 15; GS.streak++; updateHUD();
@@ -1780,6 +1810,7 @@ function startLevel6() {
             blip();
             flashScreen('green');
           } else {
+            GS.recapResults[q.text] = false;
             btn.classList.add('wrong-ans');
             const correctBtn = [...div.querySelectorAll('.mem-btn')].find(b => (b.dataset.ans === 'true') === q.answer);
             if (correctBtn) correctBtn.classList.add('correct-ans');
@@ -1931,7 +1962,12 @@ function startLevel7() {
     let correct = 0;
     let xpEarned = 0;
     PROFILE_FIELDS.forEach((f,fi) => {
-      if (states[fi] === f.correct) { correct++; xpEarned += 10; }
+      if (states[fi] === f.correct) {
+        GS.recapResults[f.name] = true;
+        correct++; xpEarned += 10;
+      } else {
+        GS.recapResults[f.name] = false;
+      }
     });
     if (correct === PROFILE_FIELDS.length) xpEarned += 20;
     addXP(xpEarned, null);
@@ -2022,11 +2058,13 @@ function startLevel8() {
       `;
       function ans(choice) {
         if (choice === item.answer) {
+          GS.recapResults[`STEP 1 PACKET: ${item.label}`] = true;
           addXP(10, $('boss-private'));
           flashScreen('green');
           itemIdx++;
           showItem();
         } else {
+          GS.recapResults[`STEP 1 PACKET: ${item.label}`] = false;
           showBreach(() => { showItem(); });
           loseXP(5);
         }
@@ -2043,6 +2081,7 @@ function startLevel8() {
     const suspiciousItems = BOSS_STEP2_ITEMS;
     let found = 0;
     const needed = suspiciousItems.filter(s=>s.isBad).length;
+    suspiciousItems.forEach(s => { if(s.isBad) GS.recapResults[`STEP 2 Segment: "${s.text.trim()}"`] = false; });
 
     $('boss-content').innerHTML = `
       <div style="font-family:var(--font-pixel);font-size:clamp(12px,1.5vw,16px);color:var(--red);text-align:center;margin-bottom:12px">
@@ -2060,6 +2099,7 @@ function startLevel8() {
         if (el.classList.contains('found')) return;
         const idx = +el.dataset.idx;
         if (suspiciousItems[idx].isBad) {
+          GS.recapResults[`STEP 2 Segment: "${suspiciousItems[idx].text.trim()}"`] = true;
           el.classList.add('found');
           found++;
           $('boss-found').textContent = found;
@@ -2093,6 +2133,7 @@ function startLevel8() {
       btn.textContent = pw;
       btn.addEventListener('click', () => {
         if (oi === correct) {
+          GS.recapResults[`STEP 3 QUESTION: ${BOSS_STEP3_ITEMS[0].question}`] = true;
           btn.classList.add('correct');
           stepDone[2] = true;
           updateStepIndicator(2);
@@ -2101,6 +2142,7 @@ function startLevel8() {
           clearInterval(timerInterval);
           setTimeout(finishBoss, 1000);
         } else {
+          GS.recapResults[`STEP 3 QUESTION: ${BOSS_STEP3_ITEMS[0].question}`] = false;
           btn.classList.add('wrong');
           showBreach(() => { /* remain on step */ });
           loseXP(5);
