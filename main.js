@@ -604,10 +604,16 @@ function updateHUD() {
 function showWorldMap(autoAdvanceFromLv = null) {
   clearAllTimers();
   const mainArea = document.getElementById('main-area');
+  const levelContent = document.getElementById('level-content');
   const mapNodes = document.querySelectorAll('.map-node');
   const playerSprite = document.getElementById('player-sprite');
   const playerImg = document.getElementById('player-sprite-img');
   const promptEl = document.getElementById('interaction-prompt');
+  
+  if (levelContent) {
+    levelContent.dispatchEvent(new Event('removed'));
+    levelContent.innerHTML = '';
+  }
   
   if (mainArea) mainArea.style.display = 'none';
   if (promptEl) promptEl.style.display = 'none';
@@ -915,7 +921,10 @@ const LEVEL_META = {
 
 function showLevelTransition(lvNum) {
   clearAllTimers();
-  levelContent.innerHTML = '';
+  if (levelContent) {
+    levelContent.dispatchEvent(new Event('removed'));
+    levelContent.innerHTML = '';
+  }
   feedbackOverlay.style.display = 'none';
   levelSplash.style.display = 'flex';
 
