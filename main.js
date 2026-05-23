@@ -599,7 +599,7 @@ function updateHUD() {
     if (nameEl)  nameEl.textContent  = GS.character ? GS.character.name  : 'PLAYER ' + player;
 }
 
-function showWorldMap() {
+function showWorldMap(autoAdvanceFromLv = null) {
   clearAllTimers();
   const mainArea = document.getElementById('main-area');
   const mapNodes = document.querySelectorAll('.map-node');
@@ -699,8 +699,49 @@ function showWorldMap() {
     8: { left: 7 }
   };
 
+  if (autoAdvanceFromLv && autoAdvanceFromLv < 8) {
+    let nextLv = autoAdvanceFromLv + 1;
+    if (nextLv === 8 && GS.levelsDone.length < 7) {
+      autoAdvanceFromLv = null;
+    } else {
+      let autoDir = null;
+      for (let d in Graph[autoAdvanceFromLv]) {
+        if (Graph[autoAdvanceFromLv][d] === nextLv) {
+          autoDir = d;
+          break;
+        }
+      }
+      if (autoDir) {
+        setTimeout(() => {
+          isMoving = true;
+          GS.currentNode = nextLv;
+          
+          if (playerSprite) {
+            playerSprite.style.transition = 'left 1.5s linear, top 1.5s linear';
+          }
+          
+          updatePlayerPos(GS.currentNode);
+          if (promptEl) promptEl.style.display = 'none';
+          
+          if (autoDir === 'left' && playerImg) playerImg.style.transform = 'scaleX(-1)';
+          if (autoDir === 'right' && playerImg) playerImg.style.transform = 'scaleX(1)';
+          
+          setTimeout(() => {
+            isMoving = false;
+            autoAdvanceFromLv = null;
+            if (playerSprite) {
+              playerSprite.style.transition = 'left 0.3s linear, top 0.3s linear';
+            }
+          }, 1500);
+        }, 500);
+      } else {
+        autoAdvanceFromLv = null;
+      }
+    }
+  }
+
   function mapLoop() {
-    if (!isMoving) {
+    if (!isMoving && autoAdvanceFromLv == null) {
       let dir = null;
       if (Input.up) dir = 'up';
       else if (Input.down) dir = 'down';
@@ -918,7 +959,7 @@ function completeLevel(lvNum) {
   setTimeout(() => {
     levelSplash.style.display = 'none';
     showLevelRecap(lvNum, () => {
-      showWorldMap();
+      showWorldMap(lvNum);
     });
   }, 2000);
 }
