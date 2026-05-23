@@ -243,8 +243,10 @@ const levelSplash    = $('level-splash');
 const feedbackOverlay= $('feedback-overlay');
 const fbIcon         = $('fb-icon');
 const fbTitle        = $('fb-title');
+const fbItem         = $('fb-item');
 const fbMsg          = $('fb-msg');
 const fbCount        = $('fb-count');
+const fbContinueBtn  = $('fb-continue-btn');
 const xpFloat        = $('xp-float');
 const screenFlash    = $('screen-flash');
 const dispTeam       = $('disp-team');
@@ -863,21 +865,37 @@ function registerWrong(penaltyXP, msg, correctInfo) {
 // ═══════════════════════════════════════════════════
 // FEEDBACK OVERLAY
 // ═══════════════════════════════════════════════════
-function showFeedback(correct, title, msg, extraInfo='', duration=3) {
+function showFeedback(correct, title, itemText, msg, duration=15, onComplete=null) {
   feedbackOverlay.style.display = 'flex';
   $('feedback-box').className = correct ? 'correct-fb' : 'wrong-fb';
   fbIcon.textContent  = correct ? '✅' : '❌';
   fbTitle.textContent = title;
-  fbMsg.textContent   = msg + (extraInfo ? '\n' + extraInfo : '');
+  
+  if (fbItem) {
+    fbItem.textContent = itemText ? `"${itemText}"` : '';
+  }
+  
+  fbMsg.textContent   = msg;
   fbMsg.style.whiteSpace = 'pre-line';
 
   let t = duration;
-  fbCount.textContent = t;
-  clearTimeout(feedbackTimeout);
-  const iv = setInterval(()=>{
+  fbCount.textContent = t + 's';
+  clearInterval(feedbackTimeout);
+
+  const finish = () => {
+    clearInterval(feedbackTimeout);
+    feedbackOverlay.style.display = 'none';
+    if (onComplete) onComplete();
+  };
+
+  if (fbContinueBtn) {
+    fbContinueBtn.onclick = finish;
+  }
+
+  feedbackTimeout = setInterval(()=>{
     t--;
-    fbCount.textContent = t;
-    if (t <= 0) { clearInterval(iv); feedbackOverlay.style.display = 'none'; }
+    fbCount.textContent = t + 's';
+    if (t <= 0) { finish(); }
   }, 1000);
 }
 
@@ -1316,7 +1334,7 @@ function startLevel2() {
     </div>
   `;
 
-  timerInterval = setInterval(() => {
+  const l2TimerFn = () => {
     if (isPaused) return;
     timeLeft--;
     $('l2-timer-num').textContent = timeLeft;
@@ -1325,7 +1343,8 @@ function startLevel2() {
       clearAllTimers();
       finishPhish();
     }
-  }, 1000);
+  };
+  timerInterval = setInterval(l2TimerFn, 1000);
 
   function renderEmail(idx) {
     const email = PHISH_EMAILS[idx];
@@ -1396,9 +1415,13 @@ function startLevel2() {
       }
       flashScreen('green');
 
-      if (emailDone[idx] >= email.allBad) {
-        setTimeout(() => nextEmail(idx), 1500);
-      }
+      clearInterval(timerInterval);
+      showFeedback(true, 'CORRECT!', email.from, email.fromRecap, 15, () => {
+        timerInterval = setInterval(l2TimerFn, 1000);
+        if (emailDone[idx] >= email.allBad) {
+          nextEmail(idx);
+        }
+      });
     });
 
     // Make other header elements and labels clickable but wrong (triggers wrong feedback/penalty)
@@ -1420,6 +1443,11 @@ function startLevel2() {
             }, 2000);
           }
           setTimeout(() => el.classList.remove('wrong'), 400);
+
+          clearInterval(timerInterval);
+          showFeedback(false, 'WRONG!', el.textContent.trim(), 'This field is standard and not inherently suspicious in this context.', 15, () => {
+            timerInterval = setInterval(l2TimerFn, 1000);
+          });
         });
       }
     });
@@ -1428,6 +1456,9 @@ function startLevel2() {
   function clickSegment(el, emailIdx, segIdx, isBad) {
     if (el.classList.contains('found') || el.classList.contains('wrong')) return;
     const headerEl = document.querySelector('#phish-wrap .level-header');
+    
+    const segInfo = PHISH_EMAILS[emailIdx].body[segIdx];
+    
     if (isBad) {
       el.classList.add('found');
       GS.recapResults[`Email Segment: "${el.textContent.trim()}"`] = true;
@@ -1443,9 +1474,14 @@ function startLevel2() {
         headerEl.style.color = 'var(--lime)';
       }
       flashScreen('green');
-      if (emailDone[emailIdx] >= PHISH_EMAILS[emailIdx].allBad) {
-        setTimeout(() => nextEmail(emailIdx), 1500);
-      }
+      
+      clearInterval(timerInterval);
+      showFeedback(true, 'CORRECT!', el.textContent.trim(), segInfo.recap || 'Suspicious element found!', 15, () => {
+        timerInterval = setInterval(l2TimerFn, 1000);
+        if (emailDone[emailIdx] >= PHISH_EMAILS[emailIdx].allBad) {
+          nextEmail(emailIdx);
+        }
+      });
     } else {
       el.classList.add('wrong');
       wrongClicks++;
@@ -1459,6 +1495,11 @@ function startLevel2() {
         }, 2000);
       }
       setTimeout(() => el.classList.remove('wrong'), 400);
+      
+      clearInterval(timerInterval);
+      showFeedback(false, 'WRONG!', el.textContent.trim(), 'This part of the email is actually safe! Not all parts of a phishing email are malicious.', 15, () => {
+        timerInterval = setInterval(l2TimerFn, 1000);
+      });
     }
   }
 
@@ -1537,20 +1578,29 @@ function startLevel3() {
           if (fastBonus) addXP(10, btn);
           $('pw-feedback').textContent = '✅ ' + round.explanation;
           $('pw-feedback').style.color = 'var(--green)';
+
+          showFeedback(true, 'CORRECT!', pw, round.explanation, 15, () => {
+            if (idx + 1 < PW_ROUNDS.length) showRound(idx + 1);
+            else {
+              if (roundsCorrect === PW_ROUNDS.length) addXP(20, null);
+              completeLevel(3);
+            }
+          });
         } else {
           GS.recapResults[round.question] = false;
           optionsEl.querySelectorAll('.pw-option')[round.correct].classList.add('correct');
           loseXP(5);
           $('pw-feedback').textContent = '❌ ' + round.explanation;
           $('pw-feedback').style.color = 'var(--red)';
+
+          showFeedback(false, 'WRONG!', pw, round.explanation, 15, () => {
+            if (idx + 1 < PW_ROUNDS.length) showRound(idx + 1);
+            else {
+              if (roundsCorrect === PW_ROUNDS.length) addXP(20, null);
+              completeLevel(3);
+            }
+          });
         }
-        setTimeout(() => {
-          if (idx + 1 < PW_ROUNDS.length) showRound(idx + 1);
-          else {
-            if (roundsCorrect === PW_ROUNDS.length) addXP(20, null);
-            completeLevel(3);
-          }
-        }, 2000);
       });
       optionsEl.appendChild(btn);
     });
@@ -1567,15 +1617,21 @@ function startLevel3() {
           answered = true;
           GS.recapResults[round.question] = false;
           clearInterval(timerInterval);
-          const fbEl = $('l3-feedback');
-          if (!fbEl) return;
-          fbEl.textContent = 'TIME! ' + round.explanation;
+          const fbEl = $('pw-feedback');
+          if (fbEl) {
+             fbEl.textContent = 'TIME! ' + round.explanation;
+             fbEl.style.color = 'var(--red)';
+          }
           optionsEl.querySelectorAll('.pw-option')[round.correct].classList.add('correct');
           loseXP(5);
-          setTimeout(()=>{
+          
+          showFeedback(false, 'TIME OUT!', null, round.explanation, 15, () => {
             if (idx+1 < PW_ROUNDS.length) showRound(idx+1);
-            else completeLevel(3);
-          }, 2000);
+            else {
+              if (roundsCorrect === PW_ROUNDS.length) addXP(20, null);
+              completeLevel(3);
+            }
+          });
         }
       }
     }, 1000);
@@ -1751,7 +1807,9 @@ function startLevel5() {
         loseXP(5);
         $('url-browser-content').textContent = item.reason;
         flashScreen('red');
-        setTimeout(() => showURL(i+1), 3000);
+        showFeedback(false, 'TIME OUT!', item.url, item.reason + '\n\n' + item.recap, 15, () => {
+          showURL(i+1);
+        });
       }
     }, 1000);
 
@@ -1765,13 +1823,20 @@ function startLevel5() {
         registerCorrect(15, $('btn-url-safe'));
         $('url-browser-content').textContent = item.reason;
         flashScreen('green');
+        
+        showFeedback(true, 'CORRECT!', item.url, item.reason + '\n\n' + item.recap, 15, () => {
+          showURL(i+1);
+        });
       } else {
         GS.recapResults[item.url] = false;
         loseXP(5);
         $('url-browser-content').textContent = item.reason;
         flashScreen('red');
+        
+        showFeedback(false, 'WRONG!', item.url, item.reason + '\n\n' + item.recap, 15, () => {
+          showURL(i+1);
+        });
       }
-      setTimeout(() => showURL(i+1), 3000);
     }
 
     $('btn-url-safe').onclick = () => ans('safe');

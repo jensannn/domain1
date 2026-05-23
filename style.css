@@ -2180,6 +2180,14 @@ html, body {
   #comic-container {
     padding: 30px;
   }
+  #recap-scroll-area {
+    overflow-y: auto;
+    display: block;
+    padding-right: 8px;
+  }
+  #recap-list {
+    height: auto;
+  }
 }
 
 /* ---- 1024x768 (Tablets / Small Laptops) ---- */
