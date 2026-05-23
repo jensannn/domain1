@@ -29,7 +29,8 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
-  width: 100%; height: 100%; overflow: hidden;
+  width: 100%; height: 100%; overflow-x: hidden; overflow-y: auto;
+  min-width: 0;
   background: var(--bg3);
   color: var(--white);
   font-family: var(--font-mono);
@@ -51,8 +52,15 @@ html, body {
   background: radial-gradient(ellipse at center, transparent 65%, rgba(0,0,0,0.12) 100%);
 }
 #app {
-  position: fixed; inset: 0; overflow: hidden;
+  position: fixed; inset: 0; overflow-x: hidden; overflow-y: auto;
+  min-width: 0;
+  max-width: 100vw;
   background: transparent;
+}
+
+.retro-btn {
+  width: min(100%, 250px);
+  min-width: 0;
 }
 
 /* ── GENERATED BACKGROUND ── */
@@ -2091,8 +2099,22 @@ html, body {
 
 /* ---- 1366x768 (Standard Laptop) ---- */
 @media (max-width: 1366px) {
+  #main-menu-box {
+    width: min(92%, 460px);
+    padding: 34px 24px;
+  }
+  .menu-title {
+    font-size: 30px !important;
+  }
+  .menu-options .retro-btn {
+    width: 100% !important;
+    max-width: 240px;
+  }
   #team-entry-box {
     padding: 40px 50px;
+  }
+  #team-name-input {
+    min-width: 0;
   }
   #char-options {
     gap: 20px;
