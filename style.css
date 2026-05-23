@@ -170,6 +170,42 @@ html, body {
 }
 .btn-choice:hover { background: rgba(0, 182, 192, 0.08); box-shadow: 0 0 16px rgba(0, 182, 192, 0.25); }
 
+/* Password option cards (darker background for strong contrast) */
+.pw-option {
+  display: flex;
+  align-items: center;
+  padding: 18px 20px;
+  border-radius: 6px;
+  border: 3px solid rgba(255,255,255,0.04);
+  background: linear-gradient(180deg, rgba(18,10,43,0.95), rgba(18,10,43,0.88));
+  color: #F8F8FF;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.36), 0 0 12px rgba(153,0,230,0.04);
+}
+.pw-option:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.42), 0 0 24px rgba(153,0,230,0.08);
+  background: linear-gradient(180deg, rgba(18,10,43,0.98), rgba(12,6,28,0.92));
+}
+.pw-option:focus { outline: none; box-shadow: 0 0 0 4px rgba(153,0,230,0.12); }
+
+/* JS toggled states */
+.pw-option.correct {
+  border-color: var(--green);
+  background: linear-gradient(90deg, rgba(22,115,22,0.12), rgba(22,115,22,0.04));
+  box-shadow: 0 8px 26px rgba(22,115,22,0.18);
+}
+.pw-option.wrong {
+  border-color: var(--red);
+  background: linear-gradient(90deg, rgba(168,23,23,0.08), rgba(168,23,23,0.02));
+  box-shadow: 0 8px 26px rgba(168,23,23,0.12);
+}
+
+
 /* ── CURSOR BLINK ── */
 .cursor-blink {
   color: var(--pink);
