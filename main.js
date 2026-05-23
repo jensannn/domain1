@@ -8,6 +8,18 @@
 // Set to false before deploying to players.
 const DEV_MODE = false;
 
+// ── LEVEL TIMINGS & SPEEDS ────────────────────────
+// Change the countdown timers and specific level speeds here.
+const LEVEL_SETTINGS = {
+  1: { countdown: 60, speed: 5 },   // Level 1: total time, packet rolling speed (seconds)
+  2: { countdown: 45 },             // Level 2: total time
+  3: { countdown: 15 },             // Level 3: time per round
+  4: { countdown: 5 },              // Level 4: time per scenario
+  5: { countdown: 10 },             // Level 5: time per URL
+  6: { countdown: 12 },             // Level 6: memorization time
+  8: { countdown: 90 }              // Level 8: boss level total time
+};
+
 // ── AUDIO ENGINE ──────────────────────────────────
 const AC = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -1076,7 +1088,7 @@ function startLevel1() {
   let correct = 0, wrong = 0;
   let done = false;
   let answering = false;
-  const TOTAL_TIME = 60;
+  const TOTAL_TIME = LEVEL_SETTINGS[1].countdown;
   let timeLeft = TOTAL_TIME;
 
   levelContent.innerHTML = `
@@ -1153,8 +1165,10 @@ function startLevel1() {
     packetCard.classList.remove('packet-rolling');
     packetCard.style.transition = 'none';
     packetCard.style.transform = 'none';
+    packetCard.style.animation = 'none';
     void packetCard.offsetWidth;
     packetCard.classList.add('packet-rolling');
+    packetCard.style.animation = `packet-roll-3d ${LEVEL_SETTINGS[1].speed}s linear forwards, packet-pulse 1.4s ease-in-out infinite`;
     packetCard.style.opacity = '1';
   }
 
@@ -1239,7 +1253,7 @@ function startLevel2() {
   let totalNeeded = 0;
   PHISH_EMAILS.forEach(e => totalNeeded += e.allBad);
   let wrongClicks = 0;
-  const TOTAL_TIME = 45;
+  const TOTAL_TIME = LEVEL_SETTINGS[2].countdown;
   let timeLeft = TOTAL_TIME;
   let clickedCount = 0;
   let emailDone = [0, 0];
@@ -1442,7 +1456,7 @@ function startLevel3() {
         <div class="level-timer-bar" style="flex:1">
           <div class="level-timer-bar-fill" id="l3-timer-fill" style="transition:width 1s linear"></div>
         </div>
-        <span style="font-family:var(--font-pixel);font-size:18px;color:var(--gold);min-width:36px" id="l3-timer-num">15</span>
+        <span style="font-family:var(--font-pixel);font-size:18px;color:var(--gold);min-width:36px" id="l3-timer-num">${LEVEL_SETTINGS[3].countdown}</span>
       </div>
       <div id="pw-question" style="font-family:var(--font-mono);font-size:clamp(16px,2vw,20px);color:var(--white);text-align:center"></div>
       <div id="pw-options" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;flex:1"></div>
@@ -1452,7 +1466,7 @@ function startLevel3() {
 
   function showRound(idx) {
     const round = PW_ROUNDS[idx];
-    const timePerRound = 15;
+    const timePerRound = LEVEL_SETTINGS[3].countdown;
     let timeLeft = timePerRound;
     let answered = false;
 
@@ -1536,7 +1550,7 @@ function startLevel3() {
 function startLevel4() {
   let idx = 0;
   let correct = 0, wrong = 0;
-  let timeLeft = 5;
+  let timeLeft = LEVEL_SETTINGS[4].countdown;
   let answered = false;
   let multiplier = 1;
   let streakForMultiplier = 0;
@@ -1548,7 +1562,7 @@ function startLevel4() {
         <div class="level-timer-bar" style="width:200px">
           <div class="level-timer-bar-fill" id="l4-timer-fill" style="transition:width 1s linear"></div>
         </div>
-        <span id="l4-timer-num" style="font-family:var(--font-pixel);font-size:18px;color:var(--gold);min-width:28px">5</span>
+        <span id="l4-timer-num" style="font-family:var(--font-pixel);font-size:18px;color:var(--gold);min-width:28px">${LEVEL_SETTINGS[4].countdown}</span>
         <span id="speed-multiplier" style="font-family:var(--font-pixel);font-size:12px;color:var(--gold)">×1</span>
       </div>
       <div id="speed-scenario">
@@ -1570,7 +1584,7 @@ function startLevel4() {
     }
     const sc = SPEED_SCENARIOS[i];
     answered = false;
-    timeLeft = 5;
+    timeLeft = LEVEL_SETTINGS[4].countdown;
     $('speed-icon').textContent = sc.icon;
     $('speed-text').textContent = sc.text;
     $('speed-counter').textContent = `SCENARIO ${i+1} / ${SPEED_SCENARIOS.length}`;
@@ -1583,7 +1597,7 @@ function startLevel4() {
       if (isPaused) return;
       timeLeft--;
       $('l4-timer-num').textContent = timeLeft;
-      $('l4-timer-fill').style.width = (timeLeft / 5 * 100) + '%';
+      $('l4-timer-fill').style.width = (timeLeft / LEVEL_SETTINGS[4].countdown * 100) + '%';
       if (timeLeft <= 2) $('l4-timer-fill').classList.add('timer-red');
       if (timeLeft <= 0 && !answered) {
         answered = true;
@@ -1638,7 +1652,7 @@ function startLevel4() {
 function startLevel5() {
   let idx = 0;
   let score = 0;
-  let timeLeft = 10;
+  let timeLeft = LEVEL_SETTINGS[5].countdown;
 
   levelContent.innerHTML = `
     <div id="url-wrap">
@@ -1647,7 +1661,7 @@ function startLevel5() {
         <div class="level-timer-bar" style="flex:1">
           <div class="level-timer-bar-fill" id="l5-timer-fill" style="transition:width 1s linear"></div>
         </div>
-        <span style="font-family:var(--font-pixel);font-size:18px;color:var(--gold);min-width:36px" id="l5-timer-num">10</span>
+        <span style="font-family:var(--font-pixel);font-size:18px;color:var(--gold);min-width:36px" id="l5-timer-num">${LEVEL_SETTINGS[5].countdown}</span>
       </div>
       <div id="url-counter" style="font-family:var(--font-pixel);font-size:12px;color:var(--gray)">URL 1 / 5</div>
       <div id="url-browser-frame">
@@ -1674,7 +1688,7 @@ function startLevel5() {
     if (i >= URL_ITEMS.length) { clearInterval(timerInterval); completeLevel(5); return; }
     const item = URL_ITEMS[i];
     let answered = false;
-    timeLeft = 10;
+    timeLeft = LEVEL_SETTINGS[5].countdown;
     $('url-counter').textContent = `URL ${i+1} / 5`;
     $('url-browser-bar').textContent = item.url;
     $('url-browser-content').textContent = 'Read the URL carefully. Team — discuss!';
@@ -1687,7 +1701,7 @@ function startLevel5() {
       if (isPaused) return;
       timeLeft--;
       $('l5-timer-num').textContent = timeLeft;
-      $('l5-timer-fill').style.width = (timeLeft / 10 * 100) + '%';
+      $('l5-timer-fill').style.width = (timeLeft / LEVEL_SETTINGS[5].countdown * 100) + '%';
       if (timeLeft <= 3) $('l5-timer-fill').classList.add('timer-red');
       if (timeLeft <= 0 && !answered) {
         answered = true;
@@ -1732,7 +1746,7 @@ function startLevel5() {
 
 function startLevel6() {
   let phase = 'flash'; // 'flash' or 'quiz'
-  let flashTimeLeft = 12;
+  let flashTimeLeft = LEVEL_SETTINGS[6].countdown;
   let answered = 0;
   let correct = 0;
 
@@ -1770,7 +1784,7 @@ function startLevel6() {
     if (isPaused) return;
     flashTimeLeft--;
     $('l6-timer-num').textContent = flashTimeLeft;
-    $('l6-timer-fill').style.width = (flashTimeLeft / 12 * 100) + '%';
+    $('l6-timer-fill').style.width = (flashTimeLeft / LEVEL_SETTINGS[6].countdown * 100) + '%';
     $('memory-phase-label').textContent = `MEMORIZING... ${flashTimeLeft}s`;
     if (flashTimeLeft <= 0) {
       clearInterval(timerInterval);
@@ -1986,7 +2000,7 @@ function startLevel7() {
 function startLevel8() {
   let bossStep = 0; // 0,1,2
   let mistakes = 0;
-  let totalTime = 90;
+  let totalTime = LEVEL_SETTINGS[8].countdown;
   let timeLeft = totalTime;
   let stepDone = [false,false,false];
 
@@ -1997,7 +2011,7 @@ function startLevel8() {
         <div class="level-timer-bar" style="flex:1">
           <div class="level-timer-bar-fill" id="l8-timer-fill" style="background:var(--red);transition:width 1s linear"></div>
         </div>
-        <span style="font-family:var(--font-pixel);font-size:22px;color:var(--red);text-shadow:0 0 10px var(--red);min-width:36px" id="l8-timer-num">90</span>
+        <span style="font-family:var(--font-pixel);font-size:22px;color:var(--red);text-shadow:0 0 10px var(--red);min-width:36px" id="l8-timer-num">${LEVEL_SETTINGS[8].countdown}</span>
       </div>
       <div id="boss-step-indicator">
         <div class="boss-step-dot active" id="bsd-0">STEP 1</div>
