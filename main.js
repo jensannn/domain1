@@ -895,12 +895,18 @@ function showFeedback(correct, title, itemText, msg, duration=15, onComplete=nul
   };
 
   if (fbContinueBtn) {
+    fbContinueBtn.style.display = 'none';
     fbContinueBtn.onclick = finish;
   }
 
   feedbackTimeout = setInterval(()=>{
     t--;
     fbCount.textContent = t + 's';
+    
+    if (fbContinueBtn && t <= duration - 5) {
+      fbContinueBtn.style.display = '';
+    }
+
     if (t <= 0) { finish(); }
   }, 1000);
 }
