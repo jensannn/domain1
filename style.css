@@ -1164,7 +1164,7 @@ html, body {
 #url-browser-frame {
   width: 100%;
   border: 3px solid var(--cyan)bb;
-  background: var(--bg3);
+  background: #FFFFFF;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
@@ -1174,9 +1174,9 @@ html, body {
   display: flex; gap: 8px; align-items: center;
 }
 .browser-dot { width: 12px; height: 12px; border-radius: 50%; }
-.bd-red { background: var(--red); }
-.bd-yellow { background: var(--orange); }
-.bd-green { background: var(--green); }
+.bd-red { background: #FF5F56; }
+.bd-yellow { background: #FFBD2E; }
+.bd-green { background: #27C93F; }
 #url-browser-bar {
   background: #F4F1FC;
   border: 2px solid var(--cyan)88;
@@ -1273,7 +1273,7 @@ html, body {
   max-width: 95vw;
   flex: 1;
   min-height: 0;
-  background: var(--bg3);
+  background: #FFFFFF;
   border: 12px solid #D9D2E9;
   border-radius: 40px;
   position: relative;
