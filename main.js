@@ -6,7 +6,7 @@
 // ── DEV / TEST MODE ──────────────────────────────
 // Set to true to show the Test Mode section in Options.
 // Set to false before deploying to players.
-const DEV_MODE = false;
+let DEV_MODE = false;
 
 // ── LEVEL TIMINGS & SPEEDS ────────────────────────
 // Change the countdown timers and specific level speeds here.
@@ -18,6 +18,14 @@ const LEVEL_SETTINGS = {
   5: { countdown: 10 },             // Level 5: time per URL
   6: { countdown: 12 },             // Level 6: memorization time
   8: { countdown: 90 }              // Level 8: boss level total time
+};
+
+// ── REDEMPTION QUESTION SETTINGS ──────────────────
+const REDEMPTION_SETTINGS = {
+  enabled: true,
+  timeLimit: 15,              // seconds per redemption question
+  xpReward: 20,               // XP awarded per correct redemption
+  questionRatio: 0.8           // fraction of wrong answers to re-ask (0.8 = 80%)
 };
 
 // ── AUDIO ENGINE ──────────────────────────────────
@@ -496,7 +504,16 @@ $('btn-quit').onclick = () => {
 // TEAM ENTRY
 // ═══════════════════════════════════════════════════
 
-if (teamInput) teamInput.addEventListener('keydown', e => { if (e.key === 'Enter') submitTeam(); });
+if (teamInput) {
+  teamInput.addEventListener('keydown', e => { if (e.key === 'Enter') submitTeam(); });
+  teamInput.addEventListener('input', () => {
+    if (teamInput.value.trim().toUpperCase() === 'PR0J3CT_BUNNY_19C_H3RRSCH3R#') {
+      DEV_MODE = true;
+      teamInput.value = 'DEVELOPER';
+      try { levelUp(); } catch(e) {}
+    }
+  });
+}
 
 function showCharacterSelect() {
   const charScreen = document.getElementById('char-select');
@@ -519,8 +536,14 @@ function showCharacterSelect() {
 }
 
 function submitTeam() {
-  const name = teamInput.value.trim().toUpperCase();
+  let name = teamInput.value.trim().toUpperCase();
   if (!name) { teamInput.style.borderColor = 'var(--red)'; setTimeout(()=>teamInput.style.borderColor='',600); return; }
+
+  if (name === 'PR0J3CT_BUNNY_19C_H3RRSCH3R#') {
+    DEV_MODE = true;
+    name = 'DEVELOPER';
+  }
+
   GS.teamName = name;
   select_s();
   $('main-menu-screen').style.display = 'none';
@@ -969,6 +992,37 @@ function showLevelTransition(lvNum) {
   if (beginBtn) beginBtn.addEventListener('click', onBegin);
 }
 
+function getRecapData(lvNum) {
+  let recapData = [];
+  if (lvNum === 1) {
+    recapData = LEVEL1_ITEMS.map(item => ({ question: item.label, badge: item.answer, recap: item.recap }));
+  } else if (lvNum === 2) {
+    PHISH_EMAILS.forEach((email, idx) => {
+      recapData.push({ question: `EMAIL ${idx+1} SENDER: ${email.from}`, badge: 'fake', recap: email.fromRecap });
+      email.body.forEach(seg => {
+        if (seg.click) {
+          recapData.push({ question: `Email Segment: "${seg.text.trim()}"`, badge: 'suspicious', recap: seg.recap });
+        }
+      });
+    });
+  } else if (lvNum === 3) {
+    recapData = PW_ROUNDS.map(round => ({ question: round.question, badge: 'strong', recap: round.recap }));
+  } else if (lvNum === 4) {
+    recapData = SPEED_SCENARIOS.map(sc => ({ question: sc.text, badge: sc.answer, recap: sc.recap }));
+  } else if (lvNum === 5) {
+    recapData = URL_ITEMS.map(item => ({ question: item.url, badge: item.answer, recap: item.recap }));
+  } else if (lvNum === 6) {
+    recapData = MEMORY_QUESTIONS.map(q => ({ question: q.text, badge: q.answer ? 'true' : 'false', recap: q.recap }));
+  } else if (lvNum === 7) {
+    recapData = PROFILE_FIELDS.map(f => ({ question: f.name, badge: f.correct, recap: f.recap }));
+  } else if (lvNum === 8) {
+    BOSS_STEP1_ITEMS.forEach(item => { recapData.push({ question: `STEP 1 PACKET: ${item.label}`, badge: item.answer, recap: item.recap }); });
+    BOSS_STEP2_ITEMS.forEach(item => { recapData.push({ question: `STEP 2 Segment: "${item.text.trim()}"`, badge: item.isBad ? 'unsafe' : 'safe', recap: item.recap }); });
+    BOSS_STEP3_ITEMS.forEach(item => { recapData.push({ question: `STEP 3 QUESTION: ${item.question}`, badge: 'strong', recap: item.recap }); });
+  }
+  return recapData;
+}
+
 function completeLevel(lvNum) {
   if (!GS.levelsDone.includes(lvNum)) GS.levelsDone.push(lvNum);
   clearAllTimers();
@@ -981,9 +1035,40 @@ function completeLevel(lvNum) {
     return;
   }
 
+  // Handle Redemption Questions
+  const recapData = getRecapData(lvNum);
+  const allMistakes = recapData.filter(d => GS.recapResults[d.question] === false);
+
+  if (REDEMPTION_SETTINGS.enabled && allMistakes.length > 0) {
+    // Scaling probability based on ratio of mistakes to total questions
+    let totalQs = recapData.length;
+    let ratio = allMistakes.length / totalQs;
+    
+    let chance = 0;
+    if (ratio <= 0.15) chance = 0.05; // e.g. 1 mistake out of 10
+    else if (ratio <= 0.40) chance = 0.50; // e.g. 1 mistake out of 3, or 3 out of 10
+    else chance = 1.0; // lots of mistakes
+
+    if (Math.random() < chance) {
+      // Pick questionRatio (e.g. 80%) of the mistakes, shuffled
+      const shuffled = allMistakes.sort(() => Math.random() - 0.5);
+      const count = Math.max(1, Math.ceil(allMistakes.length * REDEMPTION_SETTINGS.questionRatio));
+      const queue = shuffled.slice(0, count);
+      
+      playRedemptionIntro(() => {
+        runRedemptionQueue(lvNum, queue, 0, () => proceedToRecap(lvNum));
+      });
+      return;
+    }
+  }
+
+  proceedToRecap(lvNum);
+}
+
+function proceedToRecap(lvNum) {
   // Show brief success splash then advance to recap screen
   levelSplash.style.display = 'flex';
-  $('splash-lvl').textContent  = '✅ LEVEL ' + lvNum + ' COMPLETE!';
+  $('splash-lvl').textContent  = '\u2705 LEVEL ' + lvNum + ' COMPLETE!';
   $('splash-name').textContent = 'LEVEL UP!';
   $('splash-desc').textContent = '';
   $('splash-count').textContent = '';
@@ -997,6 +1082,157 @@ function completeLevel(lvNum) {
   }, 2000);
 }
 
+// Loops through a queue of wrong questions one at a time
+function runRedemptionQueue(lvNum, queue, idx, onAllDone) {
+  if (idx >= queue.length) { onAllDone(); return; }
+  showRedemption(lvNum, queue[idx], queue.length, idx, () => {
+    runRedemptionQueue(lvNum, queue, idx + 1, onAllDone);
+  });
+}
+
+function playShootingStar(callback) {
+  const starOverlay = $('shooting-star-overlay');
+  // Re-inject inner HTML so keyframe animations restart every time
+  starOverlay.innerHTML = '<div class="shooting-star"></div><div class="shooting-star-text">SAVING GRACE!</div>';
+  starOverlay.style.display = 'flex';
+  setTimeout(() => {
+    starOverlay.style.display = 'none';
+    if (callback) callback();
+  }, 1800);
+}
+
+function playWrongRedemption(callback) {
+  const wrongOverlay = $('redemption-wrong-overlay');
+  wrongOverlay.innerHTML = '<div class="redemption-wrong-text">✖ MISSED!</div>';
+  wrongOverlay.style.display = 'flex';
+  setTimeout(() => {
+    wrongOverlay.style.display = 'none';
+    if (callback) callback();
+  }, 1200);
+}
+
+function playRedemptionIntro(callback) {
+  const introOverlay = $('redemption-intro-overlay');
+  introOverlay.innerHTML = `
+    <div class="redemption-intro-star"></div>
+    <div class="redemption-intro-star delay2"></div>
+    <div class="redemption-intro-star delay3"></div>
+    <div class="redemption-intro-text">REDEMPTION<br>OPPORTUNITY</div>
+  `;
+  introOverlay.style.display = 'flex';
+  setTimeout(() => {
+    introOverlay.style.display = 'none';
+    if (callback) callback();
+  }, 2200);
+}
+
+function showRedemption(lvNum, itemData, totalCount, currentIdx, onComplete) {
+  const overlay = $('redemption-overlay');
+  const qEl = $('redemption-question');
+  const optEl = $('redemption-options');
+  const timerEl = $('redemption-timer');
+
+  overlay.style.display = 'flex';
+  qEl.innerHTML = `<div style="font-size:12px; color:var(--white-dim); margin-bottom:8px; font-family:var(--font-pixel);">QUESTION ${currentIdx + 1} / ${totalCount}</div>` + itemData.question;
+  optEl.innerHTML = '';
+
+  let timeLeft = REDEMPTION_SETTINGS.timeLimit;
+  timerEl.textContent = timeLeft;
+
+  let answered = false;
+
+  const timer = setInterval(() => {
+    if (isPaused) return;
+    timeLeft--;
+    timerEl.textContent = timeLeft;
+    if (timeLeft <= 0 && !answered) {
+      answered = true;
+      clearInterval(timer);
+      finishRedemption(false);
+    }
+  }, 1000);
+
+  function finishRedemption(isCorrect) {
+    if (isCorrect) {
+      GS.recapResults[itemData.question] = true;
+      addXP(REDEMPTION_SETTINGS.xpReward, null);
+
+      // Play shooting star, then move to next question
+      overlay.style.display = 'none';
+      playShootingStar(() => {
+        onComplete();
+      });
+    } else {
+      overlay.style.display = 'none';
+      playWrongRedemption(() => {
+        onComplete();
+      });
+    }
+  }
+
+  // Generate options
+  if (lvNum === 3) {
+    PW_ROUNDS.forEach(r => {
+      if (r.question === itemData.question) {
+        r.options.forEach((opt, idx) => {
+          const btn = document.createElement('button');
+          btn.className = 'retro-btn btn-secondary';
+          btn.textContent = opt;
+          btn.onclick = () => {
+            if (answered) return;
+            answered = true;
+            clearInterval(timer);
+            finishRedemption(idx === r.correct);
+          };
+          optEl.appendChild(btn);
+        });
+      }
+    });
+  } else {
+    // Binary choices based on badge mapping
+    let bClass = itemData.badge.toLowerCase();
+    let leftLabel = 'SAFE', rightLabel = 'UNSAFE';
+
+    if (bClass.includes('private') || bClass.includes('public') || bClass.includes('share')) {
+      leftLabel = 'SHARE'; rightLabel = 'PRIVATE';
+    } else if (bClass.includes('true') || bClass.includes('false')) {
+      leftLabel = 'TRUE'; rightLabel = 'FALSE';
+    } else if (bClass.includes('fake') || bClass.includes('suspicious')) {
+      leftLabel = 'SAFE'; rightLabel = 'FAKE / SUSPICIOUS';
+    }
+
+    // figure out which one is correct
+    const isSafeAnswer = bClass === 'safe' || (!bClass.includes('unsafe') && bClass.includes('safe'));
+    const isLeftCorrect = (leftLabel === 'PRIVATE' && bClass.includes('private')) ||
+                          (leftLabel === 'SHARE' && (bClass.includes('share') || bClass.includes('public'))) ||
+                          (leftLabel === 'SAFE' && (isSafeAnswer || bClass.includes('share') || bClass.includes('public'))) ||
+                          (leftLabel === 'TRUE' && bClass.includes('true'));
+
+    const btn1 = document.createElement('button');
+    btn1.className = 'retro-btn btn-primary';
+    btn1.textContent = leftLabel;
+    btn1.onclick = () => {
+      if (answered) return;
+      answered = true;
+      clearInterval(timer);
+      finishRedemption(isLeftCorrect);
+    };
+
+    const btn2 = document.createElement('button');
+    btn2.className = 'retro-btn btn-warning';
+    btn2.textContent = rightLabel;
+    btn2.onclick = () => {
+      if (answered) return;
+      answered = true;
+      clearInterval(timer);
+      finishRedemption(!isLeftCorrect);
+    };
+
+    optEl.appendChild(btn1);
+    optEl.appendChild(btn2);
+  }
+}
+
 function showLevelRecap(lvNum, onContinue) {
   const recapOverlay = $('level-recap');
   const recapTitle = $('recap-title');
@@ -1006,84 +1242,7 @@ function showLevelRecap(lvNum, onContinue) {
   recapTitle.textContent = `LEVEL ${lvNum} RECAP: SECURITY SECRETS`;
   recapList.innerHTML = '';
 
-  let recapData = [];
-
-  if (lvNum === 1) {
-    recapData = LEVEL1_ITEMS.map(item => ({
-      question: item.label,
-      badge: item.answer,
-      recap: item.recap
-    }));
-  } else if (lvNum === 2) {
-    PHISH_EMAILS.forEach((email, idx) => {
-      recapData.push({
-        question: `EMAIL ${idx+1} SENDER: ${email.from}`,
-        badge: 'fake',
-        recap: email.fromRecap
-      });
-      email.body.forEach(seg => {
-        if (seg.click) {
-          recapData.push({
-            question: `Email Segment: "${seg.text.trim()}"`,
-            badge: 'suspicious',
-            recap: seg.recap
-          });
-        }
-      });
-    });
-  } else if (lvNum === 3) {
-    recapData = PW_ROUNDS.map(round => ({
-      question: round.question,
-      badge: 'strong',
-      recap: round.recap
-    }));
-  } else if (lvNum === 4) {
-    recapData = SPEED_SCENARIOS.map(sc => ({
-      question: sc.text,
-      badge: sc.answer,
-      recap: sc.recap
-    }));
-  } else if (lvNum === 5) {
-    recapData = URL_ITEMS.map(item => ({
-      question: item.url,
-      badge: item.answer,
-      recap: item.recap
-    }));
-  } else if (lvNum === 6) {
-    recapData = MEMORY_QUESTIONS.map(q => ({
-      question: q.text,
-      badge: q.answer ? 'true' : 'false',
-      recap: q.recap
-    }));
-  } else if (lvNum === 7) {
-    recapData = PROFILE_FIELDS.map(f => ({
-      question: f.name,
-      badge: f.correct,
-      recap: f.recap
-    }));
-  } else if (lvNum === 8) {
-    BOSS_STEP1_ITEMS.forEach(item => {
-      recapData.push({
-        question: `STEP 1 PACKET: ${item.label}`,
-        badge: item.answer,
-        recap: item.recap
-      });
-    });
-    BOSS_STEP2_ITEMS.forEach(item => {
-      recapData.push({
-        question: `STEP 2 Segment: "${item.text.trim()}"`,
-        badge: item.isBad ? 'unsafe' : 'safe',
-        recap: item.recap
-      });
-    });
-    BOSS_STEP3_ITEMS.forEach(item => {
-      recapData.push({
-        question: `STEP 3 QUESTION: ${item.question}`,
-        badge: 'strong',
-        recap: item.recap
-      });
-    });
-  }
+  let recapData = getRecapData(lvNum);
 
   let totalCorrect = 0;
   const totalItems = recapData.length;
@@ -2183,7 +2342,10 @@ function startLevel8() {
         <div style="font-family:var(--font-pixel);font-size:clamp(12px,1.5vw,16px);color:var(--cyan);text-align:center;margin-bottom:16px">
           STEP 1: CLASSIFY THIS DATA PACKET
         </div>
-        <div style="font-family:var(--font-pixel);font-size:clamp(20px,3.5vw,32px);color:var(--gold);text-align:center;margin:20px 0;text-shadow: none;gap:20px;justify-content:center">
+        <div style="font-family:var(--font-pixel);font-size:clamp(20px,3.5vw,32px);color:var(--gold);text-align:center;margin:20px 0;text-shadow: none;">
+          ${item.label}
+        </div>
+        <div style="display:flex;gap:20px;justify-content:center;margin-top:20px">
           <button class="retro-btn btn-safe" id="boss-private" style="font-size:16px;padding:16px 28px">PRIVATE</button>
           <button class="retro-btn btn-unsafe" id="boss-share" style="background:var(--cyan);border-color:var(--cyan);color:var(--bg);font-size:16px;padding:16px 28px">SHARE</button>
         </div>

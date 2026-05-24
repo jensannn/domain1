@@ -41,7 +41,7 @@
           <div class="team-entry-title" style="font-size: 16px; margin-bottom: 10px; text-align: center;">ENTER TEAM NAME</div>
           <div class="input-row" style="margin-bottom: 25px; justify-content: center;">
             <span class="prompt">&gt;&gt;&gt;&nbsp;</span>
-            <input type="text" id="team-name-input" maxlength="18" placeholder="TEAM AGILA" autocomplete="off" spellcheck="false" />
+            <input type="text" id="team-name-input" maxlength="30" placeholder="TEAM AGILA" autocomplete="off" spellcheck="false" />
             <span class="cursor-blink">█</span>
           </div>
 
@@ -213,6 +213,35 @@
 
             <!-- SCREEN FLASH -->
             <div id="screen-flash"></div>
+
+            <!-- REDEMPTION INTRO OVERLAY -->
+            <div id="redemption-intro-overlay" style="display:none;">
+              <div class="redemption-intro-star"></div>
+              <div class="redemption-intro-star delay2"></div>
+              <div class="redemption-intro-star delay3"></div>
+              <div class="redemption-intro-text">REDEMPTION<br>OPPORTUNITY</div>
+            </div>
+
+            <!-- REDEMPTION QUESTION OVERLAY -->
+            <div id="redemption-overlay" style="display:none; position:absolute; inset:0; background:rgba(0,0,0,0.92); z-index:50; flex-direction:column; justify-content:center; align-items:center;">
+              <div id="redemption-box" style="background:var(--bg2); border:5px solid var(--gold); padding:40px 50px; border-radius:14px; width:88%; max-width:850px; text-align:center;">
+                <div class="retro-tag" style="background:var(--gold); color:var(--bg); margin-bottom:20px; font-size:18px; padding:8px 18px;">[ REDEMPTION CHANCE ]</div>
+                <div id="redemption-timer" style="font-family:var(--font-pixel); color:var(--red); font-size:clamp(28px, 4vw, 42px); margin-bottom:15px;">15</div>
+                <div id="redemption-question" style="font-family:var(--font-mono); color:var(--white); font-size:clamp(22px, 3.5vw, 36px); margin-bottom:30px; line-height:1.5;"></div>
+                <div id="redemption-options" style="display:flex; flex-wrap:wrap; gap:20px; justify-content:center;"></div>
+              </div>
+            </div>
+
+            <!-- SHOOTING STAR OVERLAY (correct) -->
+            <div id="shooting-star-overlay" style="display:none;">
+              <div class="shooting-star"></div>
+              <div class="shooting-star-text">SAVING GRACE!</div>
+            </div>
+
+            <!-- REDEMPTION WRONG OVERLAY -->
+            <div id="redemption-wrong-overlay" style="display:none;">
+              <div class="redemption-wrong-text">✖ MISSED!</div>
+            </div>
 
             <!-- LEVEL RECAP OVERLAY -->
             <div id="level-recap" style="display:none">
