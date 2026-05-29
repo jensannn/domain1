@@ -350,7 +350,7 @@ function showMainMenu() {
   };
   $('btn-options').onclick = openOptions;
   $('btn-exit').onclick = () => {
-    document.body.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100vh;color:red;font-family:monospace;font-size:24px;">SYSTEM SHUTDOWN INITIATED...</div>';
+    document.body.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height: 100vh;color:red;font-family:monospace;font-size:clamp(24px, 6.0vw, 34px);">SYSTEM SHUTDOWN INITIATED...</div>';
   };
 }
 
@@ -1133,7 +1133,7 @@ function showRedemption(lvNum, itemData, totalCount, currentIdx, onComplete) {
   const timerEl = $('redemption-timer');
 
   overlay.style.display = 'flex';
-  qEl.innerHTML = `<div style="font-size:12px; color:var(--white-dim); margin-bottom:8px; font-family:var(--font-pixel);">QUESTION ${currentIdx + 1} / ${totalCount}</div>` + itemData.question;
+  qEl.innerHTML = `<div style="font-size:clamp(12px, 3.0vw, 17px); color:var(--white-dim); margin-bottom:8px; font-family:var(--font-pixel);">QUESTION ${currentIdx + 1} / ${totalCount}</div>` + itemData.question;
   optEl.innerHTML = '';
 
   let timeLeft = REDEMPTION_SETTINGS.timeLimit;
@@ -1250,7 +1250,7 @@ function showLevelRecap(lvNum, onContinue) {
     if (GS.recapResults[data.question]) totalCorrect++;
   });
 
-  recapTitle.innerHTML = `LEVEL ${lvNum} RECAP: SECURITY SECRETS<br><span style="font-size:18px; color:var(--gold); display:block; margin-top:10px;">TOTAL CORRECT: ${totalCorrect} / ${totalItems}</span>`;
+  recapTitle.innerHTML = `LEVEL ${lvNum} RECAP: SECURITY SECRETS<br><span style="font-size:clamp(18px, 4.5vw, 25px); color:var(--gold); display:block; margin-top:10px;">TOTAL CORRECT: ${totalCorrect} / ${totalItems}</span>`;
 
   recapData.forEach(data => {
     const itemEl = document.createElement('div');
@@ -1328,10 +1328,10 @@ function startLevel1() {
     <div id="belt-new-wrap">
       <div id="belt-top-bar">
         <div id="belt-score-info">
-          <span style="font-family:var(--font-pixel);font-size:10px;color:var(--white-dim)">
+          <span style="font-family:var(--font-pixel);font-size:clamp(10px, 2.5vw, 14px);color:var(--white-dim)">
             PACKET <span id="l1-idx" style="color:var(--gold)">1</span> of ${items.length}
           </span>
-          <span style="font-family:var(--font-pixel);font-size:10px;color:var(--white-dim)">
+          <span style="font-family:var(--font-pixel);font-size:clamp(10px, 2.5vw, 14px);color:var(--white-dim)">
             ✅ <span id="l1-correct" style="color:var(--lime)">0</span>
             &nbsp; ❌ <span id="l1-wrong" style="color:var(--red)">0</span>
           </span>
@@ -1494,15 +1494,15 @@ function startLevel2() {
   levelContent.innerHTML = `
     <div id="phish-wrap">
       <div class="level-header">CLICK ALL SUSPICIOUS ELEMENTS!</div>
-      <div style="display:flex;gap:16px;align-items:center">
+      <div style="display:flex;gap: clamp(16px, 1.6vw, 24px);align-items:center">
         <div class="level-timer-bar" style="flex:1">
           <div class="level-timer-bar-fill" id="l2-timer-fill" style="transition:width 1s linear"></div>
         </div>
-        <span style="font-family:var(--font-pixel);font-size:18px;color:var(--gold);min-width:36px" id="l2-timer-num">${TOTAL_TIME}</span>
+        <span style="font-family:var(--font-pixel);font-size:clamp(18px, 4.5vw, 25px);color:var(--gold);min-width: clamp(36px, 3.6vw, 54px)" id="l2-timer-num">${TOTAL_TIME}</span>
       </div>
       <div id="phish-btn-area" style="display:flex;justify-content:space-between;align-items:center">
-        <span id="phish-found-count" style="font-family:var(--font-pixel);font-size:12px;color:var(--gold)">FOUND: 0 / ${totalNeeded}</span>
-        <span id="phish-round-info" style="font-family:var(--font-pixel);font-size:11px;color:var(--gray)">EMAIL 1 / 2</span>
+        <span id="phish-found-count" style="font-family:var(--font-pixel);font-size:clamp(12px, 3.0vw, 17px);color:var(--gold)">FOUND: 0 / ${totalNeeded}</span>
+        <span id="phish-round-info" style="font-family:var(--font-pixel);font-size:clamp(11px, 2.75vw, 15px);color:var(--gray)">EMAIL 1 / 2</span>
       </div>
       <div id="phish-email-container"></div>
     </div>
@@ -1707,16 +1707,16 @@ function startLevel3() {
   levelContent.innerHTML = `
     <div id="pw-wrap">
       <div class="level-header">CHOOSE THE STRONGEST PASSWORD</div>
-      <div id="pw-round-info" style="font-family:var(--font-pixel);font-size:12px;color:var(--gray);text-align:center">ROUND 1 / 3</div>
-      <div style="display:flex;gap:16px;align-items:center">
+      <div id="pw-round-info" style="font-family:var(--font-pixel);font-size:clamp(12px, 3.0vw, 17px);color:var(--gray);text-align:center">ROUND 1 / 3</div>
+      <div style="display:flex;gap: clamp(16px, 1.6vw, 24px);align-items:center">
         <div class="level-timer-bar" style="flex:1">
           <div class="level-timer-bar-fill" id="l3-timer-fill" style="transition:width 1s linear"></div>
         </div>
-        <span style="font-family:var(--font-pixel);font-size:18px;color:var(--gold);min-width:36px" id="l3-timer-num">${LEVEL_SETTINGS[3].countdown}</span>
+        <span style="font-family:var(--font-pixel);font-size:clamp(18px, 4.5vw, 25px);color:var(--gold);min-width: clamp(36px, 3.6vw, 54px)" id="l3-timer-num">${LEVEL_SETTINGS[3].countdown}</span>
       </div>
-      <div id="pw-question" style="font-family:var(--font-mono);font-size:clamp(16px,2vw,20px);color:var(--white);text-align:center"></div>
-      <div id="pw-options" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;flex:1"></div>
-      <div id="pw-feedback" style="font-family:var(--font-mono);font-size:16px;color:var(--white);text-align:center;min-height:30px"></div>
+      <div id="pw-question" style="font-family:var(--font-mono);font-size:clamp(16px, 3.6vw, 28px);color:var(--white);text-align:center"></div>
+      <div id="pw-options" style="display:grid;grid-template-columns:1fr 1fr;gap: clamp(14px, 1.4vw, 21px);flex:1"></div>
+      <div id="pw-feedback" style="font-family:var(--font-mono);font-size:clamp(16px, 4.0vw, 22px);color:var(--white);text-align:center;min-height: clamp(30px, 3.0vw, 45px)"></div>
     </div>
   `;
 
@@ -1828,21 +1828,21 @@ function startLevel4() {
 
   levelContent.innerHTML = `
     <div id="speed-wrap">
-      <div style="display:flex;gap:20px;align-items:center;justify-content:space-between;width:100%">
-        <span id="speed-counter" style="font-family:var(--font-pixel);font-size:14px;color:var(--gray)">SCENARIO 1 / ${SPEED_SCENARIOS.length}</span>
-        <div class="level-timer-bar" style="width:200px">
+      <div style="display:flex;gap: clamp(20px, 2.0vw, 30px);align-items:center;justify-content:space-between;width: 100%">
+        <span id="speed-counter" style="font-family:var(--font-pixel);font-size:clamp(14px, 3.5vw, 20px);color:var(--gray)">SCENARIO 1 / ${SPEED_SCENARIOS.length}</span>
+        <div class="level-timer-bar" style="width: clamp(200px, 20.0vw, 300px)">
           <div class="level-timer-bar-fill" id="l4-timer-fill" style="transition:width 1s linear"></div>
         </div>
-        <span id="l4-timer-num" style="font-family:var(--font-pixel);font-size:18px;color:var(--gold);min-width:28px">${LEVEL_SETTINGS[4].countdown}</span>
-        <span id="speed-multiplier" style="font-family:var(--font-pixel);font-size:12px;color:var(--gold)">×1</span>
+        <span id="l4-timer-num" style="font-family:var(--font-pixel);font-size:clamp(18px, 4.5vw, 25px);color:var(--gold);min-width: clamp(28px, 2.8vw, 42px)">${LEVEL_SETTINGS[4].countdown}</span>
+        <span id="speed-multiplier" style="font-family:var(--font-pixel);font-size:clamp(12px, 3.0vw, 17px);color:var(--gold)">×1</span>
       </div>
       <div id="speed-scenario">
         <span class="scenario-icon" id="speed-icon">?</span>
         <span id="speed-text"></span>
       </div>
       <div id="speed-buttons">
-        <button class="retro-btn btn-safe" id="btn-speed-safe" style="font-size:20px;padding:20px 40px">SAFE</button>
-        <button class="retro-btn btn-unsafe" id="btn-speed-unsafe" style="font-size:20px;padding:20px 40px">UNSAFE</button>
+        <button class="retro-btn btn-safe" id="btn-speed-safe" style="font-size:clamp(20px, 5.0vw, 28px);padding:20px 40px">SAFE</button>
+        <button class="retro-btn btn-unsafe" id="btn-speed-unsafe" style="font-size:clamp(20px, 5.0vw, 28px);padding: clamp(20px, 2.0vw, 30px) clamp(40px, 4.0vw, 60px)">UNSAFE</button>
       </div>
     </div>
   `;
@@ -1928,29 +1928,29 @@ function startLevel5() {
   levelContent.innerHTML = `
     <div id="url-wrap">
       <div class="level-header">IS THIS URL SAFE OR FAKE?</div>
-      <div style="display:flex;gap:16px;align-items:center;width:100%">
+      <div style="display:flex;gap: clamp(16px, 1.6vw, 24px);align-items:center;width: 100%">
         <div class="level-timer-bar" style="flex:1">
           <div class="level-timer-bar-fill" id="l5-timer-fill" style="transition:width 1s linear"></div>
         </div>
-        <span style="font-family:var(--font-pixel);font-size:18px;color:var(--gold);min-width:36px" id="l5-timer-num">${LEVEL_SETTINGS[5].countdown}</span>
+        <span style="font-family:var(--font-pixel);font-size:clamp(18px, 4.5vw, 25px);color:var(--gold);min-width: clamp(36px, 3.6vw, 54px)" id="l5-timer-num">${LEVEL_SETTINGS[5].countdown}</span>
       </div>
-      <div id="url-counter" style="font-family:var(--font-pixel);font-size:12px;color:var(--gray)">URL 1 / 5</div>
+      <div id="url-counter" style="font-family:var(--font-pixel);font-size:clamp(12px, 3.0vw, 17px);color:var(--gray)">URL 1 / 5</div>
       <div id="url-browser-frame">
         <div id="url-browser-titlebar">
           <div class="browser-dot bd-red"></div>
           <div class="browser-dot bd-yellow"></div>
           <div class="browser-dot bd-green"></div>
-          <span style="font-family:var(--font-mono);font-size:12px;color:var(--gray);margin-left:10px">CYBER TANOD BROWSER v1.0</span>
+          <span style="font-family:var(--font-mono);font-size:clamp(12px, 3.0vw, 17px);color:var(--gray);margin-left:10px">CYBER TANOD BROWSER v1.0</span>
         </div>
         <div id="url-browser-bar"></div>
         <div id="url-browser-content">Analyzing URL...</div>
       </div>
-      <div id="url-question" style="font-family:var(--font-pixel);font-size:14px;color:var(--white);text-align:center">
+      <div id="url-question" style="font-family:var(--font-pixel);font-size:clamp(14px, 3.5vw, 20px);color:var(--white);text-align:center">
         Read the URL carefully with your team!
       </div>
       <div id="url-buttons">
-        <button class="retro-btn btn-safe" id="btn-url-safe" style="font-size:18px;padding:18px 36px">SAFE</button>
-        <button class="retro-btn btn-unsafe" id="btn-url-fake" style="font-size:18px;padding:18px 36px">FAKE</button>
+        <button class="retro-btn btn-safe" id="btn-url-safe" style="font-size:clamp(18px, 4.5vw, 25px);padding:18px 36px">SAFE</button>
+        <button class="retro-btn btn-unsafe" id="btn-url-fake" style="font-size:clamp(18px, 4.5vw, 25px);padding: clamp(18px, 1.8vw, 27px) clamp(36px, 3.6vw, 54px)">FAKE</button>
       </div>
     </div>
   `;
@@ -2033,14 +2033,14 @@ function startLevel6() {
   levelContent.innerHTML = `
     <div id="memory-wrap">
       <div class="level-header">MEMORIZE THE EMAILS — THEN ANSWER!</div>
-      <div id="memory-phase-label" style="font-family:var(--font-pixel);font-size:14px;color:var(--gold);text-align:center">
+      <div id="memory-phase-label" style="font-family:var(--font-pixel);font-size:clamp(14px, 3.5vw, 20px);color:var(--gold);text-align:center">
         MEMORIZING... ${flashTimeLeft}s
       </div>
-      <div style="display:flex;gap:16px;align-items:center">
+      <div style="display:flex;gap: clamp(16px, 1.6vw, 24px);align-items:center">
         <div class="level-timer-bar" style="flex:1">
           <div class="level-timer-bar-fill" id="l6-timer-fill" style="transition:width 1s linear"></div>
         </div>
-        <span style="font-family:var(--font-pixel);font-size:18px;color:var(--gold);min-width:36px" id="l6-timer-num">${flashTimeLeft}</span>
+        <span style="font-family:var(--font-pixel);font-size:clamp(18px, 4.5vw, 25px);color:var(--gold);min-width: clamp(36px, 3.6vw, 54px)" id="l6-timer-num">${flashTimeLeft}</span>
       </div>
       <div id="memory-flash-area"></div>
       <div id="memory-questions" style="display:none"></div>
@@ -2156,8 +2156,8 @@ function startLevel7() {
       </div>
 
       <div id="profile-submit-row">
-        <span id="profile-score" style="font-family:var(--font-pixel);font-size:12px;color:var(--gray)">Set all fields first</span>
-        <button class="retro-btn btn-primary" id="profile-submit-btn" style="font-size:12px;padding:12px 20px">[ SUBMIT PROFILE ]</button>
+        <span id="profile-score" style="font-family:var(--font-pixel);font-size:clamp(12px, 3.0vw, 17px);color:var(--gray)">Set all fields first</span>
+        <button class="retro-btn btn-primary" id="profile-submit-btn" style="font-size:clamp(12px, 3.0vw, 17px);padding: clamp(12px, 1.2vw, 18px) clamp(20px, 2.0vw, 30px)">[ SUBMIT PROFILE ]</button>
       </div>
     </div>
   `;
@@ -2287,11 +2287,11 @@ function startLevel8() {
   levelContent.innerHTML = `
     <div id="boss-wrap">
       <div id="boss-header">BOSS LEVEL: NETWORK DEFENDER</div>
-      <div style="display:flex;gap:16px;align-items:center;width:100%">
+      <div style="display:flex;gap: clamp(16px, 1.6vw, 24px);align-items:center;width: 100%">
         <div class="level-timer-bar" style="flex:1">
           <div class="level-timer-bar-fill" id="l8-timer-fill" style="background:var(--red);transition:width 1s linear"></div>
         </div>
-        <span style="font-family:var(--font-pixel);font-size:22px;color:var(--red);text-shadow: none;min-width:36px" id="l8-timer-num">${LEVEL_SETTINGS[8].countdown}</span>
+        <span style="font-family:var(--font-pixel);font-size:clamp(22px, 5.5vw, 31px);color:var(--red);text-shadow: none;min-width: clamp(36px, 3.6vw, 54px)" id="l8-timer-num">${LEVEL_SETTINGS[8].countdown}</span>
       </div>
       <div id="boss-step-indicator">
         <div class="boss-step-dot active" id="bsd-0">STEP 1</div>
@@ -2339,15 +2339,15 @@ function startLevel8() {
       if (itemIdx >= items.length) { stepDone[0]=true; showStep1(); return; }
       const item = items[itemIdx];
       $('boss-content').innerHTML = `
-        <div style="font-family:var(--font-pixel);font-size:clamp(12px,1.5vw,16px);color:var(--cyan);text-align:center;margin-bottom:16px">
+        <div style="font-family:var(--font-pixel);font-size:clamp(12px, 2.7vw, 22px);color:var(--cyan);text-align:center;margin-bottom:16px">
           STEP 1: CLASSIFY THIS DATA PACKET
         </div>
-        <div style="font-family:var(--font-pixel);font-size:clamp(20px,3.5vw,32px);color:var(--gold);text-align:center;margin:20px 0;text-shadow: none;">
+        <div style="font-family:var(--font-pixel);font-size:clamp(20px, 6.3vw, 44px);color:var(--gold);text-align:center;margin: clamp(20px, 2.0vw, 30px) 0;text-shadow: none;">
           ${item.label}
         </div>
-        <div style="display:flex;gap:20px;justify-content:center;margin-top:20px">
-          <button class="retro-btn btn-safe" id="boss-private" style="font-size:16px;padding:16px 28px">PRIVATE</button>
-          <button class="retro-btn btn-unsafe" id="boss-share" style="background:var(--cyan);border-color:var(--cyan);color:var(--bg);font-size:16px;padding:16px 28px">SHARE</button>
+        <div style="display:flex;gap: clamp(20px, 2.0vw, 30px);justify-content:center;margin-top:20px">
+          <button class="retro-btn btn-safe" id="boss-private" style="font-size:clamp(16px, 4.0vw, 22px);padding: clamp(16px, 1.6vw, 24px) clamp(28px, 2.8vw, 42px)">PRIVATE</button>
+          <button class="retro-btn btn-unsafe" id="boss-share" style="background:var(--cyan);border-color:var(--cyan);color:var(--bg);font-size:clamp(16px, 4.0vw, 22px);padding: clamp(16px, 1.6vw, 24px) clamp(28px, 2.8vw, 42px)">SHARE</button>
         </div>
       `;
       function ans(choice) {
@@ -2378,13 +2378,13 @@ function startLevel8() {
     suspiciousItems.forEach(s => { if(s.isBad) GS.recapResults[`STEP 2 Segment: "${s.text.trim()}"`] = false; });
 
     $('boss-content').innerHTML = `
-      <div style="font-family:var(--font-pixel);font-size:clamp(12px,1.5vw,16px);color:var(--red);text-align:center;margin-bottom:12px">
+      <div style="font-family:var(--font-pixel);font-size:clamp(12px, 2.7vw, 22px);color:var(--red);text-align:center;margin-bottom:12px">
         STEP 2: CLICK THE ${needed} SUSPICIOUS ELEMENTS!
       </div>
-      <div id="boss-phish-area" style="background:var(--bg3);border:2px solid var(--red)55;padding:16px;font-family:var(--font-mono);font-size:clamp(14px,1.8vw,18px)">
-        ${suspiciousItems.map((s,i)=>`<div class="phish-clickable" data-idx="${i}" style="display:block;padding:8px 0;border-bottom:1px solid var(--gray)22">${s.text}</div>`).join('')}
+      <div id="boss-phish-area" style="background:var(--bg3);border:2px solid var(--red)55;padding: clamp(16px, 1.6vw, 24px);font-family:var(--font-mono);font-size:clamp(14px, 3.24vw, 25px)">
+        ${suspiciousItems.map((s,i)=>`<div class="phish-clickable" data-idx="${i}" style="display:block;padding: clamp(8px, 0.8vw, 12px) 0;border-bottom:1px solid var(--gray)22">${s.text}</div>`).join('')}
       </div>
-      <div style="font-family:var(--font-pixel);font-size:12px;color:var(--gold);text-align:center;margin-top:10px">
+      <div style="font-family:var(--font-pixel);font-size:clamp(12px, 3.0vw, 17px);color:var(--gold);text-align:center;margin-top:10px">
         FOUND: <span id="boss-found">0</span> / ${needed}
       </div>
     `;
@@ -2415,10 +2415,10 @@ function startLevel8() {
     const correct = BOSS_STEP3_ITEMS[0].correct;
 
     $('boss-content').innerHTML = `
-      <div style="font-family:var(--font-pixel);font-size:clamp(12px,1.5vw,16px);color:var(--gold);text-align:center;margin-bottom:12px">
+      <div style="font-family:var(--font-pixel);font-size:clamp(12px, 2.7vw, 22px);color:var(--gold);text-align:center;margin-bottom:12px">
         STEP 3: CHOOSE THE STRONGEST PASSWORD!
       </div>
-      <div id="boss-pw-opts" style="display:grid;grid-template-columns:1fr 1fr;gap:10px"></div>
+      <div id="boss-pw-opts" style="display:grid;grid-template-columns:1fr 1fr;gap: clamp(10px, 1.0vw, 15px)"></div>
     `;
     options.forEach((pw, oi) => {
       const btn = document.createElement('button');

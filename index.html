@@ -35,22 +35,22 @@
       <div id="main-menu-screen" style="display:none">
         <div id="main-menu-box">
           <div class="retro-tag">[ SYSTEM READY ]</div>
-          <div class="menu-title" style="font-family: var(--font-pixel); font-size: 32px; color: var(--gold); text-shadow: none; text-align: center; margin-bottom: 10px;">CYBER TANOD</div>
-          <div class="menu-subtitle" style="font-family: var(--font-mono); font-size: 18px; color: var(--white); text-align: center; margin-bottom: 25px; letter-spacing: 2px;">BARANGAY DEFENSE FORCE</div>
+          <div class="menu-title" style="font-family: var(--font-pixel); font-size: clamp(32px, 8.0vw, 45px); color: var(--gold); text-shadow: none; text-align: center; margin-bottom: 10px;">CYBER TANOD</div>
+          <div class="menu-subtitle" style="font-family: var(--font-mono); font-size: clamp(18px, 4.5vw, 25px); color: var(--white); text-align: center; margin-bottom: 25px; letter-spacing: 2px;">BARANGAY DEFENSE FORCE</div>
           
-          <div class="team-entry-title" style="font-size: 16px; margin-bottom: 10px; text-align: center;">ENTER TEAM NAME</div>
+          <div class="team-entry-title" style="font-size: clamp(16px, 4.0vw, 22px); margin-bottom: 10px; text-align: center;">ENTER TEAM NAME</div>
           <div class="input-row" style="margin-bottom: 25px; justify-content: center;">
             <span class="prompt">&gt;&gt;&gt;&nbsp;</span>
             <input type="text" id="team-name-input" maxlength="30" placeholder="TEAM AGILA" autocomplete="off" spellcheck="false" />
             <span class="cursor-blink">█</span>
           </div>
 
-          <div class="menu-options" style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
+          <div class="menu-options" style="display: flex; flex-direction: column; gap: clamp(15px, 1.5vw, 22px); align-items: center;">
             <button id="btn-play" class="retro-btn btn-primary">PLAY GAME</button>
             <button id="btn-options" class="retro-btn btn-warning">OPTIONS</button>
             <button id="btn-exit" class="retro-btn btn-danger">EXIT</button>
           </div>
-          <div id="menu-msg" class="enter-hint" style="margin-top: 20px; height: 20px;"></div>
+          <div id="menu-msg" class="enter-hint" style="margin-top: 20px; height: clamp(20px, 2.0vw, 30px);"></div>
         </div>
       </div>
 
@@ -170,9 +170,9 @@
           </div>
           <!-- PAUSE OVERLAY -->
           <div id="pause-overlay" style="display:none; position: absolute; inset: 0; background: rgba(0,0,0,0.85); z-index: 100; flex-direction: column; justify-content: center; align-items: center;">
-            <div class="pause-box" style="background: rgba(74,74,74,0.9); border: 3px solid var(--pink); padding: 40px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-              <div class="retro-tag" style="margin-bottom: 30px; font-size: 20px;">SYSTEM PAUSED</div>
-              <div class="menu-options" style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
+            <div class="pause-box" style="background: rgba(74,74,74,0.9); border: 3px solid var(--pink); padding: clamp(40px, 4.0vw, 60px); text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+              <div class="retro-tag" style="margin-bottom: 30px; font-size: clamp(20px, 5.0vw, 28px);">SYSTEM PAUSED</div>
+              <div class="menu-options" style="display: flex; flex-direction: column; gap: clamp(15px, 1.5vw, 22px); align-items: center;">
                 <button id="btn-resume" class="retro-btn btn-primary">CONTINUE</button>
                 <button id="btn-restart" class="retro-btn btn-warning">RESTART</button>
                 <button id="btn-quit" class="retro-btn btn-danger">EXIT TO MAP</button>
@@ -201,7 +201,7 @@
               <div id="feedback-box">
                 <div id="fb-icon"></div>
                 <div id="fb-title"></div>
-                <div id="fb-item" style="font-family: var(--font-mono); color: var(--gold); margin: 10px 0; font-size: 14px;"></div>
+                <div id="fb-item" style="font-family: var(--font-mono); color: var(--gold); margin: clamp(10px, 1.0vw, 15px) 0; font-size: clamp(14px, 3.5vw, 20px);"></div>
                 <div id="fb-msg"></div>
                 <div id="fb-count"></div>
                 <button id="fb-continue-btn" class="retro-btn btn-primary" style="margin-top: 15px;">CONTINUE</button>
@@ -224,11 +224,11 @@
 
             <!-- REDEMPTION QUESTION OVERLAY -->
             <div id="redemption-overlay" style="display:none; position:absolute; inset:0; background:rgba(0,0,0,0.92); z-index:50; flex-direction:column; justify-content:center; align-items:center;">
-              <div id="redemption-box" style="background:var(--bg2); border:5px solid var(--gold); padding:40px 50px; border-radius:14px; width:88%; max-width:850px; text-align:center;">
-                <div class="retro-tag" style="background:var(--gold); color:var(--bg); margin-bottom:20px; font-size:18px; padding:8px 18px;">[ REDEMPTION CHANCE ]</div>
-                <div id="redemption-timer" style="font-family:var(--font-pixel); color:var(--red); font-size:clamp(28px, 4vw, 42px); margin-bottom:15px;">15</div>
-                <div id="redemption-question" style="font-family:var(--font-mono); color:var(--white); font-size:clamp(22px, 3.5vw, 36px); margin-bottom:30px; line-height:1.5;"></div>
-                <div id="redemption-options" style="display:flex; flex-wrap:wrap; gap:20px; justify-content:center;"></div>
+              <div id="redemption-box" style="background:var(--bg2); border:5px solid var(--gold); padding: clamp(40px, 4.0vw, 60px) clamp(50px, 5.0vw, 75px); border-radius:14px; width: 88%; max-width: clamp(850px, 85.0vw, 1275px); text-align:center;">
+                <div class="retro-tag" style="background:var(--gold); color:var(--bg); margin-bottom:20px; font-size:clamp(18px, 4.5vw, 25px); padding: clamp(8px, 0.8vw, 12px) clamp(18px, 1.8vw, 27px);">[ REDEMPTION CHANCE ]</div>
+                <div id="redemption-timer" style="font-family:var(--font-pixel); color:var(--red); font-size:clamp(28px, 7.2vw, 58px); margin-bottom:15px;">15</div>
+                <div id="redemption-question" style="font-family:var(--font-mono); color:var(--white); font-size:clamp(22px, 6.3vw, 50px); margin-bottom:30px; line-height: 1.5;"></div>
+                <div id="redemption-options" style="display:flex; flex-wrap:wrap; gap: clamp(20px, 2.0vw, 30px); justify-content:center;"></div>
               </div>
             </div>
 
@@ -280,7 +280,7 @@
       <!-- OPTIONS MODAL -->
       <div id="options-modal">
         <div id="options-box">
-          <div class="retro-tag" style="margin-bottom:24px; font-size:14px;">OPTIONS</div>
+          <div class="retro-tag" style="margin-bottom:24px; font-size:clamp(14px, 3.5vw, 20px);">OPTIONS</div>
           <div id="options-title">SYSTEM OPTIONS</div>
 
           <!-- AUDIO SECTION -->
