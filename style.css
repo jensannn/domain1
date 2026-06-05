@@ -299,7 +299,7 @@ html, body {
 .retro-tag {
   font-family: var(--font-pixel);
   font-size: clamp(10px, 2.5vw, 14px);
-  color: var(--white-dim);
+  color: var(--pink);
   letter-spacing: 2px;
 }
 .team-entry-title {
