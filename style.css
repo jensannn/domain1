@@ -99,6 +99,10 @@ html, body {
   text-transform: uppercase;
   position: relative;
   background: transparent;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.4;
 }
 .retro-btn:active { transform: translate(2px, 2px); }
 
@@ -379,15 +383,8 @@ html, body {
   padding: clamp(26px, 2.6vw, 39px) clamp(36px, 3.6vw, 54px);
   border: 3px solid var(--pink)55;
   background: rgba(255, 255, 255, 0.75);
-  cursor: pointer;
   transition: all 0.2s;
   min-width: clamp(260px, 26.0vw, 390px); flex: 0 0 260px;
-}
-.char-card:hover {
-  border-color: var(--pink);
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 5px 20px rgba(200,162,200, 0.15);
-  transform: translateY(-4px);
 }
 .char-emoji {
   font-size: clamp(140px, 35.0vw, 196px);
@@ -417,7 +414,6 @@ html, body {
 
 /* Sprite overrides */
 .char-img img { width: clamp(140px, 14.0vw, 210px); height: clamp(140px, 14.0vw, 210px); object-fit: contain; image-rendering: pixelated; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); transition: transform 0.2s; }
-.char-card:hover .char-img img { transform: scale(1.1); filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
 #active-tanod-display {
   display: flex; align-items: center; gap: clamp(8px, 0.8vw, 12px);
   font-family: var(--font-pixel);
@@ -1228,20 +1224,33 @@ html, body {
   text-align: center;
   text-shadow: none;
 }
-#memory-questions { flex: 1; display: flex; flex-direction: column; gap: clamp(10px, 1.0vw, 15px); overflow: auto; }
+#memory-questions {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
 .mem-q-item {
-  display: flex; align-items: center; justify-content: space-between;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
   border: 2px solid var(--blue)88;
   background: rgba(176, 224, 230,0.08);
-  padding: clamp(12px, 1.2vw, 18px) clamp(16px, 1.6vw, 24px);
+  padding: clamp(16px, 1.6vw, 24px);
+  border-radius: 12px;
+  gap: clamp(16px, 1.6vw, 24px);
 }
-.mem-q-text { font-family: var(--font-mono); font-size: clamp(18px, 4.32vw, 36px); color: var(--white); flex: 1; }
-.mem-q-buttons { display: flex; gap: clamp(10px, 1.0vw, 15px); }
+.mem-q-text { font-family: var(--font-mono); font-size: clamp(24px, 5.5vw, 44px); color: var(--white); flex: 1; display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.4; padding: 0 clamp(10px, 2vw, 30px); }
+.mem-q-buttons { display: flex; gap: clamp(15px, 2.0vw, 25px); width: 100%; justify-content: center; }
 .mem-btn {
+  flex: 1;
   font-family: var(--font-pixel);
-  font-size: clamp(14px, 3.24vw, 25px);
-  padding: clamp(10px, 1.0vw, 15px) clamp(20px, 2.0vw, 30px);
-  border: 2px solid;
+  font-size: clamp(20px, 4.5vw, 36px);
+  padding: clamp(16px, 2.0vw, 24px) clamp(24px, 3.0vw, 40px);
+  border: 3px solid;
   cursor: pointer;
   background: transparent;
 }
@@ -1862,92 +1871,94 @@ html, body {
   background: var(--pink);
 }
 
-#recap-list {
-  display: flex;
-  flex-wrap: wrap;
-  align-content: stretch;
-  justify-content: center;
+.recap-flashcard {
+  width: clamp(280px, 80%, 600px);
+  height: clamp(220px, 40vw, 320px);
+  cursor: pointer;
+  perspective: 1000px;
+  position: relative;
+  margin: 0 auto;
+}
+.flashcard-inner {
   width: 100%;
   height: 100%;
-  gap: clamp(12px, 1.2vw, 18px);
-  padding: clamp(12px, 1.2vw, 18px);
-  box-sizing: border-box;
+  transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+  transform-style: preserve-3d;
+  position: relative;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
 }
-.recap-item {
-  border: 2px solid rgba(140, 190, 214, 0.3);
-  background: rgba(140, 190, 214, 0.04);
-  padding: clamp(14px, 1.4vw, 21px) clamp(18px, 1.8vw, 27px);
-  border-radius: 4px;
+.recap-flashcard.flipped .flashcard-inner {
+  transform: rotateY(180deg);
+}
+.flashcard-front, .flashcard-back {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  backface-visibility: hidden;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
-  gap: clamp(8px, 0.8vw, 12px);
-  transition: all 0.2s ease;
-  flex: 1 1 250px;
-  min-height: 0;
-  overflow: hidden;
-  justify-content: center;
-}
-#recap-continue-btn {
-  margin-top: auto;
-}
-.recap-item:hover {
-  border-color: var(--cyan);
-  background: rgba(140, 190, 214, 0.08);
-  box-shadow: 0 4px 12px rgba(140, 190, 214, 0.15);
-}
-.recap-item-header {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: clamp(10px, 1.0vw, 15px);
+  justify-content: center;
+  padding: clamp(20px, 4vw, 40px);
+  box-sizing: border-box;
+  text-align: center;
+  border: 4px solid var(--pink);
+  background: rgba(255, 255, 255, 0.95);
 }
-.recap-question {
+.flashcard-back {
+  transform: rotateY(180deg);
+  background: var(--bg3);
+  border-color: var(--cyan);
+}
+.flashcard-status {
   font-family: var(--font-pixel);
-  font-size: clamp(10px, 2.52vw, 18px);
+  font-size: clamp(16px, 4.0vw, 24px);
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+}
+.flashcard-status.correct { color: var(--green); }
+.flashcard-status.wrong { color: var(--red); }
+.flashcard-question {
+  font-family: var(--font-mono);
+  font-size: clamp(20px, 4.5vw, 28px);
   color: var(--white);
   line-height: 1.4;
+  margin-bottom: 25px;
+  word-wrap: break-word;
+  max-width: 100%;
 }
-.recap-badge {
+.flashcard-badge {
   font-family: var(--font-pixel);
-  font-size: clamp(8px, 2.0vw, 11px);
-  padding: 3px clamp(8px, 0.8vw, 12px);
-  border-radius: 2px;
+  font-size: clamp(11px, 2.8vw, 16px);
+  padding: 8px 16px;
+  border-radius: 4px;
   text-transform: uppercase;
-  white-space: nowrap;
 }
-.recap-badge.private {
-  background: rgba(153, 122, 141, 0.12);
-  color: var(--red);
-  border: 1px solid var(--red);
-}
-.recap-badge.share, .recap-badge.public, .recap-badge.safe {
-  background: rgba(157,193,131, 0.12);
-  color: var(--green);
-  border: 1px solid var(--green);
-}
-.recap-badge.unsafe, .recap-badge.fake {
-  background: rgba(153, 122, 141, 0.12);
-  color: var(--red);
-  border: 1px solid var(--red);
-}
-.recap-subtext-box {
+.flashcard-badge.private { background: rgba(239, 68, 68, 0.1); color: var(--red); border: 2px solid var(--red); }
+.flashcard-badge.safe { background: rgba(34, 197, 94, 0.1); color: var(--green); border: 2px solid var(--green); }
+.flashcard-badge.unsafe { background: rgba(239, 68, 68, 0.1); color: var(--red); border: 2px solid var(--red); }
+.flashcard-hint {
   font-family: var(--font-mono);
-  font-size: clamp(13px, 2.88vw, 21px);
-  color: var(--green);
-  line-height: 1.5;
-  display: flex;
-  align-items: flex-start;
-  gap: 6px;
-  background: rgba(157,193,131, 0.08);
-  border-left: 3px solid var(--green);
-  padding: clamp(8px, 0.8vw, 12px) clamp(12px, 1.2vw, 18px);
-  border-radius: 0 4px 4px 0;
-  text-align: left;
+  font-size: clamp(14px, 3.5vw, 18px);
+  color: var(--white-dim);
+  margin-top: auto;
+  opacity: 0.7;
+  animation: blink 2s step-end infinite;
 }
-.recap-icon {
-  font-size: clamp(14px, 3.5vw, 20px);
-  line-height: 1.5;
+.flashcard-explanation {
+  font-family: var(--font-mono);
+  font-size: clamp(18px, 4.0vw, 26px);
+  color: var(--white);
+  line-height: 1.6;
+  overflow-y: auto;
 }
+/* hide scrollbar for explanation */
+.flashcard-explanation::-webkit-scrollbar { width: 6px; }
+.flashcard-explanation::-webkit-scrollbar-thumb { background: var(--cyan)44; border-radius: 3px; }
 
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    OPTIONS MODAL

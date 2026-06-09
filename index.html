@@ -1,340 +1,417 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>Cyber Tanod: Barangay Defense Force</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono:wght@400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <div id="scanlines"></div>
-    <div id="crt-vignette"></div>
-    <div id="app">
 
-      <!-- BOOT SCREEN -->
-      <div id="boot-screen" style="display:none">
-        <div id="boot-content">
-          <pre id="boot-logo">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Cyber Tanod: Barangay Defense Force</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono:wght@400&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="scanlines"></div>
+  <div id="crt-vignette"></div>
+  <div id="app">
+
+    <!-- BOOT SCREEN -->
+    <div id="boot-screen" style="display:none">
+      <div id="boot-content">
+        <pre id="boot-logo">
   ____  _  _  ____  ____  ____     ____  __   __ _   __  ____
  / ___)( \/ )(  _ \( ___)(  _ \   (_  _)/ _\ (  ( \ /  \(    \
 ( (__   )  /  ) _ &lt; )__)  )   /    )( /    \/    /(  O ) ) D (
  \___) (__/  (____/(____)(__)__)  (__)\_/\_/\_)__)  \__/(____/</pre>
-          <div class="boot-subtitle">BARANGAY DEFENSE FORCE v1.0</div>
-          <div id="boot-log"></div>
-          <div id="boot-bar-wrap">
-            <div id="boot-bar"><div id="boot-bar-fill"></div></div>
-            <div id="boot-bar-label">LOADING...</div>
+        <div class="boot-subtitle">BARANGAY DEFENSE FORCE v1.0</div>
+        <div id="boot-log"></div>
+        <div id="boot-bar-wrap">
+          <div id="boot-bar">
+            <div id="boot-bar-fill"></div>
           </div>
+          <div id="boot-bar-label">LOADING...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN MENU SCREEN -->
+    <div id="main-menu-screen" style="display:none">
+      <div id="main-menu-box">
+        <div class="retro-tag">[ SYSTEM READY ]</div>
+        <div class="menu-title"
+          style="font-family: var(--font-pixel); font-size: clamp(32px, 8.0vw, 45px); color: var(--gold); text-shadow: none; text-align: center; margin-bottom: 10px;">
+          CYBER TANOD</div>
+        <div class="menu-subtitle"
+          style="font-family: var(--font-mono); font-size: clamp(18px, 4.5vw, 25px); color: var(--white); text-align: center; margin-bottom: 25px; letter-spacing: 2px;">
+          BARANGAY DEFENSE FORCE</div>
+
+        <div class="team-entry-title"
+          style="font-size: clamp(16px, 4.0vw, 22px); margin-bottom: 10px; text-align: center;">ENTER TEAM NAME</div>
+        <div class="input-row" style="margin-bottom: 25px; justify-content: center;">
+          <span class="prompt">&gt;&gt;&gt;&nbsp;</span>
+          <input type="text" id="team-name-input" maxlength="30" placeholder="TEAM AGILA" autocomplete="off"
+            spellcheck="false" />
+          <span class="cursor-blink">█</span>
+        </div>
+
+        <div class="menu-options"
+          style="display: flex; flex-direction: column; gap: clamp(15px, 1.5vw, 22px); align-items: center;">
+          <button id="btn-play" class="retro-btn btn-primary">PLAY GAME</button>
+          <button id="btn-options" class="retro-btn btn-warning">OPTIONS</button>
+          <button id="btn-exit" class="retro-btn btn-danger">EXIT</button>
+        </div>
+        <div id="menu-msg" class="enter-hint" style="margin-top: 20px; height: clamp(20px, 2.0vw, 30px);"></div>
+      </div>
+    </div>
+
+    <!-- INTRO COMIC -->
+    <div id="intro-comic" style="display:none">
+      <div id="comic-container">
+        <div class="comic-panel" id="cp1">
+          <div class="comic-speaker">KAPITAN BALINADO</div>
+          <div class="comic-art">👮</div>
+          <div class="comic-bubble">"Mga kababayan! Ang ating arcade ay inaatake ng mga hacker! Kailangan natin ng mga
+            CYBER TANOD para mag-depensa!"</div>
+          <div class="comic-beat">PANEL 1 / 3</div>
+        </div>
+        <div class="comic-panel" id="cp2" style="display:none">
+          <div class="comic-speaker">THE HACKERS</div>
+          <div class="comic-art">💀</div>
+          <div class="comic-bubble">"MWAHAHA! Ang lahat ng inyong data ay SAMIN NA!"</div>
+          <div class="comic-beat">PANEL 2 / 3</div>
+        </div>
+        <div class="comic-panel" id="cp3" style="display:none">
+          <div class="comic-speaker">IKAW — ANG CYBER TANOD!</div>
+          <div class="comic-art">🛡️</div>
+          <div class="comic-bubble">"HANDA NA KAMI! Ipaglalaban namin ang ating arcade laban sa mga hackers! CYBER TANOD
+            — ACTIVATE!"</div>
+          <div class="comic-beat">PANEL 3 / 3</div>
+        </div>
+        <div id="comic-timer-bar">
+          <div id="comic-timer-fill"></div>
         </div>
       </div>
 
-      <!-- MAIN MENU SCREEN -->
-      <div id="main-menu-screen" style="display:none">
-        <div id="main-menu-box">
-          <div class="retro-tag">[ SYSTEM READY ]</div>
-          <div class="menu-title" style="font-family: var(--font-pixel); font-size: clamp(32px, 8.0vw, 45px); color: var(--gold); text-shadow: none; text-align: center; margin-bottom: 10px;">CYBER TANOD</div>
-          <div class="menu-subtitle" style="font-family: var(--font-mono); font-size: clamp(18px, 4.5vw, 25px); color: var(--white); text-align: center; margin-bottom: 25px; letter-spacing: 2px;">BARANGAY DEFENSE FORCE</div>
-          
-          <div class="team-entry-title" style="font-size: clamp(16px, 4.0vw, 22px); margin-bottom: 10px; text-align: center;">ENTER TEAM NAME</div>
-          <div class="input-row" style="margin-bottom: 25px; justify-content: center;">
-            <span class="prompt">&gt;&gt;&gt;&nbsp;</span>
-            <input type="text" id="team-name-input" maxlength="30" placeholder="TEAM AGILA" autocomplete="off" spellcheck="false" />
-            <span class="cursor-blink">█</span>
-          </div>
-
-          <div class="menu-options" style="display: flex; flex-direction: column; gap: clamp(15px, 1.5vw, 22px); align-items: center;">
-            <button id="btn-play" class="retro-btn btn-primary">PLAY GAME</button>
-            <button id="btn-options" class="retro-btn btn-warning">OPTIONS</button>
-            <button id="btn-exit" class="retro-btn btn-danger">EXIT</button>
-          </div>
-          <div id="menu-msg" class="enter-hint" style="margin-top: 20px; height: clamp(20px, 2.0vw, 30px);"></div>
-        </div>
-      </div>
-
-      <!-- INTRO COMIC -->
-      <div id="intro-comic" style="display:none">
-        <div id="comic-container">
-          <div class="comic-panel" id="cp1">
-            <div class="comic-speaker">KAPITAN BALINADO</div>
-            <div class="comic-art">👮</div>
-            <div class="comic-bubble">"Mga kababayan! Ang ating arcade ay inaatake ng mga hacker! Kailangan natin ng mga CYBER TANOD para mag-depensa!"</div>
-            <div class="comic-beat">PANEL 1 / 3</div>
-          </div>
-          <div class="comic-panel" id="cp2" style="display:none">
-            <div class="comic-speaker">THE HACKERS</div>
-            <div class="comic-art">💀</div>
-            <div class="comic-bubble">"MWAHAHA! Ang lahat ng inyong data ay SAMIN NA!"</div>
-            <div class="comic-beat">PANEL 2 / 3</div>
-          </div>
-          <div class="comic-panel" id="cp3" style="display:none">
-            <div class="comic-speaker">IKAW — ANG CYBER TANOD!</div>
-            <div class="comic-art">🛡️</div>
-            <div class="comic-bubble">"HANDA NA KAMI! Ipaglalaban namin ang ating arcade laban sa mga hackers! CYBER TANOD — ACTIVATE!"</div>
-            <div class="comic-beat">PANEL 3 / 3</div>
-          </div>
-          <div id="comic-timer-bar"><div id="comic-timer-fill"></div></div>
-        </div>
-
-            <!-- CHARACTER SELECT SCREEN -->
-        <div id="char-select" style="display:none">
+      <!-- CHARACTER SELECT SCREEN -->
+      <div id="char-select" style="display:none">
         <div id="char-select-box">
-        <div class="retro-tag">[ CYBER TANOD SYSTEM — CHOOSE YOUR TANOD ]</div>
-        <div class="char-select-title">PILIIN ANG IYONG TANOD</div>
-        <div id="char-options">
+          <div class="retro-tag">[ CYBER TANOD SYSTEM — CHOOSE YOUR TANOD ]</div>
+          <div class="char-select-title">PILIIN ANG IYONG TANOD</div>
+          <div id="char-options">
 
             <div class="char-card" id="char-boy">
-            <div class="char-img"><img src="boy.png" alt="Boy Sprite"></div>
-            <div class="char-name">TANOD GABRIEL</div>
-            <div class="char-tag">LALAKI</div>
-            <button class="retro-btn btn-primary char-btn" data-gender="boy" data-img="boy.png" data-name="TANOD CARLO">
+              <div class="char-img"><img src="boy.png" alt="Boy Sprite"></div>
+              <div class="char-name">TANOD GABRIEL</div>
+              <div class="char-tag">LALAKI</div>
+              <button class="retro-btn btn-primary char-btn" data-gender="boy" data-img="boy.png"
+                data-name="TANOD CARLO">
                 PILIIN
-            </button>
+              </button>
             </div>
 
             <div class="char-card" id="char-girl">
-            <div class="char-img"><img src="girl.png" alt="Girl Sprite"></div>
-            <div class="char-name">TANOD JENNY</div>
-            <div class="char-tag">BABAE</div>
-            <button class="retro-btn btn-pink char-btn" data-gender="girl" data-img="girl.png" data-name="TANOD MARIA">
+              <div class="char-img"><img src="girl.png" alt="Girl Sprite"></div>
+              <div class="char-name">TANOD JENNY</div>
+              <div class="char-tag">BABAE</div>
+              <button class="retro-btn btn-pink char-btn" data-gender="girl" data-img="girl.png"
+                data-name="TANOD MARIA">
                 PILIIN
-            </button>
+              </button>
             </div>
 
-        </div>
-        <div class="char-hint">— ang inyong tanod ang mag-depensa sa barangay! —</div>
-        </div>
+          </div>
+          <div class="char-hint">— ang inyong tanod ang mag-depensa sa barangay! —</div>
         </div>
       </div>
+    </div>
 
-      <!-- MAIN GAME SCREEN -->
-      <div id="game-screen" style="display:none">
+    <!-- MAIN GAME SCREEN -->
+    <div id="game-screen" style="display:none">
 
-        <!-- TOP BAR -->
-        <div id="top-bar">
-          <div id="top-team">
-            <span class="top-label"></span>
-            <span id="disp-team">---</span>
+      <!-- TOP BAR -->
+      <div id="top-bar">
+        <div id="top-team">
+          <span class="top-label"></span>
+          <span id="disp-team">---</span>
+        </div>
+        <div id="top-xp">
+          <div id="xp-row">
+            <span class="top-label">XP</span>
+            <span id="disp-xp">0</span>
+            <span id="disp-tier" class="tier-badge">ROOKIE TANOD</span>
           </div>
-          <div id="top-xp">
-            <div id="xp-row">
-              <span class="top-label">XP</span>
-              <span id="disp-xp">0</span>
-              <span id="disp-tier" class="tier-badge">ROOKIE TANOD</span>
-            </div>
-            <div id="xp-bar-wrap">
-              <div id="xp-bar-inner"></div>
+          <div id="xp-bar-wrap">
+            <div id="xp-bar-inner"></div>
+          </div>
+        </div>
+        <div id="top-streak">
+          <span class="top-label">STREAK</span>
+          <span id="disp-streak">0</span>
+          <span class="streak-fire">🔥</span>
+        </div>
+        <button id="btn-pause-level" style="background:none; border:none; font-size: clamp(24px, 6.0vw, 34px); cursor: pointer; color: var(--pink); margin-left: 10px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); transition: transform 0.1s;" title="Pause Game">⏸️</button>
+      </div>
+
+      <!-- BODY: WORLD MAP + TASK OVERLAY -->
+      <div id="game-body">
+
+        <!-- WORLD MAP -->
+        <div id="world-map-view">
+          <div id="map-background"></div>
+
+          <svg id="map-paths" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <!-- Animated arrows/paths linking nodes visually -->
+            <path class="map-path" d="M 10 10 L 50 10 L 88 10 L 88 48 L 50 48 L 10 48 L 10 86" fill="none" />
+            <path class="map-path" id="path-to-boss" d="M 10 86 L 50 86" fill="none" style="display:none;" />
+          </svg>
+
+          <div id="map-nodes">
+            <!-- Nodes positioned on a grid -->
+            <div class="map-node" id="node-1" data-lv="1" style="left:10%; top:10%;">01</div>
+            <div class="map-node" id="node-2" data-lv="2" style="left:50%; top:10%;">02</div>
+            <div class="map-node" id="node-3" data-lv="3" style="left:88%; top:10%;">03</div>
+            <div class="map-node" id="node-4" data-lv="4" style="left:88%; top:48%;">04</div>
+            <div class="map-node" id="node-5" data-lv="5" style="left:50%; top:48%;">05</div>
+            <div class="map-node" id="node-6" data-lv="6" style="left:10%; top:48%;">06</div>
+            <div class="map-node" id="node-7" data-lv="7" style="left:10%; top:86%;">07</div>
+            <div class="map-node boss-node locked" id="node-8" data-lv="8" style="left:50%; top:86%; display:none;">08
             </div>
           </div>
-          <div id="top-streak">
-            <span class="top-label">STREAK</span>
-            <span id="disp-streak">0</span>
-            <span class="streak-fire">🔥</span>
+
+          <!-- Player Sprite -->
+          <div id="player-sprite">
+            <img src="" alt="Player" id="player-sprite-img">
+          </div>
+
+          <div id="interaction-prompt" style="display:none">PRESS SPACE TO START</div>
+          <div id="world-map-hint">USE ARROW KEYS OR WASD TO MOVE</div>
+
+          <!-- Start Game Transition Star -->
+          <div id="start-transition-star" style="display:none; position: absolute; font-size: clamp(60px, 15vw, 90px); z-index: 10; left: 50%; top: 50%; transform: translate(-50%, -50%); pointer-events: none; text-shadow: 0 0 20px var(--gold), 0 0 40px var(--gold); color: var(--gold);">⭐</div>
+        </div>
+        <!-- PAUSE OVERLAY -->
+        <div id="pause-overlay"
+          style="display:none; position: absolute; inset: 0; background: rgba(0,0,0,0.85); z-index: 100; flex-direction: column; justify-content: center; align-items: center;">
+          <div class="pause-box"
+            style="background: rgba(74,74,74,0.9); border: 3px solid var(--pink); padding: clamp(40px, 4.0vw, 60px); text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <div class="retro-tag" style="margin-bottom: 30px; font-size: clamp(20px, 5.0vw, 28px);">SYSTEM PAUSED</div>
+            <div class="menu-options"
+              style="display: flex; flex-direction: column; gap: clamp(15px, 1.5vw, 22px); align-items: center;">
+              <button id="btn-resume" class="retro-btn btn-primary">CONTINUE</button>
+              <button id="btn-restart" class="retro-btn btn-warning">RESTART</button>
+              <button id="btn-quit" class="retro-btn btn-danger">EXIT TO MAP</button>
+            </div>
           </div>
         </div>
 
-        <!-- BODY: WORLD MAP + TASK OVERLAY -->
-        <div id="game-body">
+        <!-- TASK OVERLAY (MAIN CONTENT AREA) -->
+        <div id="main-area" style="display:none">
 
-          <!-- WORLD MAP -->
-          <div id="world-map-view">
-            <div id="map-background"></div>
-            
-            <svg id="map-paths" viewBox="0 0 100 100" preserveAspectRatio="none">
-              <!-- Animated arrows/paths linking nodes visually -->
-              <path class="map-path" d="M 10 10 L 50 10 L 88 10 L 88 48 L 50 48 L 10 48 L 10 86" fill="none" />
-              <path class="map-path" id="path-to-boss" d="M 10 86 L 50 86" fill="none" style="display:none;" />
-            </svg>
-
-            <div id="map-nodes">
-              <!-- Nodes positioned on a grid -->
-              <div class="map-node" id="node-1" data-lv="1" style="left:10%; top:10%;">01</div>
-              <div class="map-node" id="node-2" data-lv="2" style="left:50%; top:10%;">02</div>
-              <div class="map-node" id="node-3" data-lv="3" style="left:88%; top:10%;">03</div>
-              <div class="map-node" id="node-4" data-lv="4" style="left:88%; top:48%;">04</div>
-              <div class="map-node" id="node-5" data-lv="5" style="left:50%; top:48%;">05</div>
-              <div class="map-node" id="node-6" data-lv="6" style="left:10%; top:48%;">06</div>
-              <div class="map-node" id="node-7" data-lv="7" style="left:10%; top:86%;">07</div>
-              <div class="map-node boss-node locked" id="node-8" data-lv="8" style="left:50%; top:86%; display:none;">08</div>
-            </div>
-
-            <!-- Player Sprite -->
-            <div id="player-sprite">
-              <img src="" alt="Player" id="player-sprite-img">
-            </div>
-            
-            <div id="interaction-prompt" style="display:none">PRESS SPACE TO START</div>
-            <div id="world-map-hint">USE ARROW KEYS OR WASD TO MOVE</div>
-          </div>
-          <!-- PAUSE OVERLAY -->
-          <div id="pause-overlay" style="display:none; position: absolute; inset: 0; background: rgba(0,0,0,0.85); z-index: 100; flex-direction: column; justify-content: center; align-items: center;">
-            <div class="pause-box" style="background: rgba(74,74,74,0.9); border: 3px solid var(--pink); padding: clamp(40px, 4.0vw, 60px); text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-              <div class="retro-tag" style="margin-bottom: 30px; font-size: clamp(20px, 5.0vw, 28px);">SYSTEM PAUSED</div>
-              <div class="menu-options" style="display: flex; flex-direction: column; gap: clamp(15px, 1.5vw, 22px); align-items: center;">
-                <button id="btn-resume" class="retro-btn btn-primary">CONTINUE</button>
-                <button id="btn-restart" class="retro-btn btn-warning">RESTART</button>
-                <button id="btn-quit" class="retro-btn btn-danger">EXIT TO MAP</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- TASK OVERLAY (MAIN CONTENT AREA) -->
-          <div id="main-area" style="display:none">
-
-            <!-- LEVEL TRANSITION SPLASH -->
-            <div id="level-splash" style="display:none">
-              <div id="splash-inner">
-                <div id="splash-lvl"></div>
-                <div id="splash-name"></div>
-                <div id="splash-desc"></div>
-                <div id="splash-count"></div>
-              </div>
-            </div>
-
-            <!-- LIVE LEVEL CONTENT -->
-            <div id="level-content"></div>
-
-            <!-- WRONG ANSWER FEEDBACK POPUP -->
-            <div id="feedback-overlay" style="display:none">
-              <div id="feedback-box">
-                <div id="fb-icon"></div>
-                <div id="fb-title"></div>
-                <div id="fb-item" style="font-family: var(--font-mono); color: var(--gold); margin: clamp(10px, 1.0vw, 15px) 0; font-size: clamp(14px, 3.5vw, 20px);"></div>
-                <div id="fb-msg"></div>
-                <div id="fb-count"></div>
-                <button id="fb-continue-btn" class="retro-btn btn-primary" style="margin-top: 15px;">CONTINUE</button>
-              </div>
-            </div>
-
-            <!-- XP FLOAT ANIMATION -->
-            <div id="xp-float" style="display:none"></div>
-
-            <!-- SCREEN FLASH -->
-            <div id="screen-flash"></div>
-
-            <!-- REDEMPTION INTRO OVERLAY -->
-            <div id="redemption-intro-overlay" style="display:none;">
-              <div class="redemption-intro-star"></div>
-              <div class="redemption-intro-star delay2"></div>
-              <div class="redemption-intro-star delay3"></div>
-              <div class="redemption-intro-text">REDEMPTION<br>OPPORTUNITY</div>
-            </div>
-
-            <!-- REDEMPTION QUESTION OVERLAY -->
-            <div id="redemption-overlay" style="display:none; position:absolute; inset:0; background:rgba(0,0,0,0.92); z-index:50; flex-direction:column; justify-content:center; align-items:center;">
-              <div id="redemption-box" style="background:var(--bg2); border:5px solid var(--gold); padding: clamp(40px, 4.0vw, 60px) clamp(50px, 5.0vw, 75px); border-radius:14px; width: 88%; max-width: clamp(850px, 85.0vw, 1275px); text-align:center;">
-                <div class="retro-tag" style="background:var(--gold); color:var(--bg); margin-bottom:20px; font-size:clamp(18px, 4.5vw, 25px); padding: clamp(8px, 0.8vw, 12px) clamp(18px, 1.8vw, 27px);">[ REDEMPTION CHANCE ]</div>
-                <div id="redemption-timer" style="font-family:var(--font-pixel); color:var(--red); font-size:clamp(28px, 7.2vw, 58px); margin-bottom:15px;">15</div>
-                <div id="redemption-question" style="font-family:var(--font-mono); color:var(--white); font-size:clamp(22px, 6.3vw, 50px); margin-bottom:30px; line-height: 1.5;"></div>
-                <div id="redemption-options" style="display:flex; flex-wrap:wrap; gap: clamp(20px, 2.0vw, 30px); justify-content:center;"></div>
-              </div>
-            </div>
-
-            <!-- SHOOTING STAR OVERLAY (correct) -->
-            <div id="shooting-star-overlay" style="display:none;">
-              <div class="shooting-star"></div>
-              <div class="shooting-star-text">SAVING GRACE!</div>
-            </div>
-
-            <!-- REDEMPTION WRONG OVERLAY -->
-            <div id="redemption-wrong-overlay" style="display:none;">
-              <div class="redemption-wrong-text">✖ MISSED!</div>
-            </div>
-
-            <!-- LEVEL RECAP OVERLAY -->
-            <div id="level-recap" style="display:none">
-              <div id="recap-box">
-                <div class="retro-tag" id="recap-tag">[ LEVEL COMPLETE ]</div>
-                <div id="recap-title">LEVEL 1 RECAP</div>
-                <div id="recap-subtitle">Ano-ano ang mga natutunan mo sa level na ito?!</div>
-                <div id="recap-scroll-area">
-                  <div id="recap-list"></div>
+          <!-- LEVEL TRANSITION SPLASH -->
+          <div id="level-splash" style="display:none">
+            <div id="splash-inner">
+              <div id="splash-lvl"></div>
+              <div id="splash-name"></div>
+              <div id="splash-desc"></div>
+              <div id="splash-count"></div>
+              <div id="splash-instructions-wrap"
+                style="display:none; margin-top: clamp(20px, 3.0vw, 45px); max-width: 80%; background: var(--bg3); border: 4px solid var(--lime); padding: clamp(15px, 2.0vw, 30px); border-radius: 8px; box-shadow: 0 8px 20px rgba(0,0,0,0.2), 0 0 15px var(--lime);">
+                <div class="retro-tag"
+                  style="color: var(--lime); margin-bottom: 15px; font-size: clamp(14px, 3.0vw, 20px); text-shadow: none; background: transparent;">
+                  [ HOW TO PLAY ]</div>
+                <div id="splash-instructions"
+                  style="font-family: var(--font-mono); color: var(--white); font-size: clamp(14px, 3.2vw, 22px); text-align: center; line-height: 1.5; font-weight: bold;">
                 </div>
-                <button id="recap-continue-btn" class="retro-btn btn-primary">CONTINUE</button>
               </div>
             </div>
-
           </div>
+
+          <!-- LIVE LEVEL CONTENT -->
+          <div id="level-content"></div>
+
+          <!-- WRONG ANSWER FEEDBACK POPUP -->
+          <div id="feedback-overlay" style="display:none">
+            <div id="feedback-box">
+              <div id="fb-icon"></div>
+              <div id="fb-title"></div>
+              <div id="fb-item"
+                style="font-family: var(--font-mono); color: var(--gold); margin: clamp(10px, 1.0vw, 15px) 0; font-size: clamp(14px, 3.5vw, 20px);">
+              </div>
+              <div id="fb-msg"></div>
+              <div id="fb-count"></div>
+              <button id="fb-continue-btn" class="retro-btn btn-primary" style="margin-top: 15px;">CONTINUE</button>
+            </div>
+          </div>
+
+          <!-- XP FLOAT ANIMATION -->
+          <div id="xp-float" style="display:none"></div>
+
+          <!-- SCREEN FLASH -->
+          <div id="screen-flash"></div>
+
+          <!-- REDEMPTION INTRO OVERLAY -->
+          <div id="redemption-intro-overlay" style="display:none;">
+            <div class="redemption-intro-star"></div>
+            <div class="redemption-intro-star delay2"></div>
+            <div class="redemption-intro-star delay3"></div>
+            <div class="redemption-intro-text">BONUS<br>ROUND</div>
+          </div>
+
+          <!-- REDEMPTION QUESTION OVERLAY -->
+          <div id="redemption-overlay"
+            style="display:none; position:absolute; inset:0; background:rgba(0,0,0,0.92); z-index:50; flex-direction:column; justify-content:center; align-items:center;">
+            <div id="redemption-box"
+              style="background:var(--bg2); border:5px solid var(--gold); padding: clamp(40px, 4.0vw, 60px) clamp(50px, 5.0vw, 75px); border-radius:14px; width: 88%; max-width: clamp(850px, 85.0vw, 1275px); text-align:center;">
+              <div class="retro-tag"
+                style="background:var(--gold); color:var(--bg); margin-bottom:20px; font-size:clamp(18px, 4.5vw, 25px); padding: clamp(8px, 0.8vw, 12px) clamp(18px, 1.8vw, 27px);">
+                [ REDEMPTION CHANCE ]</div>
+              <div id="redemption-timer"
+                style="font-family:var(--font-pixel); color:var(--red); font-size:clamp(28px, 7.2vw, 58px); margin-bottom:15px;">
+                15</div>
+              <div id="redemption-question"
+                style="font-family:var(--font-mono); color:var(--white); font-size:clamp(22px, 6.3vw, 50px); margin-bottom:30px; line-height: 1.5;">
+              </div>
+              <div id="redemption-options"
+                style="display:flex; flex-wrap:wrap; gap: clamp(20px, 2.0vw, 30px); justify-content:center;"></div>
+            </div>
+          </div>
+
+          <!-- SHOOTING STAR OVERLAY (correct) -->
+          <div id="shooting-star-overlay" style="display:none;">
+            <div class="shooting-star"></div>
+            <div class="shooting-star-text">SAVING GRACE!</div>
+          </div>
+
+          <!-- REDEMPTION WRONG OVERLAY -->
+          <div id="redemption-wrong-overlay" style="display:none;">
+            <div class="redemption-wrong-text">✖ MISSED!</div>
+          </div>
+
+          <!-- LEVEL RECAP OVERLAY -->
+          <div id="level-recap" style="display:none">
+            <div id="recap-box">
+              <div class="retro-tag" id="recap-tag">[ LEVEL COMPLETE ]</div>
+              <div id="recap-title">LEVEL 1 RECAP</div>
+              <div id="recap-subtitle">Ano-ano ang mga natutunan mo sa level na ito?!</div>
+              <div id="recap-carousel-area"
+                style="width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; min-height: 250px;">
+                <div id="recap-card-container"
+                  style="width: 100%; perspective: 1000px; display: flex; justify-content: center; align-items: center; min-height: 200px;">
+                </div>
+                <div id="recap-controls"
+                  style="display: flex; gap: clamp(10px, 1.0vw, 15px); justify-content: center; align-items: center; margin-top: clamp(15px, 1.5vw, 22px);">
+                  <button id="recap-prev-btn" class="retro-btn btn-secondary"
+                    style="width: auto; padding: clamp(10px, 1.0vw, 15px) clamp(20px, 2.0vw, 30px);">&lt; PREV</button>
+                  <span id="recap-counter"
+                    style="font-family: var(--font-pixel); font-size: clamp(14px, 3.5vw, 20px); color: var(--gold); text-shadow: none;">1
+                    / 10</span>
+                  <button id="recap-next-btn" class="retro-btn btn-secondary"
+                    style="width: auto; padding: clamp(10px, 1.0vw, 15px) clamp(20px, 2.0vw, 30px);">NEXT &gt;</button>
+                </div>
+              </div>
+              <button id="recap-continue-btn" class="retro-btn btn-primary" style="margin-top: auto;">CONTINUE</button>
+            </div>
+          </div>
+
         </div>
       </div>
+    </div>
 
-      <!-- FINAL SCORE SCREEN -->
-      <div id="final-screen" style="display:none">
-        <div id="final-box">
-          <div class="final-header">★ MISSION COMPLETE ★</div>
-          <div id="final-team"></div>
-          <div id="final-badge">
-            <div id="final-badge-icon"></div>
-            <div id="final-badge-label"></div>
-          </div>
-          <div id="final-xp"></div>
-          <div id="final-xp-bar-wrap"><div id="final-xp-bar-fill"></div></div>
-          <div id="final-quote"></div>
-          <div class="final-footer-note">[ HALL OF HONOR — SCREENSHOT THIS SCREEN FOR DOCUMENTATION ]</div>
-          <button id="play-again-btn" class="retro-btn btn-secondary">PLAY AGAIN</button>
+    <!-- FINAL SCORE SCREEN -->
+    <div id="final-screen" style="display:none">
+      <div id="final-box">
+        <div class="final-header">★ MISSION COMPLETE ★</div>
+        <div id="final-team"></div>
+        <div id="final-badge">
+          <div id="final-badge-icon"></div>
+          <div id="final-badge-label"></div>
         </div>
+        <div id="final-xp"></div>
+        <div id="final-xp-bar-wrap">
+          <div id="final-xp-bar-fill"></div>
+        </div>
+        <div id="final-quote"></div>
+        <div class="final-footer-note">[ HALL OF HONOR — SCREENSHOT THIS SCREEN FOR DOCUMENTATION ]</div>
+        <button id="play-again-btn" class="retro-btn btn-secondary">PLAY AGAIN</button>
       </div>
+    </div>
 
-      <!-- OPTIONS MODAL -->
-      <div id="options-modal">
-        <div id="options-box">
-          <div class="retro-tag" style="margin-bottom:24px; font-size:clamp(14px, 3.5vw, 20px);">OPTIONS</div>
-          <div id="options-title">SYSTEM OPTIONS</div>
+    <!-- ERROR MODAL -->
+    <div id="error-modal"
+      style="display:none; position: absolute; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; flex-direction: column; justify-content: center; align-items: center;">
+      <div class="error-box"
+        style="background: #ffffff; border: 3px solid var(--red); padding: clamp(40px, 4.0vw, 60px); text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+        <div class="retro-tag"
+          style="margin-bottom: 20px; font-size: clamp(18px, 4.5vw, 25px); background: var(--red); color: white;">[
+          INPUT ERROR ]</div>
+        <div
+          style="font-family: var(--font-mono); color: #000000; font-size: clamp(16px, 4.0vw, 22px); margin-bottom: 30px; letter-spacing: 1px; font-weight: bold;">
+          Please insert a team name.</div>
+        <button id="btn-error-close" class="retro-btn btn-primary">OK</button>
+      </div>
+    </div>
 
-          <!-- AUDIO SECTION -->
+    <!-- OPTIONS MODAL -->
+    <div id="options-modal">
+      <div id="options-box">
+        <div class="retro-tag" style="margin-bottom:24px; font-size:clamp(14px, 3.5vw, 20px);">OPTIONS</div>
+        <div id="options-title">SYSTEM OPTIONS</div>
+
+        <!-- AUDIO SECTION -->
+        <div class="options-section">
+          <div class="options-section-label">AUDIO</div>
+          <div class="options-row">
+            <span class="options-row-label">Sound Effects</span>
+            <div class="opt-toggle-wrap">
+              <span class="opt-toggle-label" id="sfx-label">ON</span>
+              <div class="opt-switch" id="opt-sfx-switch" data-on="true">
+                <div class="opt-switch-knob"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DEV MODE SECTION (shown by JS only when DEV_MODE = true) -->
+        <div id="dev-mode-section" style="display:none;">
           <div class="options-section">
-            <div class="options-section-label">AUDIO</div>
+            <div class="options-section-label" style="color:var(--gold); text-shadow: none;">⚙ DEV / TEST MODE</div>
             <div class="options-row">
-              <span class="options-row-label">Sound Effects</span>
+              <div class="options-row-info">
+                <span class="options-row-label" style="color:var(--gold);">Unlock All Levels</span>
+                <span class="options-row-sub">Marks all levels as completed</span>
+              </div>
               <div class="opt-toggle-wrap">
-                <span class="opt-toggle-label" id="sfx-label">ON</span>
-                <div class="opt-switch" id="opt-sfx-switch" data-on="true">
+                <span class="opt-toggle-label" id="unlock-label">OFF</span>
+                <div class="opt-switch opt-switch--gold" id="opt-unlock-switch" data-on="false">
                   <div class="opt-switch-knob"></div>
                 </div>
               </div>
             </div>
-          </div>
-
-          <!-- DEV MODE SECTION (shown by JS only when DEV_MODE = true) -->
-          <div id="dev-mode-section" style="display:none;">
-            <div class="options-section">
-              <div class="options-section-label" style="color:var(--gold); text-shadow: none;">⚙ DEV / TEST MODE</div>
-              <div class="options-row">
-                <div class="options-row-info">
-                  <span class="options-row-label" style="color:var(--gold);">Unlock All Levels</span>
-                  <span class="options-row-sub">Marks all levels as completed</span>
-                </div>
-                <div class="opt-toggle-wrap">
-                  <span class="opt-toggle-label" id="unlock-label">OFF</span>
-                  <div class="opt-switch opt-switch--gold" id="opt-unlock-switch" data-on="false">
-                    <div class="opt-switch-knob"></div>
-                  </div>
+            <div class="options-row">
+              <div class="options-row-info">
+                <span class="options-row-label" style="color:var(--gold);">Reset Progress</span>
+                <span class="options-row-sub">Clears XP, streak &amp; levels</span>
+              </div>
+              <div class="opt-toggle-wrap">
+                <span class="opt-toggle-label" id="reset-label">OFF</span>
+                <div class="opt-switch opt-switch--red" id="opt-reset-switch" data-on="false">
+                  <div class="opt-switch-knob"></div>
                 </div>
               </div>
-              <div class="options-row">
-                <div class="options-row-info">
-                  <span class="options-row-label" style="color:var(--gold);">Reset Progress</span>
-                  <span class="options-row-sub">Clears XP, streak &amp; levels</span>
-                </div>
-                <div class="opt-toggle-wrap">
-                  <span class="opt-toggle-label" id="reset-label">OFF</span>
-                  <div class="opt-switch opt-switch--red" id="opt-reset-switch" data-on="false">
-                    <div class="opt-switch-knob"></div>
-                  </div>
-                </div>
-              </div>
-              <div id="dev-mode-badge">🛠 DEV MODE ACTIVE</div>
             </div>
+            <div id="dev-mode-badge">🛠 DEV MODE ACTIVE</div>
           </div>
-
-          <button id="opt-close-btn" class="retro-btn btn-danger" style="margin-top:28px;">[ CLOSE ]</button>
         </div>
+
+        <button id="opt-close-btn" class="retro-btn btn-danger" style="margin-top:28px;">[ CLOSE ]</button>
       </div>
-
-
     </div>
-    <script src="main.js"></script>
-  </body>
+
+
+  </div>
+  <script src="main.js"></script>
+</body>
+
 </html>

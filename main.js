@@ -14,9 +14,9 @@ const LEVEL_SETTINGS = {
   1: { countdown: 60, speed: 5 },   // Level 1: total time, packet rolling speed (seconds)
   2: { countdown: 45 },             // Level 2: total time
   3: { countdown: 15 },             // Level 3: time per round
-  4: { countdown: 5 },              // Level 4: time per scenario
+  4: { countdown: 10 },              // Level 4: time per scenario
   5: { countdown: 10 },             // Level 5: time per URL
-  6: { countdown: 12 },             // Level 6: memorization time
+  6: { countdown: 30 },             // Level 6: memorization time
   8: { countdown: 90 }              // Level 8: boss level total time
 };
 
@@ -40,20 +40,20 @@ function beep(freq = 440, type = 'square', dur = 0.1, vol = 0.15) {
     g.gain.setValueAtTime(vol, AC.currentTime);
     g.gain.exponentialRampToValueAtTime(0.001, AC.currentTime + dur);
     o.start(); o.stop(AC.currentTime + dur);
-  } catch(e) {}
+  } catch (e) { }
 }
 
 // (character state will be added to the main GS object below)
 
-function chime()   { beep(880,'sine',0.12,0.15); setTimeout(()=>beep(1100,'sine',0.1,0.12),80); setTimeout(()=>beep(1320,'sine',0.15,0.1),160); }
-function buzzer()  { beep(150,'sawtooth',0.25,0.18); setTimeout(()=>beep(120,'sawtooth',0.2,0.15),80); }
-function blip()    { beep(660,'square',0.05,0.1); }
-function select_s(){ beep(440,'square',0.07,0.1); }
+function chime() { beep(880, 'sine', 0.12, 0.15); setTimeout(() => beep(1100, 'sine', 0.1, 0.12), 80); setTimeout(() => beep(1320, 'sine', 0.15, 0.1), 160); }
+function buzzer() { beep(150, 'sawtooth', 0.25, 0.18); setTimeout(() => beep(120, 'sawtooth', 0.2, 0.15), 80); }
+function blip() { beep(660, 'square', 0.05, 0.1); }
+function select_s() { beep(440, 'square', 0.07, 0.1); }
 function levelUp() {
-  [440,554,659,880].forEach((f,i) => setTimeout(()=>beep(f,'sine',0.15,0.2),i*80));
+  [440, 554, 659, 880].forEach((f, i) => setTimeout(() => beep(f, 'sine', 0.15, 0.2), i * 80));
 }
-function bossSound(){
-  [200,150,100,200,150].forEach((f,i)=>setTimeout(()=>beep(f,'sawtooth',0.2,0.25),i*120));
+function bossSound() {
+  [200, 150, 100, 200, 150].forEach((f, i) => setTimeout(() => beep(f, 'sawtooth', 0.2, 0.25), i * 120));
 }
 
 // ── GAME STATE ────────────────────────────────────
@@ -75,24 +75,24 @@ const GS = {
 
 // ── LEVEL 1: CONVEYOR BELT ──
 const LEVEL1_ITEMS = [
-  { label: '📛 Full Name',        answer: 'private', xp: 10, recap: 'Panatilihing pribado ang iyong buong pangalan dahil maaaring gamitin ito ng mga scammer para magnakaw ng pagkakakilanlan o magpanggap na ikaw.' },
-  { label: '🎨 Favorite Color',   answer: 'share',   xp: 10, recap: 'Okay lang na ibahagi ang paborito mong kulay dahil hindi ito magagamit ng iba para malagay sa panganib ang iyong seguridad.' },
-  { label: '🏠 Home Address',     answer: 'private', xp: 10, recap: 'Huwag ibahagi ang iyong tirahan dahil maaari itong magdulot ng panganib sa iyong kaligtasan at magamit ng mga scammer para targetin ka.' },
-  { label: '🏫 School Name',      answer: 'share',   xp: 10, recap: 'Karaniwan namang ligtas na ibahagi ang pangalan ng iyong paaralan, ngunit iwasang isama ang iyong eksaktong iskedyul o oras ng pagpasok at pag-uwi.' },
-  { label: '🔑 Password',         answer: 'private', xp: 10, recap: 'Dapat manatiling lihim ang iyong password at hindi ito dapat ibinabahagi kaninuman sa anumang sitwasyon.' },
-  { label: '🐾 Pet\'s Name',      answer: 'share',   xp: 10, recap: 'Ligtas lang na ibahagi ang pangalan ng iyong alagang hayop, ngunit huwag itong gamitin bilang password o sagot sa mga tanong pangseguridad ng iyong account.' },
-  { label: '📅 Birthday (Full)',  answer: 'private', xp: 10, recap: 'Huwag basta-basta ibahagi ang iyong buong kaarawan dahil maaari itong magamit sa pag-access o pag-recover ng iyong mga account.' },
-  { label: '👤 Username',         answer: 'share',   xp: 10, recap: 'Okay lang na ibahagi ang iyong username dahil ito ay karaniwang nakikita ng publiko, ngunit siguraduhing wala itong sensitibong impormasyon.' },
-  { label: '📞 Phone Number',     answer: 'private', xp: 10, recap: 'Dapat manatiling pribado ang iyong numero ng telepono upang maprotektahan ka laban sa mga spam na tawag at panloloko sa pamamagitan ng text o SMS.' },
-  { label: '🎮 Hobby',            answer: 'share',   xp: 10, recap: 'Magandang paraan at ligtas ang pagbabahagi ng iyong mga hilig o libangan para makakonekta sa iba online nang hindi inilalantad ang personal na impormasyon.' },
+  { label: '📛 Full Name', answer: 'private', xp: 10, recap: 'Panatilihing pribado ang iyong buong pangalan dahil maaaring gamitin ito ng mga scammer para magnakaw ng pagkakakilanlan o magpanggap na ikaw.' },
+  { label: '🎨 Favorite Color', answer: 'share', xp: 10, recap: 'Okay lang na ibahagi ang paborito mong kulay dahil hindi ito magagamit ng iba para malagay sa panganib ang iyong seguridad.' },
+  { label: '🏠 Home Address', answer: 'private', xp: 10, recap: 'Huwag ibahagi ang iyong tirahan dahil maaari itong magdulot ng panganib sa iyong kaligtasan at magamit ng mga scammer para targetin ka.' },
+  { label: '🏫 School Name', answer: 'share', xp: 10, recap: 'Karaniwan namang ligtas na ibahagi ang pangalan ng iyong paaralan, ngunit iwasang isama ang iyong eksaktong iskedyul o oras ng pagpasok at pag-uwi.' },
+  { label: '🔑 Password', answer: 'private', xp: 10, recap: 'Dapat manatiling lihim ang iyong password at hindi ito dapat ibinabahagi kaninuman sa anumang sitwasyon.' },
+  { label: '🐾 Pet\'s Name', answer: 'share', xp: 10, recap: 'Ligtas lang na ibahagi ang pangalan ng iyong alagang hayop, ngunit huwag itong gamitin bilang password o sagot sa mga tanong pangseguridad ng iyong account.' },
+  { label: '📅 Birthday (Full)', answer: 'private', xp: 10, recap: 'Huwag basta-basta ibahagi ang iyong buong kaarawan dahil maaari itong magamit sa pag-access o pag-recover ng iyong mga account.' },
+  { label: '👤 Username', answer: 'share', xp: 10, recap: 'Okay lang na ibahagi ang iyong username dahil ito ay karaniwang nakikita ng publiko, ngunit siguraduhing wala itong sensitibong impormasyon.' },
+  { label: '📞 Phone Number', answer: 'private', xp: 10, recap: 'Dapat manatiling pribado ang iyong numero ng telepono upang maprotektahan ka laban sa mga spam na tawag at panloloko sa pamamagitan ng text o SMS.' },
+  { label: '🎮 Hobby', answer: 'share', xp: 10, recap: 'Magandang paraan at ligtas ang pagbabahagi ng iyong mga hilig o libangan para makakonekta sa iba online nang hindi inilalantad ang personal na impormasyon.' },
 ];
 
 // ── LEVEL 2: SPOT THE PHISH ──
 const PHISH_EMAILS = [
   {
-    from:    'kapitan@brgy-sanjose.c0m',
+    from: 'kapitan@brgy-sanjose.c0m',
     fromRecap: 'Ang email address na [kapitan@brgy-sanjose.c0m](mailto:kapitan@brgy-sanjose.c0m) ay gumagamit ng numerong “0” sa halip na letrang “o” upang magpanggap na ito ay mula sa opisyal na Barangay Kapitan.',
-    to:      'tanod@barangay.ph',
+    to: 'tanod@barangay.ph',
     subject: 'URGENT: Verify Your Account NOW!!!',
     body: [
       { text: 'Dear Resident,', click: false },
@@ -103,14 +103,14 @@ const PHISH_EMAILS = [
       { text: ' Failure to comply will result in IMMEDIATE SUSPENSION!!!', click: false },
       { text: ' — Kap. dela Cruz', click: false },
     ],
-    susItems: [0,1], // indices of click:true that are suspicious (sender + link + urgency)
+    susItems: [0, 1], // indices of click:true that are suspicious (sender + link + urgency)
     allBad: 3,       // total bad elements including sender
     notes: 'Red flags: fake sender, urgency language, suspicious link'
   },
   {
-    from:    'gcash-support@gcash-rewards-ph.xyz',
+    from: 'gcash-support@gcash-rewards-ph.xyz',
     fromRecap: 'Official GCash support will never email you from a random ".xyz" domain address.',
-    to:      'you@email.com',
+    to: 'you@email.com',
     subject: 'You have won 5000 PESOS! Claim now!',
     body: [
       { text: 'Congratulations!!!', click: false },
@@ -131,22 +131,22 @@ const PHISH_EMAILS = [
 const PW_ROUNDS = [
   {
     question: 'Which password is STRONGEST?',
-    options:  ['12345', 'MySunshine', 'M@ri0_2024!', 'password'],
-    correct:  2,
+    options: ['12345', 'MySunshine', 'M@ri0_2024!', 'password'],
+    correct: 2,
     explanation: 'M@ri0_2024! has uppercase, numbers, symbols, and length!',
     recap: 'Mas secure ang password kapag may halo itong malalaki at maliliit na letra, mga numero, at special na simbolo para maging mas mahirap hulaan.'
   },
   {
     question: 'Pick the STRONGEST password:',
-    options:  ['Juan123', 'Br@y_SanJose#9', 'hello', 'CAPITALONLY'],
-    correct:  1,
+    options: ['Juan123', 'Br@y_SanJose#9', 'hello', 'CAPITALONLY'],
+    correct: 1,
     explanation: 'Br@y_SanJose#9 combines letters, symbols, numbers!',
     recap: 'Ang pagsasama-sama ng iba’t ibang uri ng characters sa password ay nagpapahirap para ma-hack ito gamit ang automated brute-force attacks.'
   },
   {
     question: 'Which one would HACKERS hate most?',
-    options:  ['iloveyou', 'Pass1234', 'qwerty!', 'T@nd@7_Brgy#2024'],
-    correct:  3,
+    options: ['iloveyou', 'Pass1234', 'qwerty!', 'T@nd@7_Brgy#2024'],
+    correct: 3,
     explanation: 'T@nd@7_Brgy#2024 is long, random, and complex!',
     recap: 'Kapag mas mahaba ang password at may halo itong symbols at numbers, mas matagal at mas mahirap itong ma-hack.'
   },
@@ -154,30 +154,30 @@ const PW_ROUNDS = [
 
 // ── LEVEL 4: SPEED ROUND ──
 const SPEED_SCENARIOS = [
-  { text: 'Isang hindi mo kilalang tao online ang nagtatanong ng address ng iyong paaralan.', icon:'👤', answer:'unsafe', xp:5, recap: 'Ang pagbibigay ng school address sa mga hindi mo kilala online ay puwedeng magdulot ng panganib sa iyong kaligtasan sa totoong buhay.' },
-  { text: 'Gumagamit ka ng mga HTTPS na website para sa iyong pananaliksik.', icon:'🔒', answer:'safe', xp:5, recap: 'Ang HTTPS ay nag-e-encrypt ng iyong koneksyon kaya’t hindi madaling mabasa ang data na ipinapadala sa pagitan ng iyong browser at ng website.' },
-  { text: 'Iisa lang ang password na ginagamit mo sa lahat ng apps.', icon:'🔑', answer:'unsafe', xp:5, recap: 'Kapag pare-pareho ang password mo sa lahat ng account, delikado ito dahil kung ma-hack ang isa, puwede ring maapektuhan ang iba.' },
-  { text: 'Lagi kang nagla-log out sa mga shared na computer pagkatapos gamitin ito.', icon:'💻', answer:'safe', xp:5, recap: 'Ang pagla-log out sa mga pampubliko o shared computer ay nakakaiwas sa pag-access ng susunod na gagamit sa iyong mga personal na account.' },
-  { text: 'Nag-click ka ng link mula sa isang hindi kilalang email.', icon:'📧', answer:'unsafe', xp:5, recap: 'Ang mga link mula sa hindi kilalang email ay maaaring magtungo sa pekeng website o mag-trigger ng awtomatikong pag-download ng malware.' },
-  { text: 'In-activate mo ang 2-factor authentication sa GCash.', icon:'📱', answer:'safe', xp:5, recap: 'Ang two-factor authentication ay dagdag na seguridad na pumipigil sa pag-access sa account mo kahit alam pa ng iba ang password mo.' },
-  { text: 'Binigay mo ang iyong OTP code sa isang “GCash agent”.', icon:'💬', answer:'unsafe', xp:5, recap: 'Ang official support agents ay hindi humihingi ng OTP dahil ito ang ginagamit para ma-approve ang mga transaksyon.' },
-  { text: 'Ina-update mo agad ang apps mo kapag may notification na available na ang update.', icon:'🔄', answer:'safe', xp:5, recap: 'Ang pagpapanatiling updated sa iyong software ay nakakatulong para agad maayos ang mga kilalang security loopholes at system vulnerabilities.' },
-  { text: 'Isinusulat mo ang mga password mo sa notebook na puwedeng makita ng iba.', icon:'📓', answer:'unsafe', xp:5, recap: 'Ang mga notebook na may passwords ay madaling mawala, manakaw, o makita ng ibang tao na hindi dapat nakakakita.' },
-  { text: 'Gumagamit ka ng matibay na password na may mga simbolo at numero.', icon:'🛡️', answer:'safe', xp:5, recap: 'Ang mga matitibay na password na may halo ng mga letra, numero, at simbolo ay isa sa pinakamahalagang unang depensa ng iyong mga digital na account.' },
-  { text: 'Ipinopost mo ang iyong buong kaarawan sa social media.', icon:'🎂', answer:'unsafe', xp:5, recap: 'Puwedeng gamitin ng mga scammer ang mga birthday na naka-post online para sagutin ang security questions at ma-take over ang accounts.' },
-  { text: 'Tinitingnan mo muna ang mga URL bago mag-click ng mga link.', icon:'🔍', answer:'safe', xp:5, recap: 'Kapag chine-check mo ang URL, mas madali mong makikita kung may pekeng spelling at kung tunay ba ang website na pupuntahan mo.' },
-  { text: 'Nagda-download ka ng mga apps mula sa mga hindi opisyal na website.', icon:'⬇️', answer:'unsafe', xp:5, recap: 'Ang mga third-party marketplace, ay may mga apps na puwedeng may nakatagong spyware o Trojan.' },
-  { text: 'Gumagamit ka ng VPN kapag naka-connect ka sa public Wi-Fi.', icon:'📡', answer:'safe', xp:5, recap: 'Ang Virtual Private Network ay nag-e-encrypt ng internet mo sa public Wi-Fi para hindi basta makita ng iba ang iyong activity.' },
-  { text: 'Ibinahagi mo ang iyong home address sa isang public chat group.', icon:'🏠', answer:'unsafe', xp:5, recap: 'Ang mga public chat room ay puwedeng makita ng kahit sino, kaya nagiging delikado ito dahil maaaring malaman ang iyong lokasyon at magamit sa panlilinlang o ibang panganib sa totoong buhay.' },
+  { text: 'Isang hindi mo kilalang tao online ang nagtatanong ng address ng iyong paaralan.', icon: '👤', answer: 'unsafe', xp: 5, recap: 'Ang pagbibigay ng school address sa mga hindi mo kilala online ay puwedeng magdulot ng panganib sa iyong kaligtasan sa totoong buhay.' },
+  { text: 'Gumagamit ka ng mga HTTPS na website para sa iyong pananaliksik.', icon: '🔒', answer: 'safe', xp: 5, recap: 'Ang HTTPS ay nag-e-encrypt ng iyong koneksyon kaya’t hindi madaling mabasa ang data na ipinapadala sa pagitan ng iyong browser at ng website.' },
+  { text: 'Iisa lang ang password na ginagamit mo sa lahat ng apps.', icon: '🔑', answer: 'unsafe', xp: 5, recap: 'Kapag pare-pareho ang password mo sa lahat ng account, delikado ito dahil kung ma-hack ang isa, puwede ring maapektuhan ang iba.' },
+  { text: 'Lagi kang nagla-log out sa mga shared na computer pagkatapos gamitin ito.', icon: '💻', answer: 'safe', xp: 5, recap: 'Ang pagla-log out sa mga pampubliko o shared computer ay nakakaiwas sa pag-access ng susunod na gagamit sa iyong mga personal na account.' },
+  { text: 'Nag-click ka ng link mula sa isang hindi kilalang email.', icon: '📧', answer: 'unsafe', xp: 5, recap: 'Ang mga link mula sa hindi kilalang email ay maaaring magtungo sa pekeng website o mag-trigger ng awtomatikong pag-download ng malware.' },
+  { text: 'In-activate mo ang 2-factor authentication sa GCash.', icon: '📱', answer: 'safe', xp: 5, recap: 'Ang two-factor authentication ay dagdag na seguridad na pumipigil sa pag-access sa account mo kahit alam pa ng iba ang password mo.' },
+  { text: 'Binigay mo ang iyong OTP code sa isang “GCash agent”.', icon: '💬', answer: 'unsafe', xp: 5, recap: 'Ang official support agents ay hindi humihingi ng OTP dahil ito ang ginagamit para ma-approve ang mga transaksyon.' },
+  { text: 'Ina-update mo agad ang apps mo kapag may notification na available na ang update.', icon: '🔄', answer: 'safe', xp: 5, recap: 'Ang pagpapanatiling updated sa iyong software ay nakakatulong para agad maayos ang mga kilalang security loopholes at system vulnerabilities.' },
+  { text: 'Isinusulat mo ang mga password mo sa notebook na puwedeng makita ng iba.', icon: '📓', answer: 'unsafe', xp: 5, recap: 'Ang mga notebook na may passwords ay madaling mawala, manakaw, o makita ng ibang tao na hindi dapat nakakakita.' },
+  { text: 'Gumagamit ka ng matibay na password na may mga simbolo at numero.', icon: '🛡️', answer: 'safe', xp: 5, recap: 'Ang mga matitibay na password na may halo ng mga letra, numero, at simbolo ay isa sa pinakamahalagang unang depensa ng iyong mga digital na account.' },
+  { text: 'Ipinopost mo ang iyong buong kaarawan sa social media.', icon: '🎂', answer: 'unsafe', xp: 5, recap: 'Puwedeng gamitin ng mga scammer ang mga birthday na naka-post online para sagutin ang security questions at ma-take over ang accounts.' },
+  { text: 'Tinitingnan mo muna ang mga URL bago mag-click ng mga link.', icon: '🔍', answer: 'safe', xp: 5, recap: 'Kapag chine-check mo ang URL, mas madali mong makikita kung may pekeng spelling at kung tunay ba ang website na pupuntahan mo.' },
+  { text: 'Nagda-download ka ng mga apps mula sa mga hindi opisyal na website.', icon: '⬇️', answer: 'unsafe', xp: 5, recap: 'Ang mga third-party marketplace, ay may mga apps na puwedeng may nakatagong spyware o Trojan.' },
+  { text: 'Gumagamit ka ng VPN kapag naka-connect ka sa public Wi-Fi.', icon: '📡', answer: 'safe', xp: 5, recap: 'Ang Virtual Private Network ay nag-e-encrypt ng internet mo sa public Wi-Fi para hindi basta makita ng iba ang iyong activity.' },
+  { text: 'Ibinahagi mo ang iyong home address sa isang public chat group.', icon: '🏠', answer: 'unsafe', xp: 5, recap: 'Ang mga public chat room ay puwedeng makita ng kahit sino, kaya nagiging delikado ito dahil maaaring malaman ang iyong lokasyon at magamit sa panlilinlang o ibang panganib sa totoong buhay.' },
 ];
 
 // ── LEVEL 5: LINK INSPECTOR ──
 const URL_ITEMS = [
-  { url: 'https://deped.gov.ph',                    answer: 'safe', reason: '✅ Official .gov.ph domain = SAFE!', recap: 'Ang mga legit na government websites sa Pilipinas ay laging gumagamit ng opisyal na “.gov.ph” na domain.' },
-  { url: 'http://depd-ph.weebly.com',               answer: 'fake', reason: '❌ Fake: misspelled + weebly.com = NOT official', recap: 'Ang mga maling spelling sa domain at mga free blog hosting site tulad ng “weebly.com” ay mga palatandaan na maaaring peke o clone ang website.' },
-  { url: 'https://gcash-rewards.ph.freesite.net',   answer: 'fake', reason: '❌ Fake: gcash is NOT on freesite.net', recap: 'Gumagamit ang mga scammer ng free web hosts tulad ng “freesite.net” para gawing peke ang mga phishing site at magmukhang official na website.' },
-  { url: 'https://www.bsp.gov.ph',                  answer: 'safe', reason: '✅ Official BSP government site', recap: 'Ang pagtingin kung “.gov.ph” ang domain ay isa sa pinakamadaling paraan para malaman kung legit ang government website.' },
-  { url: 'https://fb-security-update.xyz',          answer: 'fake', reason: '❌ Fake: Facebook never uses .xyz domain', recap: 'Ang mga malalaking tech companies tulad ng Facebook ay hindi kailanman makikipag-ugnayan sa iyo gamit ang mga kahina-hinalang domain extensions tulad ng “.xyz”.' },
+  { url: 'https://deped.gov.ph', answer: 'safe', reason: '✅ Official .gov.ph domain = SAFE!', recap: 'Ang mga legit na government websites sa Pilipinas ay laging gumagamit ng opisyal na “.gov.ph” na domain.' },
+  { url: 'http://depd-ph.weebly.com', answer: 'fake', reason: '❌ Fake: misspelled + weebly.com = NOT official', recap: 'Ang mga maling spelling sa domain at mga free blog hosting site tulad ng “weebly.com” ay mga palatandaan na maaaring peke o clone ang website.' },
+  { url: 'https://gcash-rewards.ph.freesite.net', answer: 'fake', reason: '❌ Fake: gcash is NOT on freesite.net', recap: 'Gumagamit ang mga scammer ng free web hosts tulad ng “freesite.net” para gawing peke ang mga phishing site at magmukhang official na website.' },
+  { url: 'https://www.bsp.gov.ph', answer: 'safe', reason: '✅ Official BSP government site', recap: 'Ang pagtingin kung “.gov.ph” ang domain ay isa sa pinakamadaling paraan para malaman kung legit ang government website.' },
+  { url: 'https://fb-security-update.xyz', answer: 'fake', reason: '❌ Fake: Facebook never uses .xyz domain', recap: 'Ang mga malalaking tech companies tulad ng Facebook ay hindi kailanman makikipag-ugnayan sa iyo gamit ang mga kahina-hinalang domain extensions tulad ng “.xyz”.' },
 ];
 
 // ── LEVEL 6: SCAM INBOX MEMORY ──
@@ -210,14 +210,14 @@ const MEMORY_QUESTIONS = [
 
 // ── LEVEL 7: SAFE PROFILE ──
 const PROFILE_FIELDS = [
-  { name: '👤 Full Name',       correct: 'private', desc: 'Ang iyong opisyal na unang pangalan at apelyido.', recap: 'Ang pagtatago ng iyong buong pangalan ay nakakatulong para maiwasan ang pagsubaybay sa iyo sa publiko at mga tangkang pagnanakaw ng pagkakakilanlan.' },
-  { name: '😎 Nickname',        correct: 'public',  desc: 'Isang palayaw o gaming alias na ginagamit ng iyong mga kaibigan.', recap: 'Ligtas na ipakita ang mga palayaw sa publiko dahil hindi nito inilalantad ang iyong legal na pagkakakilanlan.' },
-  { name: '🏫 School',          correct: 'public',  desc: 'Ang pangalan ng school o campus na pinapasukan mo.', recap: 'Ang pangalan ng paaralan ay itinuturing na pampublikong impormasyon, ngunit dapat panatilihing pribado ang mga detalye tulad ng eksaktong iskedyul ng klase.' },
-  { name: '📚 Grade Level',     correct: 'private', desc: 'Ang iyong kasalukuyang taon o grade level (hal. Grade 7).', recap: 'Ang pagpapanatiling pribado ng iyong grade level ay nagdadagdag ng proteksyon laban sa online profiling ng mga bata.' },
-  { name: '🎂 Birthday',        correct: 'private', desc: 'Ang iyong buong petsa ng kapanganakan (buwan, araw, at taon).', recap: 'Ang mga kaarawan ay madalas ginagamit sa security questions at identity verification, kaya dapat itong panatilihing pribado.' },
-  { name: '📞 Phone Number',    correct: 'private', desc: 'Ang iyong personal na 11-digit na mobile number.', recap: 'Ang iyong numero ng telepono ay dapat manatiling pribado upang maiwasan ang SMS scams, hindi inaasahang tawag, at direktang panggugulo.' },
-  { name: '❤️ Favorite Subject',correct: 'public',  desc: 'Mga subject sa school na interesado kang pag-aralan.', recap: 'Ligtas mag-share ng mga interes sa pag-aaral at nakakatulong pa ito para sa maayos na pakikisalamuha sa iba.' },
-  { name: '🏘️ Home Barangay',   correct: 'private', desc: 'Ang tiyak na barangay o lugar kung saan ka nakatira.', recap: 'Ang iyong barangay na tinitirhan ay dapat panatilihing pribado upang maiwasan ang mga taong may masamang hangarin na matukoy ang iyong lokasyon.' },
+  { name: '👤 Full Name', correct: 'private', desc: 'Ang iyong opisyal na unang pangalan at apelyido.', recap: 'Ang pagtatago ng iyong buong pangalan ay nakakatulong para maiwasan ang pagsubaybay sa iyo sa publiko at mga tangkang pagnanakaw ng pagkakakilanlan.' },
+  { name: '😎 Nickname', correct: 'public', desc: 'Isang palayaw o gaming alias na ginagamit ng iyong mga kaibigan.', recap: 'Ligtas na ipakita ang mga palayaw sa publiko dahil hindi nito inilalantad ang iyong legal na pagkakakilanlan.' },
+  { name: '🏫 School', correct: 'public', desc: 'Ang pangalan ng school o campus na pinapasukan mo.', recap: 'Ang pangalan ng paaralan ay itinuturing na pampublikong impormasyon, ngunit dapat panatilihing pribado ang mga detalye tulad ng eksaktong iskedyul ng klase.' },
+  { name: '📚 Grade Level', correct: 'private', desc: 'Ang iyong kasalukuyang taon o grade level (hal. Grade 7).', recap: 'Ang pagpapanatiling pribado ng iyong grade level ay nagdadagdag ng proteksyon laban sa online profiling ng mga bata.' },
+  { name: '🎂 Birthday', correct: 'private', desc: 'Ang iyong buong petsa ng kapanganakan (buwan, araw, at taon).', recap: 'Ang mga kaarawan ay madalas ginagamit sa security questions at identity verification, kaya dapat itong panatilihing pribado.' },
+  { name: '📞 Phone Number', correct: 'private', desc: 'Ang iyong personal na 11-digit na mobile number.', recap: 'Ang iyong numero ng telepono ay dapat manatiling pribado upang maiwasan ang SMS scams, hindi inaasahang tawag, at direktang panggugulo.' },
+  { name: '❤️ Favorite Subject', correct: 'public', desc: 'Mga subject sa school na interesado kang pag-aralan.', recap: 'Ligtas mag-share ng mga interes sa pag-aaral at nakakatulong pa ito para sa maayos na pakikisalamuha sa iba.' },
+  { name: '🏘️ Home Barangay', correct: 'private', desc: 'Ang tiyak na barangay o lugar kung saan ka nakatira.', recap: 'Ang iyong barangay na tinitirhan ay dapat panatilihing pribado upang maiwasan ang mga taong may masamang hangarin na matukoy ang iyong lokasyon.' },
 ];
 
 // ── LEVEL 8: BOSS CHALLENGES ──
@@ -239,30 +239,30 @@ const BOSS_STEP3_ITEMS = [
 
 // ── DOM REFS ──────────────────────────────────────
 const $ = id => document.getElementById(id);
-const bootScreen     = $('boot-screen');
-const teamEntry      = $('team-entry');
-const introComic     = $('intro-comic');
-const gameScreen     = $('game-screen');
-const finalScreen    = $('final-screen');
-const teamInput      = $('team-name-input');
-const startBtn       = $('start-btn');
-const levelContent   = $('level-content');
-const levelSplash    = $('level-splash');
-const feedbackOverlay= $('feedback-overlay');
-const fbIcon         = $('fb-icon');
-const fbTitle        = $('fb-title');
-const fbItem         = $('fb-item');
-const fbMsg          = $('fb-msg');
-const fbCount        = $('fb-count');
-const fbContinueBtn  = $('fb-continue-btn');
-const xpFloat        = $('xp-float');
-const screenFlash    = $('screen-flash');
-const dispTeam       = $('disp-team');
-const dispXP         = $('disp-xp');
-const dispTier       = $('disp-tier');
-const xpBarInner     = $('xp-bar-inner');
-const dispStreak     = $('disp-streak');
-const activeTanodDisp= $('active-tanod-display');
+const bootScreen = $('boot-screen');
+const teamEntry = $('team-entry');
+const introComic = $('intro-comic');
+const gameScreen = $('game-screen');
+const finalScreen = $('final-screen');
+const teamInput = $('team-name-input');
+const startBtn = $('start-btn');
+const levelContent = $('level-content');
+const levelSplash = $('level-splash');
+const feedbackOverlay = $('feedback-overlay');
+const fbIcon = $('fb-icon');
+const fbTitle = $('fb-title');
+const fbItem = $('fb-item');
+const fbMsg = $('fb-msg');
+const fbCount = $('fb-count');
+const fbContinueBtn = $('fb-continue-btn');
+const xpFloat = $('xp-float');
+const screenFlash = $('screen-flash');
+const dispTeam = $('disp-team');
+const dispXP = $('disp-xp');
+const dispTier = $('disp-tier');
+const xpBarInner = $('xp-bar-inner');
+const dispStreak = $('disp-streak');
+const activeTanodDisp = $('active-tanod-display');
 
 // ── TIMERS & MAP STATE ─────────────────────────────
 let timerInterval = null;
@@ -279,18 +279,18 @@ function clearAllTimers() {
 // ── INPUT HANDLING ────────────────────────────────
 const Input = { up: false, down: false, left: false, right: false, space: false };
 document.addEventListener('keydown', e => {
-  if(e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') Input.up = true;
-  if(e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') Input.down = true;
-  if(e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') Input.left = true;
-  if(e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') Input.right = true;
-  if(e.key === ' ' || e.key === 'Enter') Input.space = true;
+  if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') Input.up = true;
+  if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') Input.down = true;
+  if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') Input.left = true;
+  if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') Input.right = true;
+  if (e.key === ' ' || e.key === 'Enter') Input.space = true;
 });
 document.addEventListener('keyup', e => {
-  if(e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') Input.up = false;
-  if(e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') Input.down = false;
-  if(e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') Input.left = false;
-  if(e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') Input.right = false;
-  if(e.key === ' ' || e.key === 'Enter') Input.space = false;
+  if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') Input.up = false;
+  if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') Input.down = false;
+  if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') Input.left = false;
+  if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') Input.right = false;
+  if (e.key === ' ' || e.key === 'Enter') Input.space = false;
 });
 
 // ═══════════════════════════════════════════════════
@@ -318,7 +318,7 @@ function runBootSequence() {
     if (i >= bootLines.length) {
       labelEl.textContent = '[ SYSTEM READY ]';
       fillEl.style.width = '100%';
-      beep(880,'sine',0.2,0.2);
+      beep(880, 'sine', 0.2, 0.2);
       setTimeout(showMainMenu, 600);
       return;
     }
@@ -328,7 +328,7 @@ function runBootSequence() {
     logEl.appendChild(span);
     beep(440 + i * 40, 'square', 0.04, 0.08);
     fillEl.style.width = ((i + 1) / bootLines.length * 100) + '%';
-    labelEl.textContent = 'LOADING ' + Math.round((i+1)/bootLines.length*100) + '%...';
+    labelEl.textContent = 'LOADING ' + Math.round((i + 1) / bootLines.length * 100) + '%...';
     i++;
     setTimeout(nextLine, 260);
   }
@@ -341,7 +341,7 @@ function runBootSequence() {
 function showMainMenu() {
   $('boot-screen').style.display = 'none';
   $('main-menu-screen').style.display = 'flex';
-  
+
   const inputEl = document.getElementById('team-name-input');
   setTimeout(() => { if (inputEl) inputEl.focus(); }, 100);
 
@@ -400,7 +400,7 @@ if (modal) modal.onclick = e => {
 
 // ── SFX Toggle ──
 const sfxSwitch = $('opt-sfx-switch');
-const sfxLabel  = $('sfx-label');
+const sfxLabel = $('sfx-label');
 if (sfxSwitch) {
   // Set initial visual
   setOptSwitch(sfxSwitch, sfxLabel, sfxEnabled);
@@ -413,7 +413,7 @@ if (sfxSwitch) {
 
 // ── Unlock All Levels Toggle (DEV only) ──
 const unlockSwitch = $('opt-unlock-switch');
-const unlockLabel  = $('unlock-label');
+const unlockLabel = $('unlock-label');
 if (unlockSwitch) {
   unlockSwitch.onclick = () => {
     if (!DEV_MODE) return;
@@ -436,7 +436,7 @@ if (unlockSwitch) {
 
 // ── Reset Progress Toggle (DEV only) ──
 const resetSwitch = $('opt-reset-switch');
-const resetLabel  = $('reset-label');
+const resetLabel = $('reset-label');
 if (resetSwitch) {
   resetSwitch.onclick = () => {
     if (!DEV_MODE) return;
@@ -466,22 +466,56 @@ document.addEventListener('keydown', e => {
     closeOptions();
     return;
   }
-  // Otherwise toggle pause during a level
-  const mainArea = document.getElementById('main-area');
-  if (mainArea && mainArea.style.display === 'block' && $('feedback-overlay').style.display !== 'flex' && $('level-splash').style.display !== 'flex') {
-    togglePause();
+  // Otherwise toggle pause during a level or map
+  const gameScreen = $('game-screen');
+  if (gameScreen && gameScreen.style.display !== 'none') {
+    if ($('feedback-overlay').style.display === 'flex' || $('level-splash').style.display === 'flex') return;
+    const pauseOverlay = $('pause-overlay');
+    if (isPaused && pauseOverlay.style.display === 'none') {
+      pauseOverlay.style.display = 'flex';
+    } else {
+      togglePause(true);
+    }
   }
 });
 
 
-function togglePause() {
+function togglePause(showMenu = true) {
   isPaused = !isPaused;
   const pauseOverlay = $('pause-overlay');
+  const btnPause = $('btn-pause-level');
+
+  const btnQuit = $('btn-quit');
+  const btnRestart = $('btn-restart');
+  const mainArea = document.getElementById('main-area');
+  const inLevel = mainArea && mainArea.style.display === 'block';
+
+  if (btnQuit) {
+    btnQuit.textContent = inLevel ? 'EXIT TO MAP' : 'EXIT TO TITLE';
+  }
+  if (btnRestart) {
+    btnRestart.style.display = inLevel ? 'block' : 'none';
+  }
+
   if (isPaused) {
-    pauseOverlay.style.display = 'flex';
+    if (showMenu) pauseOverlay.style.display = 'flex';
+    if (btnPause) btnPause.textContent = '▶️';
   } else {
     pauseOverlay.style.display = 'none';
+    if (btnPause) btnPause.textContent = '⏸️';
   }
+}
+
+const btnPauseLevel = document.getElementById('btn-pause-level');
+if (btnPauseLevel) {
+  btnPauseLevel.onclick = () => {
+    const gameScreen = $('game-screen');
+    if (gameScreen && gameScreen.style.display !== 'none') {
+      if ($('feedback-overlay').style.display === 'flex' || $('level-splash').style.display === 'flex') return;
+      togglePause(false);
+      try { select_s(); } catch (e) { }
+    }
+  };
 }
 
 $('btn-resume').onclick = () => {
@@ -497,7 +531,13 @@ $('btn-restart').onclick = () => {
 $('btn-quit').onclick = () => {
   togglePause();
   clearAllTimers();
-  showWorldMap();
+  const mainArea = document.getElementById('main-area');
+  if (mainArea && mainArea.style.display === 'block') {
+    showWorldMap();
+  } else {
+    $('game-screen').style.display = 'none';
+    $('main-menu-screen').style.display = 'flex';
+  }
 };
 
 // ═══════════════════════════════════════════════════
@@ -510,7 +550,7 @@ if (teamInput) {
     if (teamInput.value.trim().toUpperCase() === 'PR0J3CT_BUNNY_19C_H3RRSCH3R#') {
       DEV_MODE = true;
       teamInput.value = 'DEVELOPER';
-      try { levelUp(); } catch(e) {}
+      try { levelUp(); } catch (e) { }
     }
   });
 }
@@ -525,8 +565,8 @@ function showCharacterSelect() {
     btn.addEventListener('click', () => {
       GS.character = {
         gender: btn.dataset.gender,
-        img:    btn.dataset.img,
-        name:   btn.dataset.name,
+        img: btn.dataset.img,
+        name: btn.dataset.name,
       };
       select_s();
       charScreen.style.display = 'none';
@@ -537,7 +577,18 @@ function showCharacterSelect() {
 
 function submitTeam() {
   let name = teamInput.value.trim().toUpperCase();
-  if (!name) { teamInput.style.borderColor = 'var(--red)'; setTimeout(()=>teamInput.style.borderColor='',600); return; }
+  if (!name) {
+    teamInput.style.borderColor = 'var(--red)';
+    setTimeout(() => teamInput.style.borderColor = '', 600);
+    const errorModal = document.getElementById('error-modal');
+    if (errorModal) {
+      errorModal.style.display = 'flex';
+      try { buzzer(); } catch (e) { }
+      const closeBtn = document.getElementById('btn-error-close');
+      if (closeBtn) closeBtn.onclick = () => { try { select_s(); } catch (e) { } errorModal.style.display = 'none'; teamInput.focus(); };
+    }
+    return;
+  }
 
   if (name === 'PR0J3CT_BUNNY_19C_H3RRSCH3R#') {
     DEV_MODE = true;
@@ -555,17 +606,17 @@ function submitTeam() {
 // ═══════════════════════════════════════════════════
 function showIntroComic() {
   introComic.style.display = 'flex';
-  const panels = ['cp1','cp2','cp3'];
+  const panels = ['cp1', 'cp2', 'cp3'];
   let pi = 0;
   const fill = $('comic-timer-fill');
   fill.style.transition = 'none'; fill.style.width = '100%';
 
   function showPanel(idx) {
-    panels.forEach((id,i) => $(id).style.display = i === idx ? 'flex' : 'none');
+    panels.forEach((id, i) => $(id).style.display = i === idx ? 'flex' : 'none');
     blip();
     fill.style.transition = 'none'; fill.style.width = '100%';
     setTimeout(() => {
-      fill.style.transition = 'width 2.8s linear';
+      fill.style.transition = 'width 14.8s linear';
       fill.style.width = '0%';
     }, 50);
     setTimeout(() => {
@@ -574,7 +625,7 @@ function showIntroComic() {
         introComic.style.display = 'none';
         startGame();
       }
-    }, 3000);
+    }, 15000);
   }
   showPanel(0);
 }
@@ -589,7 +640,7 @@ function startGame() {
   GS.level = 1;
   GS.streak = 0;
   GS.xp = 0;
-  
+
   const unlockSwitch = document.getElementById('opt-unlock-switch');
   if (DEV_MODE && unlockSwitch && unlockSwitch.dataset.on === 'true') {
     GS.levelsDone = [1, 2, 3, 4, 5, 6, 7];
@@ -598,18 +649,18 @@ function startGame() {
     GS.levelsDone = [];
     GS.currentNode = 1;
   }
-  
-  showWorldMap();
+
+  showWorldMap(null, true);
 }
 
 function updateHUD() {
   dispXP.textContent = GS.xp;
   dispStreak.textContent = GS.streak;
   const tiers = [
-    { min:0,   max:150, label:'ROOKIE TANOD',       bg:'#8CBED6'   },
-    { min:151, max:250, label:'ACTIVE TANOD',        bg:'#6D92A0'   },
-    { min:251, max:350, label:'SENIOR TANOD',        bg:'#C8A2C8'   },
-    { min:351, max:9999,label:'CYBER TANOD ELITE',   bg:'#A8A5A6', color:'var(--white)' },
+    { min: 0, max: 150, label: 'ROOKIE TANOD', bg: '#8CBED6' },
+    { min: 151, max: 250, label: 'ACTIVE TANOD', bg: '#6D92A0' },
+    { min: 251, max: 350, label: 'SENIOR TANOD', bg: '#C8A2C8' },
+    { min: 351, max: 9999, label: 'CYBER TANOD ELITE', bg: '#A8A5A6', color: 'var(--white)' },
   ];
   const tier = tiers.find(t => GS.xp >= t.min && GS.xp <= t.max) || tiers[0];
   dispTier.textContent = tier.label;
@@ -619,12 +670,12 @@ function updateHUD() {
   xpBarInner.style.width = pct + '%';
   const player = GS.playerIndex + 1;
   const emojiEl = document.getElementById('tanod-emoji-disp');
-  const nameEl  = document.getElementById('tanod-name-disp');
-    if (emojiEl) emojiEl.textContent = '';
-    if (nameEl)  nameEl.textContent  = GS.character ? GS.character.name  : 'PLAYER ' + player;
+  const nameEl = document.getElementById('tanod-name-disp');
+  if (emojiEl) emojiEl.textContent = '';
+  if (nameEl) nameEl.textContent = GS.character ? GS.character.name : 'PLAYER ' + player;
 }
 
-function showWorldMap(autoAdvanceFromLv = null) {
+function showWorldMap(autoAdvanceFromLv = null, isGameStart = false) {
   clearAllTimers();
   const mainArea = document.getElementById('main-area');
   const levelContent = document.getElementById('level-content');
@@ -632,26 +683,26 @@ function showWorldMap(autoAdvanceFromLv = null) {
   const playerSprite = document.getElementById('player-sprite');
   const playerImg = document.getElementById('player-sprite-img');
   const promptEl = document.getElementById('interaction-prompt');
-  
+
   if (levelContent) {
     levelContent.dispatchEvent(new Event('removed'));
     levelContent.innerHTML = '';
   }
-  
+
   if (mainArea) mainArea.style.display = 'none';
   if (promptEl) promptEl.style.display = 'none';
   if (playerImg && GS.character) playerImg.src = GS.character.img;
 
   const highestCompleted = GS.levelsDone.length > 0 ? Math.max(...GS.levelsDone) : 0;
-  
+
   mapNodes.forEach(node => {
     const lv = parseInt(node.dataset.lv);
     node.classList.remove('completed', 'locked');
-    
+
     if (GS.levelsDone.includes(lv)) {
       node.classList.add('completed');
     }
-    
+
     // Sequential locking: node is locked if it's strictly greater than highest completed + 1
     if (lv > highestCompleted + 1) {
       node.classList.add('locked');
@@ -662,7 +713,7 @@ function showWorldMap(autoAdvanceFromLv = null) {
       if (node.classList.contains('locked')) return;
       GS.currentNode = lv;
       updatePlayerPos(GS.currentNode);
-      
+
       select_s();
       cancelAnimationFrame(mapLoopId);
       if (promptEl) promptEl.style.display = 'none';
@@ -691,10 +742,10 @@ function showWorldMap(autoAdvanceFromLv = null) {
   if (GS.currentNode === undefined) {
     let targetLv = 1;
     if (GS.levelsDone.length > 0) {
-       targetLv = Math.min(8, Math.max(...GS.levelsDone) + 1);
-       if (targetLv === 8 && GS.levelsDone.length < 7) {
-         targetLv = Math.max(...GS.levelsDone); // stay on last if boss locked
-       }
+      targetLv = Math.min(8, Math.max(...GS.levelsDone) + 1);
+      if (targetLv === 8 && GS.levelsDone.length < 7) {
+        targetLv = Math.max(...GS.levelsDone); // stay on last if boss locked
+      }
     }
     GS.currentNode = targetLv;
   }
@@ -707,18 +758,77 @@ function showWorldMap(autoAdvanceFromLv = null) {
       playerSprite.style.top = targetNode.style.top;
     }
   };
-  
+
   // Disable transition initially to snap to position
   if (playerSprite) {
     playerSprite.style.transition = 'none';
     updatePlayerPos(GS.currentNode);
     void playerSprite.offsetWidth; // trigger reflow
     playerSprite.style.transition = 'left 0.3s linear, top 0.3s linear';
+
+    if (isGameStart) {
+      playerSprite.style.opacity = '0';
+      const star = document.getElementById('start-transition-star');
+      if (star) {
+        star.style.display = 'block';
+        star.style.left = '50%';
+        star.style.top = '50%';
+        star.style.transform = 'translate(-50%, -50%) scale(0)';
+        star.style.transition = 'none';
+
+        if (promptEl) promptEl.style.display = 'none';
+
+        // Animate star in
+        setTimeout(() => {
+          star.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+          star.style.transform = 'translate(-50%, -50%) scale(1)';
+          try { chime(); } catch (e) { }
+        }, 100);
+
+        // Move star to current node (starting position)
+        setTimeout(() => {
+          const targetNode = document.querySelector(`.map-node[data-lv="${GS.currentNode}"]`);
+          if (targetNode) {
+            star.style.transition = 'left 0.8s ease-in-out, top 0.8s ease-in-out';
+            star.style.left = targetNode.style.left;
+            star.style.top = targetNode.style.top;
+            try { beep(600, 'sine', 0.8, 0.1); } catch (e) { }
+          }
+        }, 800);
+
+        // Star disappears, player appears
+        setTimeout(() => {
+          star.style.transition = 'transform 0.3s ease-in';
+          star.style.transform = 'translate(-50%, -50%) scale(0)';
+
+          setTimeout(() => {
+            star.style.display = 'none';
+            playerSprite.style.opacity = '1';
+            playerSprite.style.transform = 'translate(-50%, -100%) scale(0)';
+            playerSprite.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s';
+
+            // Trigger reflow
+            void playerSprite.offsetWidth;
+            playerSprite.style.transform = 'translate(-50%, -100%) scale(1)';
+            try { levelUp(); } catch (e) { }
+
+            // Allow movement after transition finishes
+            setTimeout(() => {
+              isMoving = false;
+            }, 400);
+
+          }, 300);
+        }, 1700);
+      }
+    } else {
+      playerSprite.style.opacity = '1';
+      playerSprite.style.transform = 'translate(-50%, -100%) scale(1)';
+    }
   }
 
-  let isMoving = false;
+  let isMoving = isGameStart;
   let spaceWasPressed = false;
-  
+
   const Graph = {
     1: { right: 2 },
     2: { left: 1, right: 3 },
@@ -746,17 +856,17 @@ function showWorldMap(autoAdvanceFromLv = null) {
         setTimeout(() => {
           isMoving = true;
           GS.currentNode = nextLv;
-          
+
           if (playerSprite) {
             playerSprite.style.transition = 'left 1.5s linear, top 1.5s linear';
           }
-          
+
           updatePlayerPos(GS.currentNode);
           if (promptEl) promptEl.style.display = 'none';
-          
+
           if (autoDir === 'left' && playerImg) playerImg.style.transform = 'scaleX(-1)';
           if (autoDir === 'right' && playerImg) playerImg.style.transform = 'scaleX(1)';
-          
+
           setTimeout(() => {
             isMoving = false;
             autoAdvanceFromLv = null;
@@ -788,38 +898,38 @@ function showWorldMap(autoAdvanceFromLv = null) {
             GS.currentNode = nextNodeId;
             updatePlayerPos(GS.currentNode);
             if (promptEl) promptEl.style.display = 'none';
-            
+
             if (dir === 'left' && playerImg) playerImg.style.transform = 'scaleX(-1)';
             if (dir === 'right' && playerImg) playerImg.style.transform = 'scaleX(1)';
-            
+
             setTimeout(() => {
               isMoving = false;
             }, 300); // match CSS transition duration
           }
         }
       }
-      
+
       // Update prompt when stationary
       if (!isMoving) {
-         const currentNodeEl = document.querySelector(`.map-node[data-lv="${GS.currentNode}"]`);
-         if (currentNodeEl && !currentNodeEl.classList.contains('locked')) {
-           if (promptEl) promptEl.style.display = 'block';
-           
-           if (Input.space && !spaceWasPressed) {
-             spaceWasPressed = true;
-             select_s();
-             cancelAnimationFrame(mapLoopId);
-             if (promptEl) promptEl.style.display = 'none';
-             if (mainArea) mainArea.style.display = 'block';
-             showLevelTransition(GS.currentNode);
-             return;
-           }
-         } else {
-           if (promptEl) promptEl.style.display = 'none';
-         }
+        const currentNodeEl = document.querySelector(`.map-node[data-lv="${GS.currentNode}"]`);
+        if (currentNodeEl && !currentNodeEl.classList.contains('locked')) {
+          if (promptEl) promptEl.style.display = 'block';
+
+          if (Input.space && !spaceWasPressed) {
+            spaceWasPressed = true;
+            select_s();
+            cancelAnimationFrame(mapLoopId);
+            if (promptEl) promptEl.style.display = 'none';
+            if (mainArea) mainArea.style.display = 'block';
+            showLevelTransition(GS.currentNode);
+            return;
+          }
+        } else {
+          if (promptEl) promptEl.style.display = 'none';
+        }
       }
     }
-    
+
     if (!Input.space) spaceWasPressed = false;
     mapLoopId = requestAnimationFrame(mapLoop);
   }
@@ -836,7 +946,7 @@ function addXP(amount, el) {
   GS.xp = Math.max(0, GS.xp + amount);
   updateHUD();
   if (el) floatXP('+' + amount + ' XP', el);
-  else     floatXPCenter('+' + amount + ' XP');
+  else floatXPCenter('+' + amount + ' XP');
   chime();
 }
 
@@ -852,12 +962,12 @@ function floatXPCenter(text) {
   xpFloat.textContent = text;
   xpFloat.style.display = 'block';
   xpFloat.style.left = '50%';
-  xpFloat.style.top  = '40%';
+  xpFloat.style.top = '40%';
   xpFloat.style.transform = 'translateX(-50%)';
   xpFloat.style.animation = 'none';
   void xpFloat.offsetWidth;
   xpFloat.style.animation = 'float-up 1.2s ease-out forwards';
-  setTimeout(()=>{ xpFloat.style.display='none'; }, 1300);
+  setTimeout(() => { xpFloat.style.display = 'none'; }, 1300);
 }
 
 function floatXP(text, el) {
@@ -865,12 +975,12 @@ function floatXP(text, el) {
   const parentRect = document.getElementById('main-area').getBoundingClientRect();
   xpFloat.textContent = text;
   xpFloat.style.display = 'block';
-  xpFloat.style.left = (rect.left - parentRect.left + rect.width/2 - 50) + 'px';
-  xpFloat.style.top  = (rect.top  - parentRect.top) + 'px';
+  xpFloat.style.left = (rect.left - parentRect.left + rect.width / 2 - 50) + 'px';
+  xpFloat.style.top = (rect.top - parentRect.top) + 'px';
   xpFloat.style.animation = 'none';
   void xpFloat.offsetWidth;
   xpFloat.style.animation = 'float-up 1.2s ease-out forwards';
-  setTimeout(()=>{ xpFloat.style.display='none'; }, 1300);
+  setTimeout(() => { xpFloat.style.display = 'none'; }, 1300);
 }
 
 function flashScreen(color) {
@@ -894,17 +1004,17 @@ function registerWrong(penaltyXP, msg, correctInfo) {
 // ═══════════════════════════════════════════════════
 // FEEDBACK OVERLAY
 // ═══════════════════════════════════════════════════
-function showFeedback(correct, title, itemText, msg, duration=15, onComplete=null) {
+function showFeedback(correct, title, itemText, msg, duration = 15, onComplete = null) {
   feedbackOverlay.style.display = 'flex';
   $('feedback-box').className = correct ? 'correct-fb' : 'wrong-fb';
-  fbIcon.textContent  = correct ? '✅' : '❌';
+  fbIcon.textContent = correct ? '✅' : '❌';
   fbTitle.textContent = title;
-  
+
   if (fbItem) {
     fbItem.textContent = itemText ? `"${itemText}"` : '';
   }
-  
-  fbMsg.textContent   = msg;
+
+  fbMsg.textContent = msg;
   fbMsg.style.whiteSpace = 'pre-line';
 
   let t = duration;
@@ -922,10 +1032,10 @@ function showFeedback(correct, title, itemText, msg, duration=15, onComplete=nul
     fbContinueBtn.onclick = finish;
   }
 
-  feedbackTimeout = setInterval(()=>{
+  feedbackTimeout = setInterval(() => {
     t--;
     fbCount.textContent = t + 's';
-    
+
     if (fbContinueBtn && t <= duration - 5) {
       fbContinueBtn.style.display = '';
     }
@@ -938,14 +1048,18 @@ function showFeedback(correct, title, itemText, msg, duration=15, onComplete=nul
 // LEVEL TRANSITION
 // ═══════════════════════════════════════════════════
 const LEVEL_META = {
-  1: { name:'CONVEYOR BELT',   desc:'Sort each data packet — SHARE or KEEP PRIVATE!', boss: false },
-  2: { name:'SPOT THE PHISH',  desc:'Click ALL suspicious elements in the email!',     boss: false },
-  3: { name:'PASSWORD POWER',  desc:'Choose the STRONGEST password!',                 boss: false },
-  4: { name:'SPEED ROUND',     desc:'Vote SAFE or UNSAFE — fast!',                    boss: false },
-  5: { name:'LINK INSPECTOR',  desc:'Is the URL SAFE or FAKE?',                       boss: false },
-  6: { name:'SCAM INBOX',      desc:'Memorize the emails, then answer from memory!',  boss: false },
-  7: { name:'SAFE PROFILE',    desc:'Toggle each field: PUBLIC or PRIVATE!',          boss: false },
-  8: { name:'BOSS LEVEL',      desc:'3 challenges in 90 seconds — don\'t get BREACHED!', boss: true },
+  1: { name: 'CONVEYOR BELT', desc: 'Sort each data packet — SHARE or KEEP PRIVATE!', boss: false, instructions: 'Use the LEFT / RIGHT arrow keys or click the buttons to sort the incoming data packets before time runs out.' },
+  2: { name: 'SPOT THE PHISH', desc: 'Click ALL suspicious elements in the email!', boss: false, instructions: 'Carefully inspect the email and click on any suspicious senders, links, or urgent requests.' },
+  3: { name: 'PASSWORD POWER', desc: 'Choose the STRONGEST password!', boss: false, instructions: 'Analyze the options and click on the strongest, most secure password.' },
+  4: { name: 'SPEED ROUND', desc: 'Vote SAFE or UNSAFE — fast!', boss: false, instructions: 'Read the scenario quickly and vote SAFE or UNSAFE. String together correct answers for a multiplier!' },
+  5: {
+    name: 'LINK INSPECTOR', desc: 'Is the URL SAFE or FAKE?', boss: false, instructions: 'Examine the URL in the address bar to determine if it\'s an official, SAFE website or a FAKE one.'
+  },
+  6: { name: 'SCAM INBOX', desc: 'Memorize the emails, then answer from memory!', boss: false, instructions: 'You have limited time to memorize the details of three emails. Afterwards, answer the True/False questions based on what you remember.' },
+  7: { name: 'SAFE PROFILE', desc: 'Toggle each field: PUBLIC or PRIVATE!', boss: false, instructions: 'Configure your social media profile by toggling each piece of information to PUBLIC or PRIVATE, then submit.' },
+  8: {
+    name: 'BOSS LEVEL', desc: '3 challenges in 90 seconds — don\'t get BREACHED!', boss: true, instructions: 'The ultimate test! Complete three consecutive security challenges within the 90-second time limit to defend the barangay.'
+  },
 };
 
 function showLevelTransition(lvNum) {
@@ -961,18 +1075,30 @@ function showLevelTransition(lvNum) {
   updateHUD();
 
   const meta = LEVEL_META[lvNum];
-  const splashLvl  = $('splash-lvl');
+  const splashLvl = $('splash-lvl');
   const splashName = $('splash-name');
   const splashDesc = $('splash-desc');
-  const splashCount= $('splash-count');
+  const splashCount = $('splash-count');
 
   if (lvNum === 8) bossSound();
   else levelUp();
 
-  splashLvl.textContent  = 'LEVEL ' + lvNum;
+  splashLvl.textContent = 'LEVEL ' + lvNum;
   splashName.textContent = meta.name;
   splashDesc.textContent = meta.desc;
-  splashName.className   = meta.boss ? 'boss-splash' : '';
+  splashName.className = meta.boss ? 'boss-splash' : '';
+
+  const splashInstWrap = $('splash-instructions-wrap');
+  const splashInst = $('splash-instructions');
+  if (splashInstWrap && splashInst) {
+    if (meta.instructions) {
+      splashInst.innerHTML = meta.instructions;
+      splashInstWrap.style.display = 'block';
+    } else {
+      splashInst.innerHTML = '';
+      splashInstWrap.style.display = 'none';
+    }
+  }
 
   if (lvNum > 2 && (lvNum - 1) % 2 === 0) {
     GS.playerIndex = (GS.playerIndex + 1) % 4;
@@ -998,7 +1124,7 @@ function getRecapData(lvNum) {
     recapData = LEVEL1_ITEMS.map(item => ({ question: item.label, badge: item.answer, recap: item.recap }));
   } else if (lvNum === 2) {
     PHISH_EMAILS.forEach((email, idx) => {
-      recapData.push({ question: `EMAIL ${idx+1} SENDER: ${email.from}`, badge: 'fake', recap: email.fromRecap });
+      recapData.push({ question: `EMAIL ${idx + 1} SENDER: ${email.from}`, badge: 'fake', recap: email.fromRecap });
       email.body.forEach(seg => {
         if (seg.click) {
           recapData.push({ question: `Email Segment: "${seg.text.trim()}"`, badge: 'suspicious', recap: seg.recap });
@@ -1043,7 +1169,7 @@ function completeLevel(lvNum) {
     // Scaling probability based on ratio of mistakes to total questions
     let totalQs = recapData.length;
     let ratio = allMistakes.length / totalQs;
-    
+
     let chance = 0;
     if (ratio <= 0.15) chance = 0.05; // e.g. 1 mistake out of 10
     else if (ratio <= 0.40) chance = 0.50; // e.g. 1 mistake out of 3, or 3 out of 10
@@ -1054,7 +1180,7 @@ function completeLevel(lvNum) {
       const shuffled = allMistakes.sort(() => Math.random() - 0.5);
       const count = Math.max(1, Math.ceil(allMistakes.length * REDEMPTION_SETTINGS.questionRatio));
       const queue = shuffled.slice(0, count);
-      
+
       playRedemptionIntro(() => {
         runRedemptionQueue(lvNum, queue, 0, () => proceedToRecap(lvNum));
       });
@@ -1068,10 +1194,12 @@ function completeLevel(lvNum) {
 function proceedToRecap(lvNum) {
   // Show brief success splash then advance to recap screen
   levelSplash.style.display = 'flex';
-  $('splash-lvl').textContent  = '\u2705 LEVEL ' + lvNum + ' COMPLETE!';
+  $('splash-lvl').textContent = '\u2705 LEVEL ' + lvNum + ' COMPLETE!';
   $('splash-name').textContent = 'LEVEL UP!';
   $('splash-desc').textContent = '';
   $('splash-count').textContent = '';
+  if ($('splash-instructions-wrap')) $('splash-instructions-wrap').style.display = 'none';
+  if ($('splash-instructions')) $('splash-instructions').innerHTML = '';
   $('splash-name').className = '';
   levelUp();
   setTimeout(() => {
@@ -1204,9 +1332,9 @@ function showRedemption(lvNum, itemData, totalCount, currentIdx, onComplete) {
     // figure out which one is correct
     const isSafeAnswer = bClass === 'safe' || (!bClass.includes('unsafe') && bClass.includes('safe'));
     const isLeftCorrect = (leftLabel === 'PRIVATE' && bClass.includes('private')) ||
-                          (leftLabel === 'SHARE' && (bClass.includes('share') || bClass.includes('public'))) ||
-                          (leftLabel === 'SAFE' && (isSafeAnswer || bClass.includes('share') || bClass.includes('public'))) ||
-                          (leftLabel === 'TRUE' && bClass.includes('true'));
+      (leftLabel === 'SHARE' && (bClass.includes('share') || bClass.includes('public'))) ||
+      (leftLabel === 'SAFE' && (isSafeAnswer || bClass.includes('share') || bClass.includes('public'))) ||
+      (leftLabel === 'TRUE' && bClass.includes('true'));
 
     const btn1 = document.createElement('button');
     btn1.className = 'retro-btn btn-primary';
@@ -1236,11 +1364,14 @@ function showRedemption(lvNum, itemData, totalCount, currentIdx, onComplete) {
 function showLevelRecap(lvNum, onContinue) {
   const recapOverlay = $('level-recap');
   const recapTitle = $('recap-title');
-  const recapList = $('recap-list');
+  const recapCardContainer = $('recap-card-container');
   const continueBtn = $('recap-continue-btn');
+  const prevBtn = $('recap-prev-btn');
+  const nextBtn = $('recap-next-btn');
+  const counterEl = $('recap-counter');
 
   recapTitle.textContent = `LEVEL ${lvNum} RECAP: SECURITY SECRETS`;
-  recapList.innerHTML = '';
+  if (recapCardContainer) recapCardContainer.innerHTML = '';
 
   let recapData = getRecapData(lvNum);
 
@@ -1252,10 +1383,16 @@ function showLevelRecap(lvNum, onContinue) {
 
   recapTitle.innerHTML = `LEVEL ${lvNum} RECAP: SECURITY SECRETS<br><span style="font-size:clamp(18px, 4.5vw, 25px); color:var(--gold); display:block; margin-top:10px;">TOTAL CORRECT: ${totalCorrect} / ${totalItems}</span>`;
 
-  recapData.forEach(data => {
-    const itemEl = document.createElement('div');
-    itemEl.className = 'recap-item';
-    
+  let currentIndex = 0;
+
+  function renderCard(index) {
+    if (!recapCardContainer) return;
+    recapCardContainer.innerHTML = '';
+    const data = recapData[index];
+
+    const cardEl = document.createElement('div');
+    cardEl.className = 'recap-flashcard';
+
     let badgeClass = data.badge.toLowerCase();
     if (badgeClass.includes('private')) badgeClass = 'private';
     else if (badgeClass.includes('share') || badgeClass.includes('public') || badgeClass.includes('safe') || badgeClass.includes('true')) badgeClass = 'safe';
@@ -1263,26 +1400,78 @@ function showLevelRecap(lvNum, onContinue) {
 
     const isCorrect = GS.recapResults[data.question] === true;
     const icon = isCorrect ? '✅' : '❌';
+    const statusText = isCorrect ? 'CORRECT' : 'WRONG';
+    const statusClass = isCorrect ? 'correct' : 'wrong';
 
-    itemEl.innerHTML = `
-      <div class="recap-item-header">
-        <span class="recap-question">${icon} ${data.question}</span>
-        <span class="recap-badge ${badgeClass}">${data.badge}</span>
-      </div>
-      <div class="recap-subtext-box">
-        <span>${data.recap}</span>
+    cardEl.innerHTML = `
+      <div class="flashcard-inner">
+        <div class="flashcard-front">
+          <div class="flashcard-status ${statusClass}">${icon} ${statusText}</div>
+          <div class="flashcard-question">${data.question}</div>
+          <div class="flashcard-badge ${badgeClass}">${data.badge}</div>
+          <div class="flashcard-hint">(Click to flip)</div>
+        </div>
+        <div class="flashcard-back">
+          <div class="flashcard-explanation">${data.recap}</div>
+          <div class="flashcard-hint" style="margin-top: 20px;">(Click to flip back)</div>
+        </div>
       </div>
     `;
-    recapList.appendChild(itemEl);
-  });
+
+    cardEl.addEventListener('click', () => {
+      cardEl.classList.toggle('flipped');
+      blip();
+    });
+
+    recapCardContainer.appendChild(cardEl);
+    if (counterEl) counterEl.textContent = `${index + 1} / ${totalItems}`;
+
+    if (prevBtn) {
+      prevBtn.disabled = index === 0;
+      prevBtn.style.opacity = index === 0 ? '0.5' : '1';
+      prevBtn.style.cursor = index === 0 ? 'not-allowed' : 'pointer';
+    }
+
+    if (nextBtn) {
+      nextBtn.disabled = index === totalItems - 1;
+      nextBtn.style.opacity = index === totalItems - 1 ? '0.5' : '1';
+      nextBtn.style.cursor = index === totalItems - 1 ? 'not-allowed' : 'pointer';
+    }
+  }
+
+  if (prevBtn) {
+    prevBtn.onclick = () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderCard(currentIndex);
+        select_s();
+      }
+    };
+  }
+
+  if (nextBtn) {
+    nextBtn.onclick = () => {
+      if (currentIndex < totalItems - 1) {
+        currentIndex++;
+        renderCard(currentIndex);
+        select_s();
+      }
+    };
+  }
+
+  if (totalItems > 0) {
+    renderCard(0);
+  }
 
   recapOverlay.style.display = 'flex';
 
-  continueBtn.onclick = () => {
-    select_s();
-    recapOverlay.style.display = 'none';
-    onContinue();
-  };
+  if (continueBtn) {
+    continueBtn.onclick = () => {
+      select_s();
+      recapOverlay.style.display = 'none';
+      onContinue();
+    };
+  }
 }
 
 // ═══════════════════════════════════════════════════
@@ -1291,7 +1480,7 @@ function showLevelRecap(lvNum, onContinue) {
 function startLevel(n) {
   levelContent.innerHTML = '';
   GS.recapResults = {};
-  switch(n) {
+  switch (n) {
     case 1: startLevel1(); break;
     case 2: startLevel2(); break;
     case 3: startLevel3(); break;
@@ -1310,7 +1499,7 @@ function startLevel1() {
   let items = LEVEL1_ITEMS.map(item => ({ ...item }));
 
   // shuffle items so packets appear in random order
-  (function shuffle(a){
+  (function shuffle(a) {
     for (let i = a.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [a[i], a[j]] = [a[j], a[i]];
@@ -1344,7 +1533,7 @@ function startLevel1() {
         </div>
       </div>
       <div id="belt-dots-row">
-        ${items.map((_,i) => `<div class="belt-dot" id="bdot-${i}"></div>`).join('')}
+        ${items.map((_, i) => `<div class="belt-dot" id="bdot-${i}"></div>`).join('')}
       </div>
       <div id="belt-arena">
         <div id="belt-camera">
@@ -1357,8 +1546,6 @@ function startLevel1() {
             </div>
           </div>
         </div>
-        <div id="belt-dir-left">← SHARE THIS WAY</div>
-        <div id="belt-dir-right">KEEP PRIVATE THIS WAY →</div>
       </div>
       <div id="belt-action-buttons">
         <button id="btn-share-new" class="belt-action-btn share-btn">
@@ -1376,14 +1563,14 @@ function startLevel1() {
     </div>
   `;
 
-  const timerFill  = $('belt-timer-fill');
+  const timerFill = $('belt-timer-fill');
   const timerLabel = $('belt-timer-label');
   const packetCard = $('belt-packet-card');
   const packetName = $('packet-name-el');
 
   function updateDots(idx) {
-    items.forEach((_,i) => {
-      const d = $('bdot-'+i);
+    items.forEach((_, i) => {
+      const d = $('bdot-' + i);
       if (!d) return;
       d.className = 'belt-dot' + (i < idx ? ' done' : i === idx ? ' active' : '');
     });
@@ -1421,20 +1608,29 @@ function startLevel1() {
     packetCard.style.transform = computed === 'none' ? `translateX(${flyDir})` : `${computed} translateX(${flyDir})`;
     packetCard.style.opacity = '0';
 
+    blip();
+    clearInterval(timerInterval);
+
     if (choice === item.answer) {
       GS.recapResults[item.label] = true;
       correct++;
       $('l1-correct').textContent = correct;
       registerCorrect(item.xp, packetCard);
+
+      showFeedback(true, 'CORRECT!', item.label, item.recap, 15, l1Proceed);
     } else {
       GS.recapResults[item.label] = false;
       wrong++;
       $('l1-wrong').textContent = wrong;
       loseXP(5);
-    }
-    blip();
-    currentIdx++;
 
+      showFeedback(false, 'WRONG!', item.label, item.recap, 15, l1Proceed);
+    }
+  }
+
+  function l1Proceed() {
+    timerInterval = setInterval(l1TimerFn, 1000);
+    currentIdx++;
     if (currentIdx >= items.length) {
       done = true;
       clearAllTimers();
@@ -1442,26 +1638,27 @@ function startLevel1() {
       if (correct === items.length) addXP(20, null);
       setTimeout(() => completeLevel(1), 1200);
     } else {
-      setTimeout(() => { answering = false; showItem(currentIdx); }, 350);
+      answering = false;
+      showItem(currentIdx);
     }
   }
 
-  $('btn-share-new').addEventListener('click',   () => answer('share'));
+  $('btn-share-new').addEventListener('click', () => answer('share'));
   $('btn-private-new').addEventListener('click', () => answer('private'));
 
   document.addEventListener('keydown', l1Key);
   function l1Key(e) {
-    if (e.key === 'ArrowLeft')  answer('share');
+    if (e.key === 'ArrowLeft') answer('share');
     if (e.key === 'ArrowRight') answer('private');
   }
 
-  timerInterval = setInterval(() => {
+  const l1TimerFn = () => {
     if (isPaused) return;
     timeLeft--;
     const pct = (timeLeft / TOTAL_TIME * 100);
     timerFill.style.width = pct + '%';
     timerLabel.textContent = timeLeft + 's left';
-    if (timeLeft <= 10)      { timerFill.classList.add('timer-red');    timerFill.classList.remove('timer-yellow'); }
+    if (timeLeft <= 10) { timerFill.classList.add('timer-red'); timerFill.classList.remove('timer-yellow'); }
     else if (timeLeft <= 20) { timerFill.classList.add('timer-yellow'); }
     if (timeLeft <= 0) {
       done = true;
@@ -1470,7 +1667,9 @@ function startLevel1() {
       flashScreen('red');
       setTimeout(() => completeLevel(1), 1000);
     }
-  }, 1000);
+  };
+
+  timerInterval = setInterval(l1TimerFn, 1000);
 
   showItem(0);
   levelContent.addEventListener('removed', () => document.removeEventListener('keydown', l1Key));
@@ -1522,15 +1721,15 @@ function startLevel2() {
 
   function renderEmail(idx) {
     const email = PHISH_EMAILS[idx];
-    GS.recapResults[`EMAIL ${idx+1} SENDER: ${email.from}`] = false;
+    GS.recapResults[`EMAIL ${idx + 1} SENDER: ${email.from}`] = false;
     email.body.forEach(seg => { if (seg.click) GS.recapResults[`Email Segment: "${seg.text.trim()}"`] = false; });
-    
+
     const headerEl = document.querySelector('#phish-wrap .level-header');
     if (headerEl) {
       headerEl.textContent = 'CLICK ALL SUSPICIOUS ELEMENTS!';
       headerEl.style.color = '';
     }
-    $('phish-round-info').textContent = `EMAIL ${idx+1} / 2`;
+    $('phish-round-info').textContent = `EMAIL ${idx + 1} / 2`;
     const container = $('phish-email-container');
     container.innerHTML = `
       <div class="phish-email-header">
@@ -1574,14 +1773,14 @@ function startLevel2() {
       const el = $('phish-from');
       if (el.classList.contains('found') || el.classList.contains('wrong')) return;
       el.classList.add('found');
-      GS.recapResults[`EMAIL ${idx+1} SENDER: ${email.from}`] = true;
+      GS.recapResults[`EMAIL ${idx + 1} SENDER: ${email.from}`] = true;
       totalFound++;
       emailDone[idx]++;
       $('phish-found-count').textContent = `FOUND: ${totalFound} / ${totalNeeded}`;
       blip();
       floatXPCenter('+10 XP');
       GS.xp += 10; updateHUD();
-      
+
       const headerEl = document.querySelector('#phish-wrap .level-header');
       if (headerEl) {
         headerEl.textContent = `SENDER ADDRESS IS FAKE/SUSPICIOUS!`;
@@ -1630,9 +1829,9 @@ function startLevel2() {
   function clickSegment(el, emailIdx, segIdx, isBad) {
     if (el.classList.contains('found') || el.classList.contains('wrong')) return;
     const headerEl = document.querySelector('#phish-wrap .level-header');
-    
+
     const segInfo = PHISH_EMAILS[emailIdx].body[segIdx];
-    
+
     if (isBad) {
       el.classList.add('found');
       GS.recapResults[`Email Segment: "${el.textContent.trim()}"`] = true;
@@ -1648,7 +1847,7 @@ function startLevel2() {
         headerEl.style.color = 'var(--lime)';
       }
       flashScreen('green');
-      
+
       clearInterval(timerInterval);
       showFeedback(true, 'CORRECT!', el.textContent.trim(), segInfo.recap || 'Suspicious element found!', 15, () => {
         timerInterval = setInterval(l2TimerFn, 1000);
@@ -1669,7 +1868,7 @@ function startLevel2() {
         }, 2000);
       }
       setTimeout(() => el.classList.remove('wrong'), 400);
-      
+
       clearInterval(timerInterval);
       showFeedback(false, 'WRONG!', el.textContent.trim(), 'Ang bahaging ito ng email ay ligtas. Hindi lahat ng bahagi ng phishing email ay nakakapinsala.', 15, () => {
         timerInterval = setInterval(l2TimerFn, 1000);
@@ -1726,7 +1925,7 @@ function startLevel3() {
     let timeLeft = timePerRound;
     let answered = false;
 
-    $('pw-round-info').textContent = `ROUND ${idx+1} / 3`;
+    $('pw-round-info').textContent = `ROUND ${idx + 1} / 3`;
     $('pw-question').textContent = round.question;
     $('pw-feedback').textContent = '';
     $('l3-timer-num').textContent = timeLeft;
@@ -1793,14 +1992,14 @@ function startLevel3() {
           clearInterval(timerInterval);
           const fbEl = $('pw-feedback');
           if (fbEl) {
-             fbEl.textContent = 'TIME! ' + round.explanation;
-             fbEl.style.color = 'var(--red)';
+            fbEl.textContent = 'TIME! ' + round.explanation;
+            fbEl.style.color = 'var(--red)';
           }
           optionsEl.querySelectorAll('.pw-option')[round.correct].classList.add('correct');
           loseXP(5);
-          
+
           showFeedback(false, 'TIME OUT!', null, round.explanation, 15, () => {
-            if (idx+1 < PW_ROUNDS.length) showRound(idx+1);
+            if (idx + 1 < PW_ROUNDS.length) showRound(idx + 1);
             else {
               if (roundsCorrect === PW_ROUNDS.length) addXP(20, null);
               completeLevel(3);
@@ -1858,10 +2057,10 @@ function startLevel4() {
     timeLeft = LEVEL_SETTINGS[4].countdown;
     $('speed-icon').textContent = sc.icon;
     $('speed-text').textContent = sc.text;
-    $('speed-counter').textContent = `SCENARIO ${i+1} / ${SPEED_SCENARIOS.length}`;
+    $('speed-counter').textContent = `SCENARIO ${i + 1} / ${SPEED_SCENARIOS.length}`;
     $('l4-timer-num').textContent = timeLeft;
     $('l4-timer-fill').style.width = '100%';
-    $('l4-timer-fill').classList.remove('timer-red','timer-yellow');
+    $('l4-timer-fill').classList.remove('timer-red', 'timer-yellow');
 
     clearInterval(timerInterval);
     timerInterval = setInterval(() => {
@@ -1878,7 +2077,11 @@ function startLevel4() {
         $('speed-multiplier').textContent = '×' + multiplier;
         GS.recapResults[sc.text] = false;
         loseXP(5);
-        setTimeout(() => showScenario(i+1), 1500);
+
+        showFeedback(false, 'TIME OUT!', null, sc.recap, 15, () => {
+          idx++;
+          showScenario(idx);
+        });
       }
     }, 1000);
   }
@@ -1897,6 +2100,11 @@ function startLevel4() {
       const earned = sc.xp * multiplier;
       registerCorrect(earned, choice === 'safe' ? $('btn-speed-safe') : $('btn-speed-unsafe'));
       flashScreen('green');
+
+      showFeedback(true, 'CORRECT!', sc.text, sc.recap, 15, () => {
+        idx++;
+        showScenario(idx);
+      });
     } else {
       GS.recapResults[sc.text] = false;
       wrong++;
@@ -1905,13 +2113,16 @@ function startLevel4() {
       $('speed-multiplier').textContent = '×' + multiplier;
       loseXP(5);
       flashScreen('red');
+
+      showFeedback(false, 'WRONG!', sc.text, sc.recap, 15, () => {
+        idx++;
+        showScenario(idx);
+      });
     }
-    idx++;
-    setTimeout(() => showScenario(idx), 1200);
   }
 
-  $('btn-speed-safe').addEventListener('click',   () => answer('safe'));
-  $('btn-speed-unsafe').addEventListener('click',  () => answer('unsafe'));
+  $('btn-speed-safe').addEventListener('click', () => answer('safe'));
+  $('btn-speed-unsafe').addEventListener('click', () => answer('unsafe'));
 
   showScenario(0);
 }
@@ -1960,12 +2171,12 @@ function startLevel5() {
     const item = URL_ITEMS[i];
     let answered = false;
     timeLeft = LEVEL_SETTINGS[5].countdown;
-    $('url-counter').textContent = `URL ${i+1} / 5`;
+    $('url-counter').textContent = `URL ${i + 1} / 5`;
     $('url-browser-bar').textContent = item.url;
     $('url-browser-content').textContent = 'Read the URL carefully. Team — discuss!';
     $('l5-timer-num').textContent = timeLeft;
     $('l5-timer-fill').style.width = '100%';
-    $('l5-timer-fill').classList.remove('timer-red','timer-yellow');
+    $('l5-timer-fill').classList.remove('timer-red', 'timer-yellow');
 
     clearInterval(timerInterval);
     timerInterval = setInterval(() => {
@@ -1982,7 +2193,7 @@ function startLevel5() {
         $('url-browser-content').textContent = item.reason;
         flashScreen('red');
         showFeedback(false, 'TIME OUT!', item.url, item.reason + '\n\n' + item.recap, 15, () => {
-          showURL(i+1);
+          showURL(i + 1);
         });
       }
     }, 1000);
@@ -1997,18 +2208,18 @@ function startLevel5() {
         registerCorrect(15, $('btn-url-safe'));
         $('url-browser-content').textContent = item.reason;
         flashScreen('green');
-        
+
         showFeedback(true, 'CORRECT!', item.url, item.reason + '\n\n' + item.recap, 15, () => {
-          showURL(i+1);
+          showURL(i + 1);
         });
       } else {
         GS.recapResults[item.url] = false;
         loseXP(5);
         $('url-browser-content').textContent = item.reason;
         flashScreen('red');
-        
+
         showFeedback(false, 'WRONG!', item.url, item.reason + '\n\n' + item.recap, 15, () => {
-          showURL(i+1);
+          showURL(i + 1);
         });
       }
     }
@@ -2079,14 +2290,22 @@ function startLevel6() {
     const quizEl = $('memory-questions');
     quizEl.style.display = 'flex';
 
-    MEMORY_QUESTIONS.forEach((q, qi) => {
+    function showQuizQuestion(index) {
+      quizEl.innerHTML = '';
+      if (index >= MEMORY_QUESTIONS.length) {
+        if (correct === MEMORY_QUESTIONS.length) addXP(30, null);
+        completeLevel(6);
+        return;
+      }
+
+      const q = MEMORY_QUESTIONS[index];
       const div = document.createElement('div');
       div.className = 'mem-q-item';
       div.innerHTML = `
-        <span class="mem-q-text">${qi+1}. ${q.text}</span>
+        <span class="mem-q-text">${index + 1}. ${q.text}</span>
         <div class="mem-q-buttons">
-          <button class="mem-btn mem-btn-true" data-qi="${qi}" data-ans="true">TRUE</button>
-          <button class="mem-btn mem-btn-false" data-qi="${qi}" data-ans="false">FALSE</button>
+          <button class="mem-btn mem-btn-true" data-qi="${index}" data-ans="true">TRUE</button>
+          <button class="mem-btn mem-btn-false" data-qi="${index}" data-ans="false">FALSE</button>
         </div>
       `;
       div.querySelectorAll('.mem-btn').forEach(btn => {
@@ -2103,23 +2322,23 @@ function startLevel6() {
             floatXPCenter('+15 XP');
             blip();
             flashScreen('green');
+
+            showFeedback(true, 'CORRECT!', q.text, q.recap, 15, () => showQuizQuestion(index + 1));
           } else {
             GS.recapResults[q.text] = false;
             btn.classList.add('wrong-ans');
             const correctBtn = [...div.querySelectorAll('.mem-btn')].find(b => (b.dataset.ans === 'true') === q.answer);
             if (correctBtn) correctBtn.classList.add('correct-ans');
             loseXP(5);
-          }
-          if (answered >= MEMORY_QUESTIONS.length) {
-            setTimeout(() => {
-              if (correct === MEMORY_QUESTIONS.length) addXP(30, null);
-              completeLevel(6);
-            }, 1500);
+
+            showFeedback(false, 'WRONG!', q.text, q.recap, 15, () => showQuizQuestion(index + 1));
           }
         });
       });
       quizEl.appendChild(div);
-    });
+    }
+
+    showQuizQuestion(0);
   }
 }
 
@@ -2129,7 +2348,7 @@ function startLevel6() {
 
 function startLevel7() {
   const states = new Array(PROFILE_FIELDS.length).fill('unset');
-  
+
   // Grab current system time dynamically for status bar
   const now = new Date();
   const hours = String(now.getHours()).padStart(2, '0');
@@ -2192,7 +2411,7 @@ function startLevel7() {
       // Update classes
       div.className = `profile-field ${state}`;
       switchEl.className = `custom-switch ${state}-state`;
-      
+
       if (state === 'public') {
         privateLabel.classList.remove('active');
         publicLabel.classList.add('active');
@@ -2241,7 +2460,7 @@ function startLevel7() {
   });
 
   $('profile-submit-btn').addEventListener('click', () => {
-    const unset = states.filter(s=>s==='unset').length;
+    const unset = states.filter(s => s === 'unset').length;
     if (unset > 0) {
       $('profile-score').textContent = '⚠️ SET ALL FIELDS FIRST!';
       $('profile-score').style.color = 'var(--red)';
@@ -2255,7 +2474,7 @@ function startLevel7() {
     }
     let correct = 0;
     let xpEarned = 0;
-    PROFILE_FIELDS.forEach((f,fi) => {
+    PROFILE_FIELDS.forEach((f, fi) => {
       if (states[fi] === f.correct) {
         GS.recapResults[f.name] = true;
         correct++; xpEarned += 10;
@@ -2270,7 +2489,7 @@ function startLevel7() {
     } else {
       flashScreen('red');
     }
-    setTimeout(()=>completeLevel(7), 1000);
+    setTimeout(() => completeLevel(7), 1000);
   });
 }
 
@@ -2282,7 +2501,7 @@ function startLevel8() {
   let mistakes = 0;
   let totalTime = LEVEL_SETTINGS[8].countdown;
   let timeLeft = totalTime;
-  let stepDone = [false,false,false];
+  let stepDone = [false, false, false];
 
   levelContent.innerHTML = `
     <div id="boss-wrap">
@@ -2321,10 +2540,10 @@ function startLevel8() {
   }
 
   function updateStepIndicator(step) {
-    for (let i=0;i<3;i++) {
-      const el = $('bsd-'+i);
+    for (let i = 0; i < 3; i++) {
+      const el = $('bsd-' + i);
       if (stepDone[i]) el.className = 'boss-step-dot done';
-      else if (i===step) el.className = 'boss-step-dot active';
+      else if (i === step) el.className = 'boss-step-dot active';
       else el.className = 'boss-step-dot';
     }
   }
@@ -2336,7 +2555,7 @@ function startLevel8() {
     let itemIdx = 0;
 
     function showItem() {
-      if (itemIdx >= items.length) { stepDone[0]=true; showStep1(); return; }
+      if (itemIdx >= items.length) { stepDone[0] = true; showStep1(); return; }
       const item = items[itemIdx];
       $('boss-content').innerHTML = `
         <div style="font-family:var(--font-pixel);font-size:clamp(12px, 2.7vw, 22px);color:var(--cyan);text-align:center;margin-bottom:16px">
@@ -2364,7 +2583,7 @@ function startLevel8() {
         }
       }
       $('boss-private').onclick = () => ans('private');
-      $('boss-share').onclick   = () => ans('share');
+      $('boss-share').onclick = () => ans('share');
     }
     showItem();
   }
@@ -2374,15 +2593,15 @@ function startLevel8() {
     updateStepIndicator(1);
     const suspiciousItems = BOSS_STEP2_ITEMS;
     let found = 0;
-    const needed = suspiciousItems.filter(s=>s.isBad).length;
-    suspiciousItems.forEach(s => { if(s.isBad) GS.recapResults[`STEP 2 Segment: "${s.text.trim()}"`] = false; });
+    const needed = suspiciousItems.filter(s => s.isBad).length;
+    suspiciousItems.forEach(s => { if (s.isBad) GS.recapResults[`STEP 2 Segment: "${s.text.trim()}"`] = false; });
 
     $('boss-content').innerHTML = `
       <div style="font-family:var(--font-pixel);font-size:clamp(12px, 2.7vw, 22px);color:var(--red);text-align:center;margin-bottom:12px">
         STEP 2: CLICK THE ${needed} SUSPICIOUS ELEMENTS!
       </div>
       <div id="boss-phish-area" style="background:var(--bg3);border:2px solid var(--red)55;padding: clamp(16px, 1.6vw, 24px);font-family:var(--font-mono);font-size:clamp(14px, 3.24vw, 25px)">
-        ${suspiciousItems.map((s,i)=>`<div class="phish-clickable" data-idx="${i}" style="display:block;padding: clamp(8px, 0.8vw, 12px) 0;border-bottom:1px solid var(--gray)22">${s.text}</div>`).join('')}
+        ${suspiciousItems.map((s, i) => `<div class="phish-clickable" data-idx="${i}" style="display:block;padding: clamp(8px, 0.8vw, 12px) 0;border-bottom:1px solid var(--gray)22">${s.text}</div>`).join('')}
       </div>
       <div style="font-family:var(--font-pixel);font-size:clamp(12px, 3.0vw, 17px);color:var(--gold);text-align:center;margin-top:10px">
         FOUND: <span id="boss-found">0</span> / ${needed}
@@ -2399,7 +2618,7 @@ function startLevel8() {
           $('boss-found').textContent = found;
           addXP(10, el);
           flashScreen('green');
-          if (found >= needed) { stepDone[1]=true; setTimeout(showStep2, 800); }
+          if (found >= needed) { stepDone[1] = true; setTimeout(showStep2, 800); }
         } else {
           showBreach(() => { /* same step */ });
           loseXP(5);
@@ -2472,19 +2691,19 @@ function showFinalScreen() {
 
   if (xp <= 150) {
     badge = 'ROOKIE TANOD';
-    icon  = '🪖';
+    icon = '🪖';
     quote = '"Magaling! Hindi lang ito ang simula. Patuloy na mag-aral ng cybersecurity!"';
   } else if (xp <= 250) {
     badge = 'ACTIVE TANOD';
-    icon  = '🛡️';
+    icon = '🛡️';
     quote = '"Outstanding! Kaya ng team na ito i-depensa ang barangay digital!"';
   } else if (xp <= 350) {
     badge = 'SENIOR TANOD';
-    icon  = '⭐';
+    icon = '⭐';
     quote = '"Kahanga-hanga! Mga cyber hero kayo ng barangay!"';
   } else {
     badge = 'CYBER TANOD ELITE';
-    icon  = '🏆';
+    icon = '🏆';
     quote = '"LEGENDARY! Walang hacker na kayang talunin ang team na ito!"';
   }
 
