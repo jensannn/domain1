@@ -92,6 +92,7 @@
         <div id="comic-timer-bar">
           <div id="comic-timer-fill"></div>
         </div>
+        <button id="dev-skip-comic" class="retro-btn btn-warning" style="display:none; position:absolute; top: 20px; right: 20px; z-index: 100;">SKIP (DEV)</button>
       </div>
 
       <!-- CHARACTER SELECT SCREEN -->
@@ -152,6 +153,7 @@
           <span class="streak-fire">🔥</span>
         </div>
         <button id="btn-pause-level" style="background:none; border:none; font-size: clamp(24px, 6.0vw, 34px); cursor: pointer; color: var(--pink); margin-left: 10px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); transition: transform 0.1s;" title="Pause Game">⏸️</button>
+        <button id="btn-menu-in-game" style="background:none; border:none; font-size: clamp(24px, 6.0vw, 34px); cursor: pointer; color: var(--pink); margin-left: 10px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); transition: transform 0.1s;" title="Menu">☰</button>
       </div>
 
       <!-- BODY: WORLD MAP + TASK OVERLAY -->
@@ -183,9 +185,9 @@
           <!-- Player Sprite -->
           <div id="player-sprite">
             <img src="" alt="Player" id="player-sprite-img">
+            <div id="interaction-prompt" style="display:none">PRESS SPACE TO START</div>
           </div>
 
-          <div id="interaction-prompt" style="display:none">PRESS SPACE TO START</div>
           <div id="world-map-hint">USE ARROW KEYS OR WASD TO MOVE</div>
 
           <!-- Start Game Transition Star -->
@@ -201,7 +203,9 @@
               style="display: flex; flex-direction: column; gap: clamp(15px, 1.5vw, 22px); align-items: center;">
               <button id="btn-resume" class="retro-btn btn-primary">CONTINUE</button>
               <button id="btn-restart" class="retro-btn btn-warning">RESTART</button>
+              <button id="btn-toggle-sound" class="retro-btn btn-secondary">SOUND: ON</button>
               <button id="btn-quit" class="retro-btn btn-danger">EXIT TO MAP</button>
+              <button id="btn-disable-dev" class="retro-btn btn-unsafe" style="display:none;">DISABLE DEV MODE</button>
             </div>
           </div>
         </div>
@@ -234,6 +238,7 @@
           <!-- WRONG ANSWER FEEDBACK POPUP -->
           <div id="feedback-overlay" style="display:none">
             <div id="feedback-box">
+              <button id="fb-close-btn" class="fb-close-btn" style="display:none;">&times;</button>
               <div id="fb-icon"></div>
               <div id="fb-title"></div>
               <div id="fb-item"
@@ -281,7 +286,7 @@
           <!-- SHOOTING STAR OVERLAY (correct) -->
           <div id="shooting-star-overlay" style="display:none;">
             <div class="shooting-star"></div>
-            <div class="shooting-star-text">SAVING GRACE!</div>
+            <div class="shooting-star-text">GREAT JOB!</div>
           </div>
 
           <!-- REDEMPTION WRONG OVERLAY -->

@@ -59,7 +59,8 @@ html, body {
 }
 
 .retro-btn {
-  width: min(100%, clamp(250px, 25.0vw, 375px));
+  max-width: 100%;
+  width: fit-content;
   min-width: 0;
   margin: 0 auto;
   display: block;
@@ -99,9 +100,9 @@ html, body {
   text-transform: uppercase;
   position: relative;
   background: transparent;
-  white-space: normal;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   line-height: 1.4;
 }
 .retro-btn:active { transform: translate(2px, 2px); }
@@ -173,6 +174,9 @@ html, body {
   width: 100%;
   text-align: left;
   box-shadow: 2px 2px 0 var(--cyan-dim);
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: normal;
 }
 .btn-choice:hover { background: rgba(140, 190, 214, 0.08); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
@@ -672,12 +676,32 @@ html, body {
 @keyframes idle-bounce { 100% { transform: translateY(-4px); } }
 
 #interaction-prompt {
-  position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%);
-  font-family: var(--font-pixel); font-size: clamp(16px, 4.0vw, 22px); color: var(--gold);
+  position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%);
+  width: max-content; white-space: nowrap; pointer-events: none;
+  font-family: var(--font-pixel); font-size: clamp(14px, 3.5vw, 18px); color: var(--gold);
   text-shadow: none; z-index: 5;
-  background: rgba(255, 255, 255, 0.95); padding: clamp(12px, 1.2vw, 18px) clamp(24px, 2.4vw, 36px); border: 3px solid var(--gold);
+  background: rgba(255, 255, 255, 0.95); padding: clamp(8px, 0.8vw, 12px) clamp(16px, 1.6vw, 24px); 
+  border: 3px solid var(--gold); border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.08);
   animation: pulse-glow 1s infinite alternate;
+}
+#interaction-prompt::after {
+  content: '';
+  position: absolute;
+  top: 100%; left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: var(--gold) transparent transparent transparent;
+}
+#interaction-prompt.prompt-below {
+  bottom: auto;
+  top: 105%; /* Position at the character's feet */
+}
+#interaction-prompt.prompt-below::after {
+  top: auto;
+  bottom: 100%;
+  border-color: transparent transparent var(--gold) transparent;
 }
 
 #world-map-hint {
@@ -878,33 +902,7 @@ html, body {
   from { background-position: 0 0, 0 -40px, 0 0; }
   to   { background-position: 0 0, 0 0, 0 0; }
 }
-#belt-dir-left {
-  position: absolute;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-family: var(--font-pixel);
-  font-size: clamp(7px, 1.8vw, 14px);
-  color: var(--lime);
-  text-shadow: none;
-  letter-spacing: 1px;
-  z-index: 2;
-  line-height: 1.6;
-}
-#belt-dir-right {
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-family: var(--font-pixel);
-  font-size: clamp(7px, 1.8vw, 14px);
-  color: var(--purple);
-  text-shadow: none;
-  letter-spacing: 1px;
-  z-index: 2;
-  line-height: 1.6;
-  text-align: right;
-}
+
 #belt-packet-card {
   position: absolute;
   left: 50%;
@@ -1623,6 +1621,7 @@ html, body {
   z-index: 60;
 }
 #feedback-box {
+  position: relative;
   border: 4px solid;
   padding: clamp(36px, 3.6vw, 54px) clamp(48px, 4.8vw, 72px);
   background: rgba(255, 255, 255, 0.98);
@@ -1631,6 +1630,26 @@ html, body {
   max-width: clamp(520px, 52.0vw, 780px); width: 90%;
   animation: slide-in 0.2s ease;
   box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+}
+.fb-close-btn {
+  position: absolute;
+  top: clamp(8px, 0.8vw, 12px);
+  right: clamp(12px, 1.2vw, 18px);
+  background: none;
+  border: none;
+  font-size: clamp(24px, 5.0vw, 36px);
+  color: var(--gray);
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px;
+  transition: color 0.15s ease, transform 0.1s ease;
+}
+.fb-close-btn:hover {
+  color: var(--red);
+  transform: scale(1.1);
+}
+.fb-close-btn:active {
+  transform: scale(0.95);
 }
 #feedback-box.correct-fb { border-color: var(--green); box-shadow: 0 10px 40px rgba(0,0,0,0.15), 0 2px 4px rgba(0,0,0,0.1); }
 #feedback-box.wrong-fb   { border-color: var(--red);  box-shadow: 0 10px 40px rgba(0,0,0,0.15), 0 2px 4px rgba(0,0,0,0.1); animation: shake 0.3s; }
@@ -2114,12 +2133,12 @@ html, body {
 @media (min-width: clamp(1900px, 190.0vw, 2850px)) {
   #team-entry-box, #char-select-box, #comic-container { transform: scale(1.1); }
   .menu-title { font-size: clamp(42px, 10.5vw, 59px) !important; }
-  .menu-options .retro-btn { width: clamp(300px, 30.0vw, 450px) !important; font-size: clamp(16px, 4.0vw, 22px); }
+  .menu-options .retro-btn { font-size: clamp(16px, 4.0vw, 22px); }
 }
 @media (max-width: clamp(1366px, 136.6vw, 2049px)) {
   #main-menu-box { width: min(92%, clamp(460px, 46.0vw, 690px)); padding: clamp(34px, 3.4vw, 51px) clamp(24px, 2.4vw, 36px); }
   .menu-title { font-size: clamp(30px, 7.5vw, 42px) !important; }
-  .menu-options .retro-btn { width: 100% !important; max-width: clamp(240px, 24.0vw, 360px); }
+  /* .menu-options .retro-btn sizing handled dynamically by base class */
   #team-entry-box { padding: clamp(40px, 4.0vw, 60px) clamp(50px, 5.0vw, 75px); }
   #team-name-input { min-width: 0; }
   #char-options { gap: clamp(20px, 2.0vw, 30px); }
@@ -2141,7 +2160,7 @@ html, body {
 @media (max-width: clamp(800px, 80.0vw, 1200px)) {
   #team-entry-box { padding: clamp(30px, 3.0vw, 45px) clamp(20px, 2.0vw, 30px); }
   .team-entry-title { font-size: clamp(18px, 4.5vw, 25px); }
-  .menu-options .retro-btn { width: clamp(220px, 22.0vw, 330px) !important; font-size: clamp(12px, 3.0vw, 17px); }
+  .menu-options .retro-btn { font-size: clamp(12px, 3.0vw, 17px); }
   .char-card { min-width: clamp(180px, 18.0vw, 270px); flex: 0 0 180px; padding: clamp(15px, 1.5vw, 22px) clamp(20px, 2.0vw, 30px); }
   .comic-art { font-size: clamp(70px, 17.5vw, 98px); }
   .comic-bubble { font-size: clamp(16px, 4.0vw, 22px); }
@@ -2149,7 +2168,7 @@ html, body {
 @media (max-width: 600px) {
   .menu-title { font-size: clamp(24px, 6.0vw, 34px) !important; }
   .menu-subtitle { font-size: clamp(14px, 3.5vw, 20px) !important; }
-  .menu-options .retro-btn { width: 100% !important; max-width: clamp(280px, 28.0vw, 420px); }
+  /* .menu-options .retro-btn sizing handled dynamically by base class */
   #team-entry-box, #char-select-box, #comic-container, #options-box { padding: clamp(20px, 2.0vw, 30px) clamp(15px, 1.5vw, 22px); width: 95%; }
   .input-row { flex-direction: column; align-items: stretch; }
   #team-name-input { text-align: center; font-size: clamp(16px, 4.0vw, 22px); padding: 5px 0; }

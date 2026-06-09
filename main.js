@@ -7,6 +7,7 @@
 // Set to true to show the Test Mode section in Options.
 // Set to false before deploying to players.
 let DEV_MODE = false;
+let SOUND_ENABLED = true;
 
 // ── LEVEL TIMINGS & SPEEDS ────────────────────────
 // Change the countdown timers and specific level speeds here.
@@ -32,6 +33,7 @@ const REDEMPTION_SETTINGS = {
 const AC = new (window.AudioContext || window.webkitAudioContext)();
 
 function beep(freq = 440, type = 'square', dur = 0.1, vol = 0.15) {
+  if (!SOUND_ENABLED) return;
   try {
     const o = AC.createOscillator();
     const g = AC.createGain();
@@ -255,6 +257,7 @@ const fbItem = $('fb-item');
 const fbMsg = $('fb-msg');
 const fbCount = $('fb-count');
 const fbContinueBtn = $('fb-continue-btn');
+const fbCloseBtn = $('fb-close-btn');
 const xpFloat = $('xp-float');
 const screenFlash = $('screen-flash');
 const dispTeam = $('disp-team');
@@ -497,6 +500,15 @@ function togglePause(showMenu = true) {
     btnRestart.style.display = inLevel ? 'block' : 'none';
   }
 
+  const btnDisableDev = $('btn-disable-dev');
+  if (btnDisableDev) {
+    btnDisableDev.style.display = DEV_MODE ? 'block' : 'none';
+  }
+  const btnToggleSound = $('btn-toggle-sound');
+  if (btnToggleSound) {
+    btnToggleSound.textContent = SOUND_ENABLED ? 'SOUND: ON' : 'SOUND: OFF';
+  }
+
   if (isPaused) {
     if (showMenu) pauseOverlay.style.display = 'flex';
     if (btnPause) btnPause.textContent = '▶️';
@@ -513,6 +525,27 @@ if (btnPauseLevel) {
     if (gameScreen && gameScreen.style.display !== 'none') {
       if ($('feedback-overlay').style.display === 'flex' || $('level-splash').style.display === 'flex') return;
       togglePause(false);
+      try { select_s(); } catch (e) { }
+    }
+  };
+}
+
+const btnMenuInGame = document.getElementById('btn-menu-in-game');
+if (btnMenuInGame) {
+  btnMenuInGame.onclick = () => {
+    const gameScreen = $('game-screen');
+    if (gameScreen && gameScreen.style.display !== 'none') {
+      if ($('feedback-overlay').style.display === 'flex' || $('level-splash').style.display === 'flex') return;
+      if (!isPaused) {
+        togglePause(true);
+      } else {
+        const pauseOverlay = $('pause-overlay');
+        if (pauseOverlay && pauseOverlay.style.display === 'none') {
+          pauseOverlay.style.display = 'flex';
+        } else {
+          togglePause(true);
+        }
+      }
       try { select_s(); } catch (e) { }
     }
   };
@@ -538,6 +571,18 @@ $('btn-quit').onclick = () => {
     $('game-screen').style.display = 'none';
     $('main-menu-screen').style.display = 'flex';
   }
+};
+
+$('btn-toggle-sound').onclick = () => {
+  SOUND_ENABLED = !SOUND_ENABLED;
+  $('btn-toggle-sound').textContent = SOUND_ENABLED ? 'SOUND: ON' : 'SOUND: OFF';
+  if (SOUND_ENABLED) { try { select_s(); } catch (e) { } }
+};
+
+$('btn-disable-dev').onclick = () => {
+  DEV_MODE = false;
+  $('btn-disable-dev').style.display = 'none';
+  try { select_s(); } catch (e) { }
 };
 
 // ═══════════════════════════════════════════════════
@@ -611,15 +656,28 @@ function showIntroComic() {
   const fill = $('comic-timer-fill');
   fill.style.transition = 'none'; fill.style.width = '100%';
 
+  let comicTimeout1, comicTimeout2;
+
+  const skipBtn = $('dev-skip-comic');
+  if (skipBtn) {
+    skipBtn.style.display = DEV_MODE ? 'block' : 'none';
+    skipBtn.onclick = () => {
+      clearTimeout(comicTimeout1);
+      clearTimeout(comicTimeout2);
+      introComic.style.display = 'none';
+      startGame();
+    };
+  }
+
   function showPanel(idx) {
     panels.forEach((id, i) => $(id).style.display = i === idx ? 'flex' : 'none');
     blip();
     fill.style.transition = 'none'; fill.style.width = '100%';
-    setTimeout(() => {
+    comicTimeout1 = setTimeout(() => {
       fill.style.transition = 'width 14.8s linear';
       fill.style.width = '0%';
     }, 50);
-    setTimeout(() => {
+    comicTimeout2 = setTimeout(() => {
       if (idx + 1 < panels.length) showPanel(idx + 1);
       else {
         introComic.style.display = 'none';
@@ -913,7 +971,14 @@ function showWorldMap(autoAdvanceFromLv = null, isGameStart = false) {
       if (!isMoving) {
         const currentNodeEl = document.querySelector(`.map-node[data-lv="${GS.currentNode}"]`);
         if (currentNodeEl && !currentNodeEl.classList.contains('locked')) {
-          if (promptEl) promptEl.style.display = 'block';
+          if (promptEl) {
+            if (GS.currentNode >= 1 && GS.currentNode <= 3) {
+              promptEl.classList.add('prompt-below');
+            } else {
+              promptEl.classList.remove('prompt-below');
+            }
+            promptEl.style.display = 'block';
+          }
 
           if (Input.space && !spaceWasPressed) {
             spaceWasPressed = true;
@@ -1005,6 +1070,10 @@ function registerWrong(penaltyXP, msg, correctInfo) {
 // FEEDBACK OVERLAY
 // ═══════════════════════════════════════════════════
 function showFeedback(correct, title, itemText, msg, duration = 15, onComplete = null) {
+  // Pause the level timer while feedback overlay is displayed
+  clearInterval(timerInterval);
+  timerInterval = null;
+
   feedbackOverlay.style.display = 'flex';
   $('feedback-box').className = correct ? 'correct-fb' : 'wrong-fb';
   fbIcon.textContent = correct ? '✅' : '❌';
@@ -1018,14 +1087,27 @@ function showFeedback(correct, title, itemText, msg, duration = 15, onComplete =
   fbMsg.style.whiteSpace = 'pre-line';
 
   let t = duration;
+  let finished = false;
   fbCount.textContent = t + 's';
   clearInterval(feedbackTimeout);
 
   const finish = () => {
+    if (finished) return;     // Guard against double-fire
+    finished = true;
     clearInterval(feedbackTimeout);
+    feedbackTimeout = null;
     feedbackOverlay.style.display = 'none';
     if (onComplete) onComplete();
   };
+
+  if (fbCloseBtn) {
+    if (DEV_MODE) {
+      fbCloseBtn.style.display = 'block';
+      fbCloseBtn.onclick = finish;
+    } else {
+      fbCloseBtn.style.display = 'none';
+    }
+  }
 
   if (fbContinueBtn) {
     fbContinueBtn.style.display = 'none';
@@ -1221,7 +1303,7 @@ function runRedemptionQueue(lvNum, queue, idx, onAllDone) {
 function playShootingStar(callback) {
   const starOverlay = $('shooting-star-overlay');
   // Re-inject inner HTML so keyframe animations restart every time
-  starOverlay.innerHTML = '<div class="shooting-star"></div><div class="shooting-star-text">SAVING GRACE!</div>';
+  starOverlay.innerHTML = '<div class="shooting-star"></div><div class="shooting-star-text">GREAT JOB!!!</div>';
   starOverlay.style.display = 'flex';
   setTimeout(() => {
     starOverlay.style.display = 'none';
@@ -1245,7 +1327,7 @@ function playRedemptionIntro(callback) {
     <div class="redemption-intro-star"></div>
     <div class="redemption-intro-star delay2"></div>
     <div class="redemption-intro-star delay3"></div>
-    <div class="redemption-intro-text">REDEMPTION<br>OPPORTUNITY</div>
+    <div class="redemption-intro-text">SECOND<br>CHANCE!!!</div>
   `;
   introOverlay.style.display = 'flex';
   setTimeout(() => {
@@ -1936,7 +2018,7 @@ function startLevel3() {
     round.options.forEach((pw, oi) => {
       const btn = document.createElement('button');
       btn.className = 'pw-option';
-      btn.textContent = pw;
+      btn.innerHTML = `<span style="font-family:var(--font-pixel); font-size: 0.8em; opacity:0.8; margin-right: 12px; color:var(--cyan);">${oi + 1}.</span> ${pw}`;
       btn.addEventListener('click', () => {
         if (answered) return;
         answered = true;
@@ -2040,8 +2122,8 @@ function startLevel4() {
         <span id="speed-text"></span>
       </div>
       <div id="speed-buttons">
-        <button class="retro-btn btn-safe" id="btn-speed-safe" style="font-size:clamp(20px, 5.0vw, 28px);padding:20px 40px">SAFE</button>
-        <button class="retro-btn btn-unsafe" id="btn-speed-unsafe" style="font-size:clamp(20px, 5.0vw, 28px);padding: clamp(20px, 2.0vw, 30px) clamp(40px, 4.0vw, 60px)">UNSAFE</button>
+        <button class="retro-btn btn-safe" id="btn-speed-safe" style="font-size:clamp(20px, 5.0vw, 28px);padding:20px 40px;">SAFE</button>
+        <button class="retro-btn btn-unsafe" id="btn-speed-unsafe" style="font-size:clamp(20px, 5.0vw, 28px);padding:20px 40px;">UNSAFE</button>
       </div>
     </div>
   `;
@@ -2601,7 +2683,7 @@ function startLevel8() {
         STEP 2: CLICK THE ${needed} SUSPICIOUS ELEMENTS!
       </div>
       <div id="boss-phish-area" style="background:var(--bg3);border:2px solid var(--red)55;padding: clamp(16px, 1.6vw, 24px);font-family:var(--font-mono);font-size:clamp(14px, 3.24vw, 25px)">
-        ${suspiciousItems.map((s, i) => `<div class="phish-clickable" data-idx="${i}" style="display:block;padding: clamp(8px, 0.8vw, 12px) 0;border-bottom:1px solid var(--gray)22">${s.text}</div>`).join('')}
+        ${suspiciousItems.map((s, i) => `<div class="phish-clickable" data-idx="${i}" style="display:block;padding: clamp(8px, 0.8vw, 12px) 0;border-bottom:1px solid var(--gray)22"><span style="font-family:var(--font-pixel); font-size: 0.8em; opacity:0.8; margin-right: 12px; color:var(--cyan);">${i + 1}.</span>${s.text}</div>`).join('')}
       </div>
       <div style="font-family:var(--font-pixel);font-size:clamp(12px, 3.0vw, 17px);color:var(--gold);text-align:center;margin-top:10px">
         FOUND: <span id="boss-found">0</span> / ${needed}
@@ -2643,7 +2725,7 @@ function startLevel8() {
       const btn = document.createElement('button');
       btn.className = 'pw-option';
       btn.style.fontSize = 'clamp(14px,2vw,18px)';
-      btn.textContent = pw;
+      btn.innerHTML = `<span style="font-family:var(--font-pixel); font-size: 0.8em; opacity:0.8; margin-right: 12px; color:var(--cyan);">${oi + 1}.</span> ${pw}`;
       btn.addEventListener('click', () => {
         if (oi === correct) {
           GS.recapResults[`STEP 3 QUESTION: ${BOSS_STEP3_ITEMS[0].question}`] = true;
