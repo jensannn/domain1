@@ -1619,7 +1619,7 @@ function startLevel2() {
           setTimeout(() => el.classList.remove('wrong'), 400);
 
           clearInterval(timerInterval);
-          showFeedback(false, 'WRONG!', el.textContent.trim(), 'This field is standard and not inherently suspicious in this context.', 15, () => {
+          showFeedback(false, 'WRONG!', el.textContent.trim(), 'Normal lang ang field na ito at hindi ito agad mukhang suspicious sa ganitong sitwasyon.', 15, () => {
             timerInterval = setInterval(l2TimerFn, 1000);
           });
         });
@@ -1671,7 +1671,7 @@ function startLevel2() {
       setTimeout(() => el.classList.remove('wrong'), 400);
       
       clearInterval(timerInterval);
-      showFeedback(false, 'WRONG!', el.textContent.trim(), 'This part of the email is actually safe! Not all parts of a phishing email are malicious.', 15, () => {
+      showFeedback(false, 'WRONG!', el.textContent.trim(), 'Ang bahaging ito ng email ay ligtas. Hindi lahat ng bahagi ng phishing email ay nakakapinsala.', 15, () => {
         timerInterval = setInterval(l2TimerFn, 1000);
       });
     }
