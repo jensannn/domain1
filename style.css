@@ -431,19 +431,98 @@ html, body {
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    INTRO COMIC
    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-#intro-comic {
+#vn-intro {
   position: absolute; inset: 0;
-  background: radial-gradient(ellipse at center, var(--bg2) 0%, var(--bg) 100%);
-  display: flex; align-items: center; justify-content: center;
   z-index: 80;
+  overflow: hidden;
+  background: transparent;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
 }
-#comic-container {
-  width: 90%; max-width: clamp(820px, 82.0vw, 1230px);
-  border: 4px solid var(--pink);
-  padding: clamp(40px, 4.0vw, 60px);
-  background: rgba(255, 255, 255, 0.96);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0,0,0,0.1);
-  position: relative;
+#vn-bg {
+  position: absolute; inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+}
+#vn-chars-container {
+  position: absolute;
+  bottom: clamp(60px, 6vw, 100px);
+  left: 0; right: 0;
+  height: clamp(350px, 50vw, 700px); /* Slightly smaller so they don't crowd the center */
+  pointer-events: none;
+}
+.vn-char {
+  position: absolute;
+  bottom: 0;
+  max-height: 100%;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  filter: drop-shadow(0 0 15px rgba(0,0,0,0.5));
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+#vn-char-tanods { left: -2%; }
+#vn-char-hacker { right: -2%; }
+
+.vn-char-active {
+  opacity: 1;
+  transform: scale(1.05) translateY(-10px);
+  filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.2));
+  z-index: 2;
+}
+.vn-char-inactive {
+  opacity: 0.4;
+  transform: scale(0.95) translateY(20px);
+  filter: brightness(0.5) drop-shadow(0 0 10px rgba(0,0,0,0.8));
+  z-index: 1;
+}
+
+#vn-chat-box {
+  position: absolute;
+  bottom: clamp(20px, 3vw, 40px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 95%; /* Wider */
+  max-width: 1200px; /* Larger max width */
+  background: rgba(10, 15, 25, 0.9);
+  border: 4px solid var(--cyan);
+  padding: clamp(30px, 3vw, 45px); /* More padding */
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,255,255,0.1);
+  border-radius: 8px;
+  z-index: 10;
+}
+#vn-speaker-name {
+  font-family: var(--font-pixel);
+  font-size: clamp(20px, 3.5vw, 32px); /* Much larger speaker name */
+  color: var(--gold);
+  margin-bottom: 16px;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.8);
+  letter-spacing: 2px;
+}
+#vn-dialogue-text {
+  font-family: var(--font-mono);
+  font-size: clamp(24px, 4vw, 36px); /* Much larger text */
+  color: #ffffff;
+  text-shadow: 1px 1px 3px rgba(0,0,0,1);
+  line-height: 1.6;
+  min-height: 3.2em;
+}
+#vn-continue-prompt {
+  position: absolute;
+  bottom: 15px; right: 20px;
+  font-family: var(--font-pixel);
+  font-size: clamp(12px, 1.5vw, 16px);
+  color: var(--cyan);
+  animation: blink 1s infinite;
+  opacity: 0.8;
+}
+#vn-continue-prompt span {
+  display: inline-block;
+  animation: bounce-down 1s infinite;
+}
+@keyframes bounce-down {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
 }
 .comic-panel {
   display: flex; flex-direction: column; align-items: center; gap: clamp(20px, 2.0vw, 30px);

@@ -66,34 +66,26 @@
       </div>
     </div>
 
-    <!-- INTRO COMIC -->
-    <div id="intro-comic" style="display:none">
-      <div id="comic-container">
-        <div class="comic-panel" id="cp1">
-          <div class="comic-speaker">KAPITAN BALINADO</div>
-          <div class="comic-art">👮</div>
-          <div class="comic-bubble">"Mga kababayan! Ang ating arcade ay inaatake ng mga hacker! Kailangan natin ng mga
-            CYBER TANOD para mag-depensa!"</div>
-          <div class="comic-beat">PANEL 1 / 3</div>
-        </div>
-        <div class="comic-panel" id="cp2" style="display:none">
-          <div class="comic-speaker">THE HACKERS</div>
-          <div class="comic-art">💀</div>
-          <div class="comic-bubble">"MWAHAHA! Ang lahat ng inyong data ay SAMIN NA!"</div>
-          <div class="comic-beat">PANEL 2 / 3</div>
-        </div>
-        <div class="comic-panel" id="cp3" style="display:none">
-          <div class="comic-speaker">IKAW — ANG CYBER TANOD!</div>
-          <div class="comic-art">🛡️</div>
-          <div class="comic-bubble">"HANDA NA KAMI! Ipaglalaban namin ang ating arcade laban sa mga hackers! CYBER TANOD
-            — ACTIVATE!"</div>
-          <div class="comic-beat">PANEL 3 / 3</div>
-        </div>
-        <div id="comic-timer-bar">
-          <div id="comic-timer-fill"></div>
-        </div>
-        <button id="dev-skip-comic" class="retro-btn btn-warning" style="display:none; position:absolute; top: 20px; right: 20px; z-index: 100;">SKIP (DEV)</button>
+    <!-- VN INTRO -->
+    <div id="vn-intro" style="display:none">
+      <div id="vn-bg"></div>
+      
+      <div id="vn-chars-container">
+        <img src="tanods_duo.png" id="vn-char-tanods" class="vn-char vn-char-inactive" alt="Girl and Boy">
+        <img src="hacker.png" id="vn-char-hacker" class="vn-char vn-char-inactive" alt="Hacker">
       </div>
+
+      <div id="vn-chat-box">
+        <div id="vn-speaker-name"></div>
+        <div id="vn-dialogue-text"></div>
+        <div id="vn-continue-prompt">Press to continue <span>▼</span></div>
+      </div>
+      
+      <div id="comic-timer-bar">
+        <div id="comic-timer-fill"></div>
+      </div>
+      <button id="dev-skip-comic" class="retro-btn btn-warning" style="display:none; position:absolute; top: 20px; right: 20px; z-index: 100;">SKIP (DEV)</button>
+    </div>
 
       <!-- CHARACTER SELECT SCREEN -->
       <div id="char-select" style="display:none">

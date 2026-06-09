@@ -650,42 +650,122 @@ function submitTeam() {
 // INTRO COMIC
 // ═══════════════════════════════════════════════════
 function showIntroComic() {
-  introComic.style.display = 'flex';
-  const panels = ['cp1', 'cp2', 'cp3'];
-  let pi = 0;
-  const fill = $('comic-timer-fill');
-  fill.style.transition = 'none'; fill.style.width = '100%';
+  const vnIntro = document.getElementById('vn-intro');
+  vnIntro.style.display = 'block';
 
-  let comicTimeout1, comicTimeout2;
+  const script = [
+    { speaker: "CYBER TANODS", char: "tanods", text: "Naku! Inaatake ang komunidad natin ng mga hacker! Kailangan natin mag-depensa!" },
+    { speaker: "THE HACKER", char: "hacker", text: "MWAHAHA! Ang lahat ng inyong data ay mapapasamin na!" },
+    { speaker: "CYBER TANODS", char: "tanods", text: "HANDA NA KAMI! Ipaglalaban namin ang ating komunidad! CYBER TANOD — ACTIVATE!" }
+  ];
 
-  const skipBtn = $('dev-skip-comic');
+  let currentLine = 0;
+  let isTyping = false;
+  let typeInterval = null;
+  let autoTimer = null;
+  
+  const textEl = document.getElementById('vn-dialogue-text');
+  const nameEl = document.getElementById('vn-speaker-name');
+  const tanodsImg = document.getElementById('vn-char-tanods');
+  const hackerImg = document.getElementById('vn-char-hacker');
+  const continuePrompt = document.getElementById('vn-continue-prompt');
+  
+  // Dev skip button
+  const skipBtn = document.getElementById('dev-skip-comic');
   if (skipBtn) {
     skipBtn.style.display = DEV_MODE ? 'block' : 'none';
-    skipBtn.onclick = () => {
-      clearTimeout(comicTimeout1);
-      clearTimeout(comicTimeout2);
-      introComic.style.display = 'none';
-      startGame();
+    skipBtn.onclick = (e) => {
+      e.stopPropagation(); // prevent triggering the chat advance
+      endVN();
     };
   }
 
-  function showPanel(idx) {
-    panels.forEach((id, i) => $(id).style.display = i === idx ? 'flex' : 'none');
-    blip();
-    fill.style.transition = 'none'; fill.style.width = '100%';
-    comicTimeout1 = setTimeout(() => {
-      fill.style.transition = 'width 14.8s linear';
-      fill.style.width = '0%';
-    }, 50);
-    comicTimeout2 = setTimeout(() => {
-      if (idx + 1 < panels.length) showPanel(idx + 1);
-      else {
-        introComic.style.display = 'none';
-        startGame();
+  function startLine(idx) {
+    if (idx >= script.length) {
+      endVN();
+      return;
+    }
+    
+    currentLine = idx;
+    const line = script[idx];
+    
+    // Update active characters
+    if (line.char === 'tanods') {
+      tanodsImg.className = 'vn-char vn-char-active';
+      hackerImg.className = 'vn-char vn-char-inactive';
+    } else {
+      tanodsImg.className = 'vn-char vn-char-inactive';
+      hackerImg.className = 'vn-char vn-char-active';
+    }
+
+    nameEl.textContent = line.speaker;
+    textEl.textContent = '';
+    continuePrompt.style.display = 'none';
+    
+    // Typewriter effect
+    isTyping = true;
+    let charIndex = 0;
+    clearInterval(typeInterval);
+    
+    typeInterval = setInterval(() => {
+      textEl.textContent += line.text.charAt(charIndex);
+      if (charIndex % 2 === 0) blip(); // Sound effect
+      charIndex++;
+      
+      if (charIndex >= line.text.length) {
+        finishTyping();
       }
-    }, 15000);
+    }, 40); // typing speed
+
+    resetAutoTimer();
   }
-  showPanel(0);
+
+  function finishTyping() {
+    clearInterval(typeInterval);
+    isTyping = false;
+    textEl.textContent = script[currentLine].text;
+    continuePrompt.style.display = 'block';
+    if (currentLine === script.length - 1) powerup(); // Special sound for the final ACTIVATE line
+  }
+
+  function resetAutoTimer() {
+    clearTimeout(autoTimer);
+    autoTimer = setTimeout(() => {
+      advance();
+    }, 15000); // 15 seconds auto progress
+  }
+
+  function advance() {
+    if (isTyping) {
+      // Fast forward typing
+      finishTyping();
+      resetAutoTimer();
+    } else {
+      // Next line
+      startLine(currentLine + 1);
+    }
+  }
+
+  // Input listeners
+  const handleClick = () => advance();
+  const handleKey = (e) => {
+    if (e.code === 'Space' || e.code === 'Enter') advance();
+  };
+  
+  vnIntro.addEventListener('click', handleClick);
+  document.addEventListener('keydown', handleKey);
+
+  function endVN() {
+    clearInterval(typeInterval);
+    clearTimeout(autoTimer);
+    vnIntro.removeEventListener('click', handleClick);
+    document.removeEventListener('keydown', handleKey);
+    vnIntro.style.display = 'none';
+    startGame();
+  }
+
+  // Start the first line
+  startLine(0);
 }
 
 // ═══════════════════════════════════════════════════
