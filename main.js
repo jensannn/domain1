@@ -75,31 +75,31 @@ const GS = {
 
 // ── LEVEL 1: CONVEYOR BELT ──
 const LEVEL1_ITEMS = [
-  { label: '📛 Full Name',        answer: 'private', xp: 10, recap: 'Keep your full name private as scammers can use it for identity theft and impersonation.' },
-  { label: '🎨 Favorite Color',   answer: 'share',   xp: 10, recap: 'Sharing your favorite color is safe since it cannot be used to compromise your security.' },
-  { label: '🏠 Home Address',     answer: 'private', xp: 10, recap: 'Your home address must be private to prevent physical safety risks and targeted scams.' },
-  { label: '🏫 School Name',      answer: 'share',   xp: 10, recap: 'Sharing your school name is generally safe but avoid posting it alongside specific schedules.' },
-  { label: '🔑 Password',         answer: 'private', xp: 10, recap: 'Your password must remain absolutely private and never shared with anyone under any circumstances.' },
-  { label: '🐾 Pet\'s Name',      answer: 'share',   xp: 10, recap: 'Sharing your pet\'s name is safe but avoid using it as your password or security question answer.' },
-  { label: '📅 Birthday (Full)',  answer: 'private', xp: 10, recap: 'Your full birthday should be private since it is a crucial piece of information used for account recovery.' },
-  { label: '👤 Username',         answer: 'share',   xp: 10, recap: 'Your username is safe to share as it is public-facing, but ensure it does not contain sensitive details.' },
-  { label: '📞 Phone Number',     answer: 'private', xp: 10, recap: 'Your phone number should remain private to protect you from spam calls and SMS phishing attacks.' },
-  { label: '🎮 Hobby',            answer: 'share',   xp: 10, recap: 'Sharing your hobbies is a great and safe way to connect with others online without exposing personal data.' },
+  { label: '📛 Full Name',        answer: 'private', xp: 10, recap: 'Panatilihing pribado ang iyong buong pangalan dahil maaaring gamitin ito ng mga scammer para magnakaw ng pagkakakilanlan o magpanggap na ikaw.' },
+  { label: '🎨 Favorite Color',   answer: 'share',   xp: 10, recap: 'Okay lang na ibahagi ang paborito mong kulay dahil hindi ito magagamit ng iba para malagay sa panganib ang iyong seguridad.' },
+  { label: '🏠 Home Address',     answer: 'private', xp: 10, recap: 'Huwag ibahagi ang iyong tirahan dahil maaari itong magdulot ng panganib sa iyong kaligtasan at magamit ng mga scammer para targetin ka.' },
+  { label: '🏫 School Name',      answer: 'share',   xp: 10, recap: 'Karaniwan namang ligtas na ibahagi ang pangalan ng iyong paaralan, ngunit iwasang isama ang iyong eksaktong iskedyul o oras ng pagpasok at pag-uwi.' },
+  { label: '🔑 Password',         answer: 'private', xp: 10, recap: 'Dapat manatiling lihim ang iyong password at hindi ito dapat ibinabahagi kaninuman sa anumang sitwasyon.' },
+  { label: '🐾 Pet\'s Name',      answer: 'share',   xp: 10, recap: 'Ligtas lang na ibahagi ang pangalan ng iyong alagang hayop, ngunit huwag itong gamitin bilang password o sagot sa mga tanong pangseguridad ng iyong account.' },
+  { label: '📅 Birthday (Full)',  answer: 'private', xp: 10, recap: 'Huwag basta-basta ibahagi ang iyong buong kaarawan dahil maaari itong magamit sa pag-access o pag-recover ng iyong mga account.' },
+  { label: '👤 Username',         answer: 'share',   xp: 10, recap: 'Okay lang na ibahagi ang iyong username dahil ito ay karaniwang nakikita ng publiko, ngunit siguraduhing wala itong sensitibong impormasyon.' },
+  { label: '📞 Phone Number',     answer: 'private', xp: 10, recap: 'Dapat manatiling pribado ang iyong numero ng telepono upang maprotektahan ka laban sa mga spam na tawag at panloloko sa pamamagitan ng text o SMS.' },
+  { label: '🎮 Hobby',            answer: 'share',   xp: 10, recap: 'Magandang paraan at ligtas ang pagbabahagi ng iyong mga hilig o libangan para makakonekta sa iba online nang hindi inilalantad ang personal na impormasyon.' },
 ];
 
 // ── LEVEL 2: SPOT THE PHISH ──
 const PHISH_EMAILS = [
   {
     from:    'kapitan@brgy-sanjose.c0m',
-    fromRecap: 'The email address kapitan@brgy-sanjose.c0m uses the number "0" instead of the letter "o" to impersonate the official Barangay Kapitan.',
+    fromRecap: 'Ang email address na [kapitan@brgy-sanjose.c0m](mailto:kapitan@brgy-sanjose.c0m) ay gumagamit ng numerong “0” sa halip na letrang “o” upang magpanggap na ito ay mula sa opisyal na Barangay Kapitan.',
     to:      'tanod@barangay.ph',
     subject: 'URGENT: Verify Your Account NOW!!!',
     body: [
       { text: 'Dear Resident,', click: false },
       { text: ' Your account has been COMPROMISED!!! Click here NOW to verify:', click: false },
-      { text: ' CLICK HERE NOW →', click: true, hint: '"Click here NOW" urgency link', recap: 'Urgent calls to action like "CLICK HERE NOW" are classic pressure tactics used to induce panic and hasty actions.' },
+      { text: ' CLICK HERE NOW →', click: true, hint: '"Click here NOW" urgency link', recap: 'Ang mga mensaheng tulad ng “CLICK HERE NOW” ay madalas na ginagamit para magmadali ang tao at gumawa ng desisyon nang hindi muna nag-iisip.' },
       { text: ' Or visit: ', click: false },
-      { text: 'http://brgy-sanjose-verify.freesite.net', click: true, hint: 'Suspicious link — not official .gov.ph', recap: 'Official government websites use ".gov.ph" domains, not free hosting services like "freesite.net".' },
+      { text: 'http://brgy-sanjose-verify.freesite.net', click: true, hint: 'Suspicious link — not official .gov.ph', recap: 'Ang mga opisyal na website ng gobyerno ay gumagamit ng “.gov.ph” na domain, hindi mga libreng hosting site tulad ng “freesite.net”.' },
       { text: ' Failure to comply will result in IMMEDIATE SUSPENSION!!!', click: false },
       { text: ' — Kap. dela Cruz', click: false },
     ],
@@ -116,11 +116,11 @@ const PHISH_EMAILS = [
       { text: 'Congratulations!!!', click: false },
       { text: ' You have been selected for a SPECIAL REWARD of ₱5,000!', click: false },
       { text: ' To claim, send your ', click: false },
-      { text: 'full name, birthday, and PIN', click: true, hint: 'Asking for personal info + PIN — NEVER share!', recap: 'Legitimate services like GCash will never ask for your personal PIN or sensitive account details via email.' },
+      { text: 'full name, birthday, and PIN', click: true, hint: 'Asking for personal info + PIN — NEVER share!', recap: 'Ang GCash at iba pang legit na services ay hindi humihingi ng iyong PIN o ibang sensitibong impormasyon sa email.' },
       { text: ' to this number: 09XX-XXX-XXXX.', click: false },
-      { text: ' Act fast — offer expires in 1 HOUR!!!', click: true, hint: 'Artificial urgency tactic', recap: 'Creating artificial urgency is a psychological trick scammers use to stop you from verifying their claims.' },
+      { text: ' Act fast — offer expires in 1 HOUR!!!', click: true, hint: 'Artificial urgency tactic', recap: 'Gumagawa ang mga scammer ng pekeng urgency para mapabilis ka at hindi mo na ma-check kung totoo ang sinasabi nila.' },
       { text: ' Claim here: ', click: false },
-      { text: 'http://gcash-promo.free.nf/claim', click: true, hint: 'Fake GCash site — not gcash.com.ph', recap: 'Always check the address bar, as fake GCash domains hosted on "free.nf" are designed to steal your credentials.' },
+      { text: 'http://gcash-promo.free.nf/claim', click: true, hint: 'Fake GCash site — not gcash.com.ph', recap: 'Laging tingnan ang address bar dahil ang mga pekeng GCash website na nasa “free.nf” ay ginawa para nakawin ang iyong account details.' },
     ],
     allBad: 4,
     notes: 'Red flags: asking for PIN, fake domain, unrealistic prize'
@@ -134,50 +134,50 @@ const PW_ROUNDS = [
     options:  ['12345', 'MySunshine', 'M@ri0_2024!', 'password'],
     correct:  2,
     explanation: 'M@ri0_2024! has uppercase, numbers, symbols, and length!',
-    recap: 'The strongest passwords combine uppercase and lowercase letters, numbers, and special symbols for maximum complexity.'
+    recap: 'Mas secure ang password kapag may halo itong malalaki at maliliit na letra, mga numero, at special na simbolo para maging mas mahirap hulaan.'
   },
   {
     question: 'Pick the STRONGEST password:',
     options:  ['Juan123', 'Br@y_SanJose#9', 'hello', 'CAPITALONLY'],
     correct:  1,
     explanation: 'Br@y_SanJose#9 combines letters, symbols, numbers!',
-    recap: 'A mixture of character types makes a password resilient against automated brute-force hacking attempts.'
+    recap: 'Ang pagsasama-sama ng iba’t ibang uri ng characters sa password ay nagpapahirap para ma-hack ito gamit ang automated brute-force attacks.'
   },
   {
     question: 'Which one would HACKERS hate most?',
     options:  ['iloveyou', 'Pass1234', 'qwerty!', 'T@nd@7_Brgy#2024'],
     correct:  3,
     explanation: 'T@nd@7_Brgy#2024 is long, random, and complex!',
-    recap: 'Longer passwords with custom symbols and numbers take significantly more time and resources for hackers to crack.'
+    recap: 'Kapag mas mahaba ang password at may halo itong symbols at numbers, mas matagal at mas mahirap itong ma-hack.'
   },
 ];
 
 // ── LEVEL 4: SPEED ROUND ──
 const SPEED_SCENARIOS = [
-  { text: 'A stranger online asks for your school address.', icon:'👤', answer:'unsafe', xp:5, recap: 'Sharing physical details like school address with strangers on the internet exposes you to severe offline safety hazards.' },
-  { text: 'You use HTTPS websites for research.', icon:'🔒', answer:'safe', xp:5, recap: 'HTTPS encrypts your connection, ensuring that the data sent between your browser and the website cannot be intercepted.' },
-  { text: 'You use the same password for ALL your apps.', icon:'🔑', answer:'unsafe', xp:5, recap: 'Reusing passwords across multiple accounts creates a single point of failure if one of those apps gets breached.' },
-  { text: 'You log out of shared computers after use.', icon:'💻', answer:'safe', xp:5, recap: 'Logging out of public or shared computers prevents subsequent users from accessing your personal accounts.' },
-  { text: 'You click a link from an unknown email.', icon:'📧', answer:'unsafe', xp:5, recap: 'Unsolicited email links can lead to malicious cloning sites or initiate automatic downloads of malware.' },
-  { text: 'You enable 2-factor authentication on GCash.', icon:'📱', answer:'safe', xp:5, recap: 'Two-factor authentication adds an essential second layer of security, blocking access even if someone knows your password.' },
-  { text: 'You share your OTP code with a "GCash agent".', icon:'💬', answer:'unsafe', xp:5, recap: 'Official support agents will never ask for your OTP, which grants direct access to authorize transactions.' },
-  { text: 'You update your apps when notified.', icon:'🔄', answer:'safe', xp:5, recap: 'Keeping your software updated ensures that known security loopholes and system vulnerabilities are patched immediately.' },
-  { text: 'You save passwords in a shared notebook.', icon:'📓', answer:'unsafe', xp:5, recap: 'Physical notebooks containing credentials are easily lost, stolen, or viewed by unauthorized people nearby.' },
-  { text: 'You use a strong password with symbols and numbers.', icon:'🛡️', answer:'safe', xp:5, recap: 'High-entropy passwords with letters, numbers, and symbols are the first and best line of defense for your digital accounts.' },
-  { text: 'You post your full birthday on social media.', icon:'🎂', answer:'unsafe', xp:5, recap: 'Scammers can harvest publicly shared birth dates to answer security questions and verify identity for account takeovers.' },
-  { text: 'You check URLs before clicking links.', icon:'🔍', answer:'safe', xp:5, recap: 'Checking destination URLs helps you spot deceptive spelling tricks and confirm you are visiting the authentic site.' },
-  { text: 'You download apps from unofficial websites.', icon:'⬇️', answer:'unsafe', xp:5, recap: 'Third-party marketplaces often host modified applications containing embedded spyware and Trojans.' },
-  { text: 'You use a VPN on public Wi-Fi.', icon:'📡', answer:'safe', xp:5, recap: 'A Virtual Private Network encrypts your internet traffic on open networks, protecting it from local eavesdroppers.' },
-  { text: 'You share your home address in a public chat group.', icon:'🏠', answer:'unsafe', xp:5, recap: 'Public chat rooms allow anyone to view your location, making you vulnerable to real-world threats and social engineering.' },
+  { text: 'Isang hindi mo kilalang tao online ang nagtatanong ng address ng iyong paaralan.', icon:'👤', answer:'unsafe', xp:5, recap: 'Ang pagbibigay ng school address sa mga hindi mo kilala online ay puwedeng magdulot ng panganib sa iyong kaligtasan sa totoong buhay.' },
+  { text: 'Gumagamit ka ng mga HTTPS na website para sa iyong pananaliksik.', icon:'🔒', answer:'safe', xp:5, recap: 'Ang HTTPS ay nag-e-encrypt ng iyong koneksyon kaya’t hindi madaling mabasa ang data na ipinapadala sa pagitan ng iyong browser at ng website.' },
+  { text: 'Iisa lang ang password na ginagamit mo sa lahat ng apps.', icon:'🔑', answer:'unsafe', xp:5, recap: 'Kapag pare-pareho ang password mo sa lahat ng account, delikado ito dahil kung ma-hack ang isa, puwede ring maapektuhan ang iba.' },
+  { text: 'Lagi kang nagla-log out sa mga shared na computer pagkatapos gamitin ito.', icon:'💻', answer:'safe', xp:5, recap: 'Ang pagla-log out sa mga pampubliko o shared computer ay nakakaiwas sa pag-access ng susunod na gagamit sa iyong mga personal na account.' },
+  { text: 'Nag-click ka ng link mula sa isang hindi kilalang email.', icon:'📧', answer:'unsafe', xp:5, recap: 'Ang mga link mula sa hindi kilalang email ay maaaring magtungo sa pekeng website o mag-trigger ng awtomatikong pag-download ng malware.' },
+  { text: 'In-activate mo ang 2-factor authentication sa GCash.', icon:'📱', answer:'safe', xp:5, recap: 'Ang two-factor authentication ay dagdag na seguridad na pumipigil sa pag-access sa account mo kahit alam pa ng iba ang password mo.' },
+  { text: 'Binigay mo ang iyong OTP code sa isang “GCash agent”.', icon:'💬', answer:'unsafe', xp:5, recap: 'Ang official support agents ay hindi humihingi ng OTP dahil ito ang ginagamit para ma-approve ang mga transaksyon.' },
+  { text: 'Ina-update mo agad ang apps mo kapag may notification na available na ang update.', icon:'🔄', answer:'safe', xp:5, recap: 'Ang pagpapanatiling updated sa iyong software ay nakakatulong para agad maayos ang mga kilalang security loopholes at system vulnerabilities.' },
+  { text: 'Isinusulat mo ang mga password mo sa notebook na puwedeng makita ng iba.', icon:'📓', answer:'unsafe', xp:5, recap: 'Ang mga notebook na may passwords ay madaling mawala, manakaw, o makita ng ibang tao na hindi dapat nakakakita.' },
+  { text: 'Gumagamit ka ng matibay na password na may mga simbolo at numero.', icon:'🛡️', answer:'safe', xp:5, recap: 'Ang mga matitibay na password na may halo ng mga letra, numero, at simbolo ay isa sa pinakamahalagang unang depensa ng iyong mga digital na account.' },
+  { text: 'Ipinopost mo ang iyong buong kaarawan sa social media.', icon:'🎂', answer:'unsafe', xp:5, recap: 'Puwedeng gamitin ng mga scammer ang mga birthday na naka-post online para sagutin ang security questions at ma-take over ang accounts.' },
+  { text: 'Tinitingnan mo muna ang mga URL bago mag-click ng mga link.', icon:'🔍', answer:'safe', xp:5, recap: 'Kapag chine-check mo ang URL, mas madali mong makikita kung may pekeng spelling at kung tunay ba ang website na pupuntahan mo.' },
+  { text: 'Nagda-download ka ng mga apps mula sa mga hindi opisyal na website.', icon:'⬇️', answer:'unsafe', xp:5, recap: 'Ang mga third-party marketplace, ay may mga apps na puwedeng may nakatagong spyware o Trojan.' },
+  { text: 'Gumagamit ka ng VPN kapag naka-connect ka sa public Wi-Fi.', icon:'📡', answer:'safe', xp:5, recap: 'Ang Virtual Private Network ay nag-e-encrypt ng internet mo sa public Wi-Fi para hindi basta makita ng iba ang iyong activity.' },
+  { text: 'Ibinahagi mo ang iyong home address sa isang public chat group.', icon:'🏠', answer:'unsafe', xp:5, recap: 'Ang mga public chat room ay puwedeng makita ng kahit sino, kaya nagiging delikado ito dahil maaaring malaman ang iyong lokasyon at magamit sa panlilinlang o ibang panganib sa totoong buhay.' },
 ];
 
 // ── LEVEL 5: LINK INSPECTOR ──
 const URL_ITEMS = [
-  { url: 'https://deped.gov.ph',                    answer: 'safe', reason: '✅ Official .gov.ph domain = SAFE!', recap: 'Genuine Philippine government portals always end in the official ".gov.ph" domain extension.' },
-  { url: 'http://depd-ph.weebly.com',               answer: 'fake', reason: '❌ Fake: misspelled + weebly.com = NOT official', recap: 'Misspelled domains and free blog hosting platforms like "weebly.com" are telltale signs of a malicious clone.' },
-  { url: 'https://gcash-rewards.ph.freesite.net',   answer: 'fake', reason: '❌ Fake: gcash is NOT on freesite.net', recap: 'Scammers use nested domains on free web hosts like "freesite.net" to disguise phishing sites as official portals.' },
-  { url: 'https://www.bsp.gov.ph',                  answer: 'safe', reason: '✅ Official BSP government site', recap: 'Checking for ".gov.ph" is the most reliable way to verify the authenticity of a government institution online.' },
-  { url: 'https://fb-security-update.xyz',          answer: 'fake', reason: '❌ Fake: Facebook never uses .xyz domain', recap: 'Major tech corporations like Facebook will never contact you using cheap, suspicious extensions like ".xyz".' },
+  { url: 'https://deped.gov.ph',                    answer: 'safe', reason: '✅ Official .gov.ph domain = SAFE!', recap: 'Ang mga legit na government websites sa Pilipinas ay laging gumagamit ng opisyal na “.gov.ph” na domain.' },
+  { url: 'http://depd-ph.weebly.com',               answer: 'fake', reason: '❌ Fake: misspelled + weebly.com = NOT official', recap: 'Ang mga maling spelling sa domain at mga free blog hosting site tulad ng “weebly.com” ay mga palatandaan na maaaring peke o clone ang website.' },
+  { url: 'https://gcash-rewards.ph.freesite.net',   answer: 'fake', reason: '❌ Fake: gcash is NOT on freesite.net', recap: 'Gumagamit ang mga scammer ng free web hosts tulad ng “freesite.net” para gawing peke ang mga phishing site at magmukhang official na website.' },
+  { url: 'https://www.bsp.gov.ph',                  answer: 'safe', reason: '✅ Official BSP government site', recap: 'Ang pagtingin kung “.gov.ph” ang domain ay isa sa pinakamadaling paraan para malaman kung legit ang government website.' },
+  { url: 'https://fb-security-update.xyz',          answer: 'fake', reason: '❌ Fake: Facebook never uses .xyz domain', recap: 'Ang mga malalaking tech companies tulad ng Facebook ay hindi kailanman makikipag-ugnayan sa iyo gamit ang mga kahina-hinalang domain extensions tulad ng “.xyz”.' },
 ];
 
 // ── LEVEL 6: SCAM INBOX MEMORY ──
@@ -185,56 +185,56 @@ const MEMORY_EMAILS = [
   {
     from: 'prizes@win-gcash-now.xyz',
     subject: 'YOU WON ₱10,000! CLAIM NOW!',
-    body: 'You have been selected! Send your full name, birthday, and bank details to claim your prize. Offer expires TONIGHT!'
+    body: 'Ikaw ang aming napili! Ipadala ang buong pangalan mo, birthday, at bank details para makuha ang premyo. Mag-e-expire na ito ngayong gabi!'
   },
   {
     from: 'admin@brgy-sanjose.free.nf',
     subject: 'URGENT: Account Verification Required',
-    body: 'Your barangay ID is about to expire. Click the link below to verify. Failure to comply = account suspended.'
+    body: 'Malapit nang mag-expire ang barangay ID mo. I-click ang link sa ibaba para mag-verify. Kapag hindi mo nagawa, masususpinde ang account mo.'
   },
   {
     from: 'support@gcash-ph-official.com',
     subject: 'Security Alert: Unauthorized Login',
-    body: 'Someone tried to access your GCash. Send your OTP immediately to: 09XX-XXX-XXXX to secure your account.'
+    body: 'May nagtatangkang mag-access sa GCash mo. Ipadala agad ang OTP mo sa 09XX-XXX-XXXX para ma-secure ang iyong account.'
   },
 ];
 
 const MEMORY_QUESTIONS = [
-  { text: 'One sender\'s email ended in .gov.ph', answer: false, recap: 'None of the suspicious scam emails ended in the legitimate ".gov.ph" government domain.' },
-  { text: 'One email offered free prizes (₱10,000)', answer: true, recap: 'Unsolicited lottery claims and cash rewards are common bait used in financial phishing campaigns.' },
-  { text: 'One subject line said "URGENT"', answer: true, recap: 'Urgent alerts are deliberately designed to trigger immediate panic and override your logical thinking.' },
-  { text: 'All 3 emails asked for your OTP', answer: false, recap: 'While not all asked for an OTP, any request for an One-Time Password is a massive security red flag.' },
-  { text: 'One email mentioned a barangay ID', answer: true, recap: 'Scammers frequently reference local community elements like Barangay IDs to build a false sense of trust.' },
-  { text: 'One email was from gcash.com.ph', answer: false, recap: 'None of the emails originated from real GCash channels, relying instead on deceptive, look-alike domains.' },
+  { text: 'May isang sender na ang email ay nagtatapos sa “.gov.ph”.', answer: false, recap: 'Wala sa mga kahina-hinalang scam email ang gumamit ng lehitimong “.gov.ph” na domain ng gobyerno.' },
+  { text: 'May isang email na nag-aalok ng libreng 10,000 na premyo.', answer: true, recap: 'Ang mga hindi inaasahang lottery claims at cash rewards ay karaniwang pain na ginagamit sa mga financial phishing scam.' },
+  { text: 'May isang subject line na nagsasabing “URGENT”.', answer: true, recap: 'Ginagawa ang urgent alerts para mag-panic ka agad at hindi na makapag-isip nang maayos.' },
+  { text: 'Ang lahat ng tatlong email ay humingi ng iyong OTP.', answer: false, recap: 'Kahit hindi palaging hinihingi, ang paghingi ng OTP ay isang malaking senyales na posibleng scam o security risk.' },
+  { text: 'May isang email na may binanggit na barangay ID.', answer: true, recap: 'Gumagamit ang mga scammer ng mga lokal na bagay tulad ng Barangay ID para magmukhang totoo at makuha ang tiwala ng tao.' },
+  { text: 'May isang email na galing sa gcash.com.ph', answer: false, recap: 'Wala sa mga email ang galing sa totoong GCash channels; puro pekeng domains lang na ginagaya ang mga official sites.' },
 ];
 
 // ── LEVEL 7: SAFE PROFILE ──
 const PROFILE_FIELDS = [
-  { name: '👤 Full Name',       correct: 'private', desc: 'Your official first name and family surname.', recap: 'Hiding your full name protects you from public tracking and identity theft schemes.' },
-  { name: '😎 Nickname',        correct: 'public',  desc: 'A casual name or gaming alias your friends use.', recap: 'Nicknames are safe for public display since they do not expose your legal identity.' },
-  { name: '🏫 School',          correct: 'public',  desc: 'The name of the school or campus you attend.', recap: 'School name is public-level information, but keep specific class schedules private.' },
-  { name: '📚 Grade Level',     correct: 'private', desc: 'Your current year level (e.g., Grade 7).', recap: 'Keeping your grade level private adds a layer of protection against online child profiling.' },
-  { name: '🎂 Birthday',        correct: 'private', desc: 'Your full month, day, and year of birth.', recap: 'Birthdays are commonly used as security questions and identity verification points, so keep them private.' },
-  { name: '📞 Phone Number',    correct: 'private', desc: 'Your private 11-digit mobile contact number.', recap: 'Your phone number must remain private to prevent SMS scams, unsolicited calls, and direct contact.' },
-  { name: '❤️ Favorite Subject',correct: 'public',  desc: 'School topics you enjoy learning about.', recap: 'Sharing educational interests is safe and excellent for positive community interaction.' },
-  { name: '🏘️ Home Barangay',   correct: 'private', desc: 'The specific neighborhood or area where you reside.', recap: 'Your home barangay should be private to prevent malicious actors from mapping your physical location.' },
+  { name: '👤 Full Name',       correct: 'private', desc: 'Ang iyong opisyal na unang pangalan at apelyido.', recap: 'Ang pagtatago ng iyong buong pangalan ay nakakatulong para maiwasan ang pagsubaybay sa iyo sa publiko at mga tangkang pagnanakaw ng pagkakakilanlan.' },
+  { name: '😎 Nickname',        correct: 'public',  desc: 'Isang palayaw o gaming alias na ginagamit ng iyong mga kaibigan.', recap: 'Ligtas na ipakita ang mga palayaw sa publiko dahil hindi nito inilalantad ang iyong legal na pagkakakilanlan.' },
+  { name: '🏫 School',          correct: 'public',  desc: 'Ang pangalan ng school o campus na pinapasukan mo.', recap: 'Ang pangalan ng paaralan ay itinuturing na pampublikong impormasyon, ngunit dapat panatilihing pribado ang mga detalye tulad ng eksaktong iskedyul ng klase.' },
+  { name: '📚 Grade Level',     correct: 'private', desc: 'Ang iyong kasalukuyang taon o grade level (hal. Grade 7).', recap: 'Ang pagpapanatiling pribado ng iyong grade level ay nagdadagdag ng proteksyon laban sa online profiling ng mga bata.' },
+  { name: '🎂 Birthday',        correct: 'private', desc: 'Ang iyong buong petsa ng kapanganakan (buwan, araw, at taon).', recap: 'Ang mga kaarawan ay madalas ginagamit sa security questions at identity verification, kaya dapat itong panatilihing pribado.' },
+  { name: '📞 Phone Number',    correct: 'private', desc: 'Ang iyong personal na 11-digit na mobile number.', recap: 'Ang iyong numero ng telepono ay dapat manatiling pribado upang maiwasan ang SMS scams, hindi inaasahang tawag, at direktang panggugulo.' },
+  { name: '❤️ Favorite Subject',correct: 'public',  desc: 'Mga subject sa school na interesado kang pag-aralan.', recap: 'Ligtas mag-share ng mga interes sa pag-aaral at nakakatulong pa ito para sa maayos na pakikisalamuha sa iba.' },
+  { name: '🏘️ Home Barangay',   correct: 'private', desc: 'Ang tiyak na barangay o lugar kung saan ka nakatira.', recap: 'Ang iyong barangay na tinitirhan ay dapat panatilihing pribado upang maiwasan ang mga taong may masamang hangarin na matukoy ang iyong lokasyon.' },
 ];
 
 // ── LEVEL 8: BOSS CHALLENGES ──
 const BOSS_STEP1_ITEMS = [
-  { label: '📛 Full Name', answer: 'private', recap: 'Full names must be kept private online to prevent cybercriminals from mining your personal data.' },
-  { label: '🎮 Gaming Username', answer: 'share', recap: 'Gaming usernames are safe to share but should never match your real names or passwords.' },
-  { label: '🏠 Home Address', answer: 'private', recap: 'Your home address must be private to secure your physical home and personal privacy.' },
+  { label: '📛 Full Name', answer: 'private', recap: 'Ang buong pangalan ay dapat panatilihing pribado online upang maiwasan ang mga cybercriminal na makakuha ng iyong personal na impormasyon.' },
+  { label: '🎮 Gaming Username', answer: 'share', recap: 'Ligtas ibahagi ang gaming usernames, ngunit hindi ito dapat kapareho ng iyong totoong pangalan o mga password.' },
+  { label: '🏠 Home Address', answer: 'private', recap: 'Ang iyong tirahan ay dapat manatiling pribado upang maprotektahan ang iyong bahay at privacy.' },
 ];
 
 const BOSS_STEP2_ITEMS = [
-  { text: 'support@gcash-update-now.xyz', isBad: true, recap: 'Fake domains like "gcash-update-now.xyz" are hosted by scammers to harvest your account credentials.' },
-  { text: 'CLICK HERE to secure your account NOW!', isBad: true, recap: 'Impulsive warnings demanding immediate action are classic social engineering tricks designed to deceive.' },
-  { text: 'Dear Customer', isBad: false, recap: 'Generic greetings can sometimes be generic, but always look out for suspicious domains and links.' },
+  { text: 'support@gcash-update-now.xyz', isBad: true, recap: 'Ang mga pekeng domain tulad ng “gcash-update-now.xyz” ay ginagawa ng mga scammer para makuha ang iyong account credentials.' },
+  { text: 'CLICK HERE to secure your account NOW!', isBad: true, recap: 'Ang mga biglaang babala na humihiling ng agarang aksyon ay madalas na scam tactic para malinlang ang tao.' },
+  { text: 'Dear Customer', isBad: false, recap: 'Minsan normal lang ang generic greetings, pero lagi pa ring i-check ang suspicious na domains at links.' },
 ];
 
 const BOSS_STEP3_ITEMS = [
-  { question: 'CHOOSE THE STRONGEST PASSWORD!', options: ['password123', 'Brgy@Tanod#9', 'hello', 'qwerty'], correct: 1, recap: 'A strong password with mixed character types protects your system against hacking attempts.' }
+  { question: 'CHOOSE THE STRONGEST PASSWORD!', options: ['password123', 'Brgy@Tanod#9', 'hello', 'qwerty'], correct: 1, recap: 'Ang strong password na may halo-halong characters ay nakakatulong para protektahan ka laban sa hacking.' }
 ];
 
 // ── DOM REFS ──────────────────────────────────────
