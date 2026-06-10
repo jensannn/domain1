@@ -78,12 +78,8 @@ const GS = {
 
 // ── LEVEL 1: CONVEYOR BELT ──
 const LEVEL1_ITEMS = [
-  { label: '📛 Full Name', answer: 'private', xp: 10, recap: 'Panatilihing pribado ang iyong buong pangalan dahil maaaring gamitin ito ng mga scammer para magnakaw ng pagkakakilanlan o magpanggap na ikaw.' },
   { label: '🎨 Favorite Color', answer: 'share', xp: 10, recap: 'Okay lang na ibahagi ang paborito mong kulay dahil hindi ito magagamit ng iba para malagay sa panganib ang iyong seguridad.' },
-  { label: '🏠 Home Address', answer: 'private', xp: 10, recap: 'Huwag ibahagi ang iyong tirahan dahil maaari itong magdulot ng panganib sa iyong kaligtasan at magamit ng mga scammer para targetin ka.' },
-  { label: '🏫 School Name', answer: 'share', xp: 10, recap: 'Karaniwan namang ligtas na ibahagi ang pangalan ng iyong paaralan, ngunit iwasang isama ang iyong eksaktong iskedyul o oras ng pagpasok at pag-uwi.' },
   { label: '🔑 Password', answer: 'private', xp: 10, recap: 'Dapat manatiling lihim ang iyong password at hindi ito dapat ibinabahagi kaninuman sa anumang sitwasyon.' },
-  { label: '🐾 Pet\'s Name', answer: 'share', xp: 10, recap: 'Ligtas lang na ibahagi ang pangalan ng iyong alagang hayop, ngunit huwag itong gamitin bilang password o sagot sa mga tanong pangseguridad ng iyong account.' },
   { label: '📅 Birthday (Full)', answer: 'private', xp: 10, recap: 'Huwag basta-basta ibahagi ang iyong buong kaarawan dahil maaari itong magamit sa pag-access o pag-recover ng iyong mga account.' },
   { label: '👤 Username', answer: 'share', xp: 10, recap: 'Okay lang na ibahagi ang iyong username dahil ito ay karaniwang nakikita ng publiko, ngunit siguraduhing wala itong sensitibong impormasyon.' },
   { label: '📞 Phone Number', answer: 'private', xp: 10, recap: 'Dapat manatiling pribado ang iyong numero ng telepono upang maprotektahan ka laban sa mga spam na tawag at panloloko sa pamamagitan ng text o SMS.' },
@@ -109,24 +105,6 @@ const PHISH_EMAILS = [
     susItems: [0, 1], // indices of click:true that are suspicious (sender + link + urgency)
     allBad: 3,       // total bad elements including sender
     notes: 'Red flags: fake sender, urgency language, suspicious link'
-  },
-  {
-    from: 'gcash-support@gcash-rewards-ph.xyz',
-    fromRecap: 'Official GCash support will never email you from a random ".xyz" domain address.',
-    to: 'you@email.com',
-    subject: 'You have won 5000 PESOS! Claim now!',
-    body: [
-      { text: 'Congratulations!!!', click: false },
-      { text: ' You have been selected for a SPECIAL REWARD of ₱5,000!', click: false },
-      { text: ' To claim, send your ', click: false },
-      { text: 'full name, birthday, and PIN', click: true, hint: 'Asking for personal info + PIN — NEVER share!', recap: 'Ang GCash at iba pang legit na services ay hindi humihingi ng iyong PIN o ibang sensitibong impormasyon sa email.' },
-      { text: ' to this number: 09XX-XXX-XXXX.', click: false },
-      { text: ' Act fast — offer expires in 1 HOUR!!!', click: true, hint: 'Artificial urgency tactic', recap: 'Gumagawa ang mga scammer ng pekeng urgency para mapabilis ka at hindi mo na ma-check kung totoo ang sinasabi nila.' },
-      { text: ' Claim here: ', click: false },
-      { text: 'http://gcash-promo.free.nf/claim', click: true, hint: 'Fake GCash site — not gcash.com.ph', recap: 'Laging tingnan ang address bar dahil ang mga pekeng GCash website na nasa “free.nf” ay ginawa para nakawin ang iyong account details.' },
-    ],
-    allBad: 4,
-    notes: 'Red flags: asking for PIN, fake domain, unrealistic prize'
   },
 ];
 
@@ -158,20 +136,13 @@ const PW_ROUNDS = [
 // ── LEVEL 4: SPEED ROUND ──
 const SPEED_SCENARIOS = [
   { text: 'Isang hindi mo kilalang tao online ang nagtatanong ng address ng iyong paaralan.', icon: '👤', answer: 'unsafe', xp: 5, recap: 'Ang pagbibigay ng school address sa mga hindi mo kilala online ay puwedeng magdulot ng panganib sa iyong kaligtasan sa totoong buhay.' },
-  { text: 'Gumagamit ka ng mga HTTPS na website para sa iyong pananaliksik.', icon: '🔒', answer: 'safe', xp: 5, recap: 'Ang HTTPS ay nag-e-encrypt ng iyong koneksyon kaya’t hindi madaling mabasa ang data na ipinapadala sa pagitan ng iyong browser at ng website.' },
   { text: 'Iisa lang ang password na ginagamit mo sa lahat ng apps.', icon: '🔑', answer: 'unsafe', xp: 5, recap: 'Kapag pare-pareho ang password mo sa lahat ng account, delikado ito dahil kung ma-hack ang isa, puwede ring maapektuhan ang iba.' },
   { text: 'Lagi kang nagla-log out sa mga shared na computer pagkatapos gamitin ito.', icon: '💻', answer: 'safe', xp: 5, recap: 'Ang pagla-log out sa mga pampubliko o shared computer ay nakakaiwas sa pag-access ng susunod na gagamit sa iyong mga personal na account.' },
   { text: 'Nag-click ka ng link mula sa isang hindi kilalang email.', icon: '📧', answer: 'unsafe', xp: 5, recap: 'Ang mga link mula sa hindi kilalang email ay maaaring magtungo sa pekeng website o mag-trigger ng awtomatikong pag-download ng malware.' },
-  { text: 'In-activate mo ang 2-factor authentication sa GCash.', icon: '📱', answer: 'safe', xp: 5, recap: 'Ang two-factor authentication ay dagdag na seguridad na pumipigil sa pag-access sa account mo kahit alam pa ng iba ang password mo.' },
-  { text: 'Binigay mo ang iyong OTP code sa isang “GCash agent”.', icon: '💬', answer: 'unsafe', xp: 5, recap: 'Ang official support agents ay hindi humihingi ng OTP dahil ito ang ginagamit para ma-approve ang mga transaksyon.' },
   { text: 'Ina-update mo agad ang apps mo kapag may notification na available na ang update.', icon: '🔄', answer: 'safe', xp: 5, recap: 'Ang pagpapanatiling updated sa iyong software ay nakakatulong para agad maayos ang mga kilalang security loopholes at system vulnerabilities.' },
   { text: 'Isinusulat mo ang mga password mo sa notebook na puwedeng makita ng iba.', icon: '📓', answer: 'unsafe', xp: 5, recap: 'Ang mga notebook na may passwords ay madaling mawala, manakaw, o makita ng ibang tao na hindi dapat nakakakita.' },
-  { text: 'Gumagamit ka ng matibay na password na may mga simbolo at numero.', icon: '🛡️', answer: 'safe', xp: 5, recap: 'Ang mga matitibay na password na may halo ng mga letra, numero, at simbolo ay isa sa pinakamahalagang unang depensa ng iyong mga digital na account.' },
-  { text: 'Ipinopost mo ang iyong buong kaarawan sa social media.', icon: '🎂', answer: 'unsafe', xp: 5, recap: 'Puwedeng gamitin ng mga scammer ang mga birthday na naka-post online para sagutin ang security questions at ma-take over ang accounts.' },
   { text: 'Tinitingnan mo muna ang mga URL bago mag-click ng mga link.', icon: '🔍', answer: 'safe', xp: 5, recap: 'Kapag chine-check mo ang URL, mas madali mong makikita kung may pekeng spelling at kung tunay ba ang website na pupuntahan mo.' },
   { text: 'Nagda-download ka ng mga apps mula sa mga hindi opisyal na website.', icon: '⬇️', answer: 'unsafe', xp: 5, recap: 'Ang mga third-party marketplace, ay may mga apps na puwedeng may nakatagong spyware o Trojan.' },
-  { text: 'Gumagamit ka ng VPN kapag naka-connect ka sa public Wi-Fi.', icon: '📡', answer: 'safe', xp: 5, recap: 'Ang Virtual Private Network ay nag-e-encrypt ng internet mo sa public Wi-Fi para hindi basta makita ng iba ang iyong activity.' },
-  { text: 'Ibinahagi mo ang iyong home address sa isang public chat group.', icon: '🏠', answer: 'unsafe', xp: 5, recap: 'Ang mga public chat room ay puwedeng makita ng kahit sino, kaya nagiging delikado ito dahil maaaring malaman ang iyong lokasyon at magamit sa panlilinlang o ibang panganib sa totoong buhay.' },
 ];
 
 // ── LEVEL 5: LINK INSPECTOR ──
@@ -208,25 +179,21 @@ const MEMORY_QUESTIONS = [
   { text: 'May isang subject line na nagsasabing “URGENT”.', answer: true, recap: 'Ginagawa ang urgent alerts para mag-panic ka agad at hindi na makapag-isip nang maayos.' },
   { text: 'Ang lahat ng tatlong email ay humingi ng iyong OTP.', answer: false, recap: 'Kahit hindi palaging hinihingi, ang paghingi ng OTP ay isang malaking senyales na posibleng scam o security risk.' },
   { text: 'May isang email na may binanggit na barangay ID.', answer: true, recap: 'Gumagamit ang mga scammer ng mga lokal na bagay tulad ng Barangay ID para magmukhang totoo at makuha ang tiwala ng tao.' },
-  { text: 'May isang email na galing sa gcash.com.ph', answer: false, recap: 'Wala sa mga email ang galing sa totoong GCash channels; puro pekeng domains lang na ginagaya ang mga official sites.' },
 ];
 
 // ── LEVEL 7: SAFE PROFILE ──
 const PROFILE_FIELDS = [
-  { name: '👤 Full Name', correct: 'private', desc: 'Ang iyong opisyal na unang pangalan at apelyido.', recap: 'Ang pagtatago ng iyong buong pangalan ay nakakatulong para maiwasan ang pagsubaybay sa iyo sa publiko at mga tangkang pagnanakaw ng pagkakakilanlan.' },
   { name: '😎 Nickname', correct: 'public', desc: 'Isang palayaw o gaming alias na ginagamit ng iyong mga kaibigan.', recap: 'Ligtas na ipakita ang mga palayaw sa publiko dahil hindi nito inilalantad ang iyong legal na pagkakakilanlan.' },
   { name: '🏫 School', correct: 'public', desc: 'Ang pangalan ng school o campus na pinapasukan mo.', recap: 'Ang pangalan ng paaralan ay itinuturing na pampublikong impormasyon, ngunit dapat panatilihing pribado ang mga detalye tulad ng eksaktong iskedyul ng klase.' },
   { name: '📚 Grade Level', correct: 'private', desc: 'Ang iyong kasalukuyang taon o grade level (hal. Grade 7).', recap: 'Ang pagpapanatiling pribado ng iyong grade level ay nagdadagdag ng proteksyon laban sa online profiling ng mga bata.' },
-  { name: '🎂 Birthday', correct: 'private', desc: 'Ang iyong buong petsa ng kapanganakan (buwan, araw, at taon).', recap: 'Ang mga kaarawan ay madalas ginagamit sa security questions at identity verification, kaya dapat itong panatilihing pribado.' },
   { name: '📞 Phone Number', correct: 'private', desc: 'Ang iyong personal na 11-digit na mobile number.', recap: 'Ang iyong numero ng telepono ay dapat manatiling pribado upang maiwasan ang SMS scams, hindi inaasahang tawag, at direktang panggugulo.' },
   { name: '❤️ Favorite Subject', correct: 'public', desc: 'Mga subject sa school na interesado kang pag-aralan.', recap: 'Ligtas mag-share ng mga interes sa pag-aaral at nakakatulong pa ito para sa maayos na pakikisalamuha sa iba.' },
-  { name: '🏘️ Home Barangay', correct: 'private', desc: 'Ang tiyak na barangay o lugar kung saan ka nakatira.', recap: 'Ang iyong barangay na tinitirhan ay dapat panatilihing pribado upang maiwasan ang mga taong may masamang hangarin na matukoy ang iyong lokasyon.' },
 ];
 
 // ── LEVEL 8: BOSS CHALLENGES ──
 const BOSS_STEP1_ITEMS = [
   { label: '📛 Full Name', answer: 'private', recap: 'Ang buong pangalan ay dapat panatilihing pribado online upang maiwasan ang mga cybercriminal na makakuha ng iyong personal na impormasyon.' },
-  { label: '🎮 Gaming Username', answer: 'share', recap: 'Ligtas ibahagi ang gaming usernames, ngunit hindi ito dapat kapareho ng iyong totoong pangalan o mga password.' },
+  { label: '🐾 Pet\'s Name', answer: 'share', recap: 'Ligtas lang na ibahagi ang pangalan ng iyong alagang hayop, ngunit huwag itong gamitin bilang password o sagot sa mga tanong pangseguridad ng iyong account.' },
   { label: '🏠 Home Address', answer: 'private', recap: 'Ang iyong tirahan ay dapat manatiling pribado upang maprotektahan ang iyong bahay at privacy.' },
 ];
 
@@ -1866,7 +1833,7 @@ function startLevel2() {
   const TOTAL_TIME = LEVEL_SETTINGS[2].countdown;
   let timeLeft = TOTAL_TIME;
   let clickedCount = 0;
-  let emailDone = [0, 0];
+  let emailDone = new Array(PHISH_EMAILS.length).fill(0);
 
   levelContent.innerHTML = `
     <div id="phish-wrap">
@@ -1879,7 +1846,7 @@ function startLevel2() {
       </div>
       <div id="phish-btn-area" style="display:flex;justify-content:space-between;align-items:center">
         <span id="phish-found-count" style="font-family:var(--font-pixel);font-size:clamp(12px, 3.0vw, 17px);color:var(--gold)">FOUND: 0 / ${totalNeeded}</span>
-        <span id="phish-round-info" style="font-family:var(--font-pixel);font-size:clamp(11px, 2.75vw, 15px);color:var(--gray)">EMAIL 1 / 2</span>
+        <span id="phish-round-info" style="font-family:var(--font-pixel);font-size:clamp(11px, 2.75vw, 15px);color:var(--gray)">EMAIL 1 / ${PHISH_EMAILS.length}</span>
       </div>
       <div id="phish-email-container"></div>
     </div>
@@ -1907,7 +1874,7 @@ function startLevel2() {
       headerEl.textContent = 'CLICK ALL SUSPICIOUS ELEMENTS!';
       headerEl.style.color = '';
     }
-    $('phish-round-info').textContent = `EMAIL ${idx + 1} / 2`;
+    $('phish-round-info').textContent = `EMAIL ${idx + 1} / ${PHISH_EMAILS.length}`;
     const container = $('phish-email-container');
     container.innerHTML = `
       <div class="phish-email-header">
