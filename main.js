@@ -8,6 +8,7 @@
 // Set to false before deploying to players.
 let DEV_MODE = false;
 let SOUND_ENABLED = true;
+let DISABLE_LEVEL_8 = true;
 
 // ── LEVEL TIMINGS & SPEEDS ────────────────────────
 // Change the countdown timers and specific level speeds here.
@@ -423,8 +424,13 @@ if (unlockSwitch) {
     const isOn = unlockSwitch.dataset.on !== 'true';
     setOptSwitch(unlockSwitch, unlockLabel, isOn);
     if (isOn) {
-      GS.levelsDone = [1, 2, 3, 4, 5, 6, 7];
-      GS.currentNode = 8;
+      if (DISABLE_LEVEL_8) {
+        GS.levelsDone = [1, 2, 3, 4, 5, 6];
+        GS.currentNode = 7;
+      } else {
+        GS.levelsDone = [1, 2, 3, 4, 5, 6, 7];
+        GS.currentNode = 8;
+      }
       select_s();
       // Refresh map if visible
       const wm = document.getElementById('world-map-view');
@@ -781,8 +787,13 @@ function startGame() {
 
   const unlockSwitch = document.getElementById('opt-unlock-switch');
   if (DEV_MODE && unlockSwitch && unlockSwitch.dataset.on === 'true') {
-    GS.levelsDone = [1, 2, 3, 4, 5, 6, 7];
-    GS.currentNode = 8;
+    if (DISABLE_LEVEL_8) {
+      GS.levelsDone = [1, 2, 3, 4, 5, 6];
+      GS.currentNode = 7;
+    } else {
+      GS.levelsDone = [1, 2, 3, 4, 5, 6, 7];
+      GS.currentNode = 8;
+    }
   } else {
     GS.levelsDone = [];
     GS.currentNode = 1;
@@ -863,7 +874,7 @@ function showWorldMap(autoAdvanceFromLv = null, isGameStart = false) {
   // Reveal Boss Level 8 only if all 7 previous levels are completed
   const bossNode = document.getElementById('node-8');
   const bossPath = document.getElementById('path-to-boss');
-  if (GS.levelsDone.length >= 7) {
+  if (GS.levelsDone.length >= 7 && !DISABLE_LEVEL_8) {
     if (bossNode) {
       bossNode.style.display = 'flex';
       bossNode.classList.remove('locked');
@@ -880,8 +891,9 @@ function showWorldMap(autoAdvanceFromLv = null, isGameStart = false) {
   if (GS.currentNode === undefined) {
     let targetLv = 1;
     if (GS.levelsDone.length > 0) {
-      targetLv = Math.min(8, Math.max(...GS.levelsDone) + 1);
-      if (targetLv === 8 && GS.levelsDone.length < 7) {
+      const maxLvl = DISABLE_LEVEL_8 ? 7 : 8;
+      targetLv = Math.min(maxLvl, Math.max(...GS.levelsDone) + 1);
+      if (targetLv === maxLvl && GS.levelsDone.length < maxLvl - 1) {
         targetLv = Math.max(...GS.levelsDone); // stay on last if boss locked
       }
     }
@@ -1367,7 +1379,11 @@ function proceedToRecap(lvNum) {
   setTimeout(() => {
     levelSplash.style.display = 'none';
     showLevelRecap(lvNum, () => {
-      showWorldMap(lvNum);
+      if (DISABLE_LEVEL_8 && lvNum >= 7) {
+        showFinalScreen();
+      } else {
+        showWorldMap(lvNum);
+      }
     });
   }, 2000);
 }
