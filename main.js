@@ -698,7 +698,7 @@ function showIntroComic() {
     isTyping = false;
     textEl.textContent = script[currentLine].text;
     continuePrompt.style.display = 'block';
-    if (currentLine === script.length - 1) powerup(); // Special sound for the final ACTIVATE line
+    if (currentLine === script.length - 1) levelUp(); // Special sound for the final ACTIVATE line
   }
 
   function resetAutoTimer() {
@@ -1317,13 +1317,10 @@ function completeLevel(lvNum) {
     else chance = 1.0; // lots of mistakes
 
     if (Math.random() < chance) {
-      // Pick questionRatio (e.g. 80%) of the mistakes, shuffled
-      const shuffled = allMistakes.sort(() => Math.random() - 0.5);
-      const count = Math.max(1, Math.ceil(allMistakes.length * REDEMPTION_SETTINGS.questionRatio));
-      const queue = shuffled.slice(0, count);
-
       playRedemptionIntro(() => {
-        runRedemptionQueue(lvNum, queue, 0, () => proceedToRecap(lvNum));
+        showRedemptionSelection(lvNum, allMistakes, (selectedQuestion) => {
+          showSingleRedemption(lvNum, selectedQuestion, () => proceedToRecap(lvNum));
+        });
       });
       return;
     }
@@ -1355,12 +1352,190 @@ function proceedToRecap(lvNum) {
   }, 2000);
 }
 
-// Loops through a queue of wrong questions one at a time
-function runRedemptionQueue(lvNum, queue, idx, onAllDone) {
-  if (idx >= queue.length) { onAllDone(); return; }
-  showRedemption(lvNum, queue[idx], queue.length, idx, () => {
-    runRedemptionQueue(lvNum, queue, idx + 1, onAllDone);
+// Show selection screen for user to choose ONE redemption question
+function showRedemptionSelection(lvNum, incorrectQuestions, onSelected) {
+  const overlay = $('redemption-selection-overlay');
+  if (!overlay) return;
+  
+  // Limit to max 3 questions
+  const selectedQuestions = incorrectQuestions.length > 3 
+    ? incorrectQuestions.sort(() => Math.random() - 0.5).slice(0, 3)
+    : incorrectQuestions;
+
+  overlay.innerHTML = `
+    <div class="redemption-selection-box">
+      <div class="redemption-selection-title">SECOND CHANCE!</div>
+      <div class="redemption-selection-subtitle">Choose ONE question to attempt:</div>
+      <div class="redemption-selection-list">
+        ${selectedQuestions.map((q, idx) => `
+          <button class="redemption-selection-btn" data-idx="${idx}">
+            <span class="selection-number">Q${idx + 1}</span>
+            <span class="selection-text">${q.question.substring(0, 60)}${q.question.length > 60 ? '...' : ''}</span>
+            <span class="selection-arrow">→</span>
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  `;
+
+  overlay.style.display = 'flex';
+
+  // Add click handlers
+  overlay.querySelectorAll('.redemption-selection-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.idx);
+      overlay.style.display = 'none';
+      select_s();
+      if (onSelected) onSelected(selectedQuestions[idx]);
+    });
   });
+}
+
+// Show single redemption question for user to answer
+function showSingleRedemption(lvNum, itemData, onComplete) {
+  const overlay = $('redemption-overlay');
+  const qEl = $('redemption-question');
+  const optEl = $('redemption-options');
+  const timerEl = $('redemption-timer');
+
+  overlay.style.display = 'flex';
+  qEl.innerHTML = `<div style="font-size:clamp(12px, 3.0vw, 17px); color:var(--white-dim); margin-bottom:8px; font-family:var(--font-pixel);">FINAL ATTEMPT</div>` + itemData.question;
+  optEl.innerHTML = '';
+
+  let timeLeft = REDEMPTION_SETTINGS.timeLimit;
+  timerEl.textContent = timeLeft;
+
+  let answered = false;
+
+  const timer = setInterval(() => {
+    if (isPaused) return;
+    timeLeft--;
+    timerEl.textContent = timeLeft;
+    if (timeLeft <= 0 && !answered) {
+      answered = true;
+      clearInterval(timer);
+      finishRedemption(false);
+    }
+  }, 1000);
+
+  function finishRedemption(isCorrect) {
+    if (isCorrect) {
+      GS.recapResults[itemData.question] = true;
+      addXP(REDEMPTION_SETTINGS.xpReward, null);
+
+      // Play shooting star, then move to next question
+      overlay.style.display = 'none';
+      playShootingStar(() => {
+        onComplete();
+      });
+    } else {
+      overlay.style.display = 'none';
+      playWrongRedemption(() => {
+        onComplete();
+      });
+    }
+  }
+
+  // Generate options based on question type
+  generateRedemptionOptions(lvNum, itemData, optEl, answered, timer, finishRedemption);
+}
+
+// Helper to generate answer options for redemption questions
+function generateRedemptionOptions(lvNum, itemData, optEl, answered, timer, finishRedemption) {
+  if (lvNum === 3) {
+    // Password Power-Up: MCQ with randomized options
+    PW_ROUNDS.forEach(r => {
+      if (r.question === itemData.question) {
+        const shuffledOptions = [...r.options].map((opt, idx) => ({ opt, originalIdx: idx }));
+        shuffledOptions.sort(() => Math.random() - 0.5);
+
+        shuffledOptions.forEach(({ opt, originalIdx }) => {
+          const btn = document.createElement('button');
+          btn.className = 'retro-btn btn-secondary';
+          btn.textContent = opt;
+          btn.onclick = () => {
+            if (answered) return;
+            answered = true;
+            clearInterval(timer);
+            finishRedemption(originalIdx === r.correct);
+          };
+          optEl.appendChild(btn);
+        });
+      }
+    });
+  } else if (lvNum === 6) {
+    // Memory questions: True/False
+    let correctAnswer = null;
+    MEMORY_QUESTIONS.forEach(q => {
+      if (q.text === itemData.question) {
+        correctAnswer = q.answer;
+      }
+    });
+
+    const btn1 = document.createElement('button');
+    btn1.className = 'retro-btn btn-primary';
+    btn1.textContent = 'TRUE';
+    btn1.onclick = () => {
+      if (answered) return;
+      answered = true;
+      clearInterval(timer);
+      finishRedemption(true === correctAnswer);
+    };
+
+    const btn2 = document.createElement('button');
+    btn2.className = 'retro-btn btn-warning';
+    btn2.textContent = 'FALSE';
+    btn2.onclick = () => {
+      if (answered) return;
+      answered = true;
+      clearInterval(timer);
+      finishRedemption(false === correctAnswer);
+    };
+
+    optEl.appendChild(btn1);
+    optEl.appendChild(btn2);
+  } else {
+    // Binary choices for other levels
+    let bClass = itemData.badge.toLowerCase();
+    let leftLabel = 'SAFE', rightLabel = 'UNSAFE';
+
+    if (bClass.includes('private') || bClass.includes('public') || bClass.includes('share')) {
+      leftLabel = 'SHARE'; rightLabel = 'PRIVATE';
+    } else if (bClass.includes('true') || bClass.includes('false')) {
+      leftLabel = 'TRUE'; rightLabel = 'FALSE';
+    } else if (bClass.includes('fake') || bClass.includes('suspicious')) {
+      leftLabel = 'SAFE'; rightLabel = 'FAKE / SUSPICIOUS';
+    }
+
+    const isSafeAnswer = bClass === 'safe' || (!bClass.includes('unsafe') && bClass.includes('safe'));
+    const isLeftCorrect = (leftLabel === 'PRIVATE' && bClass.includes('private')) ||
+      (leftLabel === 'SHARE' && (bClass.includes('share') || bClass.includes('public'))) ||
+      (leftLabel === 'SAFE' && (isSafeAnswer || bClass.includes('share') || bClass.includes('public'))) ||
+      (leftLabel === 'TRUE' && bClass.includes('true'));
+
+    const btn1 = document.createElement('button');
+    btn1.className = 'retro-btn btn-primary';
+    btn1.textContent = leftLabel;
+    btn1.onclick = () => {
+      if (answered) return;
+      answered = true;
+      clearInterval(timer);
+      finishRedemption(isLeftCorrect);
+    };
+
+    const btn2 = document.createElement('button');
+    btn2.className = 'retro-btn btn-warning';
+    btn2.textContent = rightLabel;
+    btn2.onclick = () => {
+      if (answered) return;
+      answered = true;
+      clearInterval(timer);
+      finishRedemption(!isLeftCorrect);
+    };
+
+    optEl.appendChild(btn1);
+    optEl.appendChild(btn2);
+  }
 }
 
 function playShootingStar(callback) {
@@ -1399,112 +1574,7 @@ function playRedemptionIntro(callback) {
   }, 2200);
 }
 
-function showRedemption(lvNum, itemData, totalCount, currentIdx, onComplete) {
-  const overlay = $('redemption-overlay');
-  const qEl = $('redemption-question');
-  const optEl = $('redemption-options');
-  const timerEl = $('redemption-timer');
 
-  overlay.style.display = 'flex';
-  qEl.innerHTML = `<div style="font-size:clamp(12px, 3.0vw, 17px); color:var(--white-dim); margin-bottom:8px; font-family:var(--font-pixel);">QUESTION ${currentIdx + 1} / ${totalCount}</div>` + itemData.question;
-  optEl.innerHTML = '';
-
-  let timeLeft = REDEMPTION_SETTINGS.timeLimit;
-  timerEl.textContent = timeLeft;
-
-  let answered = false;
-
-  const timer = setInterval(() => {
-    if (isPaused) return;
-    timeLeft--;
-    timerEl.textContent = timeLeft;
-    if (timeLeft <= 0 && !answered) {
-      answered = true;
-      clearInterval(timer);
-      finishRedemption(false);
-    }
-  }, 1000);
-
-  function finishRedemption(isCorrect) {
-    if (isCorrect) {
-      GS.recapResults[itemData.question] = true;
-      addXP(REDEMPTION_SETTINGS.xpReward, null);
-
-      // Play shooting star, then move to next question
-      overlay.style.display = 'none';
-      playShootingStar(() => {
-        onComplete();
-      });
-    } else {
-      overlay.style.display = 'none';
-      playWrongRedemption(() => {
-        onComplete();
-      });
-    }
-  }
-
-  // Generate options
-  if (lvNum === 3) {
-    PW_ROUNDS.forEach(r => {
-      if (r.question === itemData.question) {
-        r.options.forEach((opt, idx) => {
-          const btn = document.createElement('button');
-          btn.className = 'retro-btn btn-secondary';
-          btn.textContent = opt;
-          btn.onclick = () => {
-            if (answered) return;
-            answered = true;
-            clearInterval(timer);
-            finishRedemption(idx === r.correct);
-          };
-          optEl.appendChild(btn);
-        });
-      }
-    });
-  } else {
-    // Binary choices based on badge mapping
-    let bClass = itemData.badge.toLowerCase();
-    let leftLabel = 'SAFE', rightLabel = 'UNSAFE';
-
-    if (bClass.includes('private') || bClass.includes('public') || bClass.includes('share')) {
-      leftLabel = 'SHARE'; rightLabel = 'PRIVATE';
-    } else if (bClass.includes('true') || bClass.includes('false')) {
-      leftLabel = 'TRUE'; rightLabel = 'FALSE';
-    } else if (bClass.includes('fake') || bClass.includes('suspicious')) {
-      leftLabel = 'SAFE'; rightLabel = 'FAKE / SUSPICIOUS';
-    }
-
-    // figure out which one is correct
-    const isSafeAnswer = bClass === 'safe' || (!bClass.includes('unsafe') && bClass.includes('safe'));
-    const isLeftCorrect = (leftLabel === 'PRIVATE' && bClass.includes('private')) ||
-      (leftLabel === 'SHARE' && (bClass.includes('share') || bClass.includes('public'))) ||
-      (leftLabel === 'SAFE' && (isSafeAnswer || bClass.includes('share') || bClass.includes('public'))) ||
-      (leftLabel === 'TRUE' && bClass.includes('true'));
-
-    const btn1 = document.createElement('button');
-    btn1.className = 'retro-btn btn-primary';
-    btn1.textContent = leftLabel;
-    btn1.onclick = () => {
-      if (answered) return;
-      answered = true;
-      clearInterval(timer);
-      finishRedemption(isLeftCorrect);
-    };
-
-    const btn2 = document.createElement('button');
-    btn2.className = 'retro-btn btn-warning';
-    btn2.textContent = rightLabel;
-    btn2.onclick = () => {
-      if (answered) return;
-      answered = true;
-      clearInterval(timer);
-      finishRedemption(!isLeftCorrect);
-    };
-
-    optEl.appendChild(btn1);
-    optEl.appendChild(btn2);
-  }
-}
 
 function showLevelRecap(lvNum, onContinue) {
   const recapOverlay = $('level-recap');
