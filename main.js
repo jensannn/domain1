@@ -1160,12 +1160,8 @@ function showFeedback(correct, title, itemText, msg, duration = 15, onComplete =
   };
 
   if (fbCloseBtn) {
-    if (DEV_MODE) {
-      fbCloseBtn.style.display = 'block';
-      fbCloseBtn.onclick = finish;
-    } else {
-      fbCloseBtn.style.display = 'none';
-    }
+    fbCloseBtn.style.display = 'block';
+    fbCloseBtn.onclick = finish;
   }
 
   if (fbContinueBtn) {
@@ -1177,7 +1173,7 @@ function showFeedback(correct, title, itemText, msg, duration = 15, onComplete =
     t--;
     fbCount.textContent = t + 's';
 
-    if (fbContinueBtn && t <= duration - 5) {
+    if (fbContinueBtn && t <= duration - 2) {
       fbContinueBtn.style.display = '';
     }
 
@@ -2253,8 +2249,8 @@ function startLevel4() {
         <span id="speed-text"></span>
       </div>
       <div id="speed-buttons">
-        <button class="retro-btn btn-safe" id="btn-speed-safe" style="font-size:clamp(20px, 5.0vw, 28px);padding:20px 40px;">SAFE</button>
-        <button class="retro-btn btn-unsafe" id="btn-speed-unsafe" style="font-size:clamp(20px, 5.0vw, 28px);padding:20px 40px;">UNSAFE</button>
+        <button class="retro-btn btn-safe" id="btn-speed-safe" style="font-size:clamp(28px, 7vw, 42px);padding:clamp(24px, 3vw, 36px) clamp(50px, 6vw, 80px);">SAFE</button>
+        <button class="retro-btn btn-unsafe" id="btn-speed-unsafe" style="font-size:clamp(28px, 7vw, 42px);padding:clamp(24px, 3vw, 36px) clamp(50px, 6vw, 80px);">UNSAFE</button>
       </div>
     </div>
   `;
@@ -2373,8 +2369,8 @@ function startLevel5() {
         Read the URL carefully with your team!
       </div>
       <div id="url-buttons">
-        <button class="retro-btn btn-safe" id="btn-url-safe" style="font-size:clamp(18px, 4.5vw, 25px);padding:18px 36px">SAFE</button>
-        <button class="retro-btn btn-unsafe" id="btn-url-fake" style="font-size:clamp(18px, 4.5vw, 25px);padding: clamp(18px, 1.8vw, 27px) clamp(36px, 3.6vw, 54px)">FAKE</button>
+        <button class="retro-btn btn-safe" id="btn-url-safe" style="font-size:clamp(28px, 7vw, 42px);padding:clamp(24px, 3vw, 36px) clamp(50px, 6vw, 80px)">SAFE</button>
+        <button class="retro-btn btn-unsafe" id="btn-url-fake" style="font-size:clamp(28px, 7vw, 42px);padding:clamp(24px, 3vw, 36px) clamp(50px, 6vw, 80px)">FAKE</button>
       </div>
     </div>
   `;
@@ -2467,6 +2463,7 @@ function startLevel6() {
         <span style="font-family:var(--font-pixel);font-size:clamp(18px, 4.5vw, 25px);color:var(--gold);min-width: clamp(36px, 3.6vw, 54px)" id="l6-timer-num">${flashTimeLeft}</span>
       </div>
       <div id="memory-flash-area"></div>
+      <button class="retro-btn btn-primary" id="l6-skip-btn" style="margin-top:16px;font-size:clamp(16px, 4vw, 22px);padding:clamp(12px,1.5vw,18px) clamp(30px,3vw,45px);">READY NA! ▶</button>
       <div id="memory-questions" style="display:none"></div>
     </div>
   `;
@@ -2476,10 +2473,19 @@ function startLevel6() {
   MEMORY_EMAILS.forEach(em => {
     const div = document.createElement('div');
     div.className = 'memory-email-block';
+    
+    // Highlight key phrases that correspond to TRUE quiz answers
+    let highlightedSubject = em.subject
+      .replace(/(₱10,000)/gi, '<span class="mem-highlight">$1</span>')
+      .replace(/(URGENT)/gi, '<span class="mem-highlight">$1</span>');
+    let highlightedBody = em.body
+      .replace(/(premyo)/gi, '<span class="mem-highlight">$1</span>')
+      .replace(/(barangay ID)/gi, '<span class="mem-highlight">$1</span>');
+    
     div.innerHTML = `
       <div class="memory-email-field"><span class="mem-label">FROM: </span>${em.from}</div>
-      <div class="memory-email-field"><span class="mem-label">SUBJECT: </span>${em.subject}</div>
-      <div class="memory-email-body">${em.body}</div>
+      <div class="memory-email-field"><span class="mem-label">SUBJECT: </span>${highlightedSubject}</div>
+      <div class="memory-email-body">${highlightedBody}</div>
     `;
     flashArea.appendChild(div);
   });
@@ -2493,9 +2499,18 @@ function startLevel6() {
     if (flashTimeLeft <= 0) {
       clearInterval(timerInterval);
       flashArea.style.display = 'none';
+      $('l6-skip-btn').style.display = 'none';
       startQuizPhase();
     }
   }, 1000);
+
+  // Skip memorization button
+  $('l6-skip-btn').addEventListener('click', () => {
+    clearInterval(timerInterval);
+    flashArea.style.display = 'none';
+    $('l6-skip-btn').style.display = 'none';
+    startQuizPhase();
+  });
 
   function startQuizPhase() {
     $('memory-phase-label').textContent = 'ANSWER FROM MEMORY!';
@@ -2584,6 +2599,7 @@ function startLevel7() {
           </div>
           <div id="profile-grid"></div>
         </div>
+        <div id="phone-scroll-hint">SCROLL DOWN ▼</div>
         <div id="phone-home-indicator"></div>
       </div>
 
@@ -2595,6 +2611,17 @@ function startLevel7() {
   `;
 
   const grid = $('profile-grid');
+  
+  // Hide scroll hint when user scrolls
+  const phoneScreen = $('phone-screen');
+  const scrollHint = $('phone-scroll-hint');
+  if (phoneScreen && scrollHint) {
+    phoneScreen.addEventListener('scroll', () => {
+      if (phoneScreen.scrollTop > 30) {
+        scrollHint.style.display = 'none';
+      }
+    }, { passive: true });
+  }
   PROFILE_FIELDS.forEach((f, fi) => {
     const div = document.createElement('div');
     div.className = 'profile-field unset';

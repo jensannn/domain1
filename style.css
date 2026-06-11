@@ -1293,6 +1293,14 @@ html, body {
 .memory-email-block:last-child { border-bottom: none; }
 .memory-email-field { font-size: clamp(18px, 4.32vw, 36px); color: var(--white); margin-bottom: 6px; }
 .memory-email-body  { font-size: clamp(18px, 4.32vw, 36px); color: var(--white-dim); line-height: 1.6; }
+.mem-highlight {
+  background: rgba(255, 215, 0, 0.25);
+  color: var(--gold);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border-bottom: 2px solid var(--gold);
+  font-weight: bold;
+}
 .mem-label { color: var(--blue); }
 #memory-phase-label {
   font-family: var(--font-pixel);
@@ -1408,19 +1416,40 @@ html, body {
   overflow-y: auto;
   gap: clamp(16px, 1.6vw, 24px);
   background: radial-gradient(circle at top, var(--bg2) 0%, var(--bg) 100%);
-  scrollbar-width: thin;
-  scrollbar-color: var(--purple)44 transparent;
+  scrollbar-width: auto;
+  scrollbar-color: var(--cyan) rgba(100, 100, 120, 0.3);
+  position: relative;
 }
 
 #phone-screen::-webkit-scrollbar {
-  width: 6px;
+  width: 14px;
 }
 #phone-screen::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(100, 100, 120, 0.3);
+  border-radius: 7px;
 }
 #phone-screen::-webkit-scrollbar-thumb {
-  background: var(--purple)44;
-  border-radius: 3px;
+  background: var(--cyan);
+  border-radius: 7px;
+  border: 2px solid rgba(0, 0, 0, 0.3);
+}
+#phone-screen::-webkit-scrollbar-thumb:hover {
+  background: var(--gold);
+}
+
+/* Scroll down indicator for phone screen */
+#phone-scroll-hint {
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-pixel);
+  font-size: clamp(12px, 2vw, 16px);
+  color: var(--cyan);
+  animation: bounce-down 1s infinite, blink 2s infinite;
+  pointer-events: none;
+  z-index: 5;
+  text-align: center;
 }
 
 /* Home Indicator */
