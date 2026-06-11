@@ -26,7 +26,7 @@ const LEVEL_SETTINGS = {
 const REDEMPTION_SETTINGS = {
   enabled: true,
   timeLimit: 15,              // seconds per redemption question
-  xpReward: 20,               // XP awarded per correct redemption
+  xpReward: 200,               // XP awarded per correct redemption
   questionRatio: 0.8           // fraction of wrong answers to re-ask (0.8 = 80%)
 };
 
@@ -78,12 +78,12 @@ const GS = {
 
 // ── LEVEL 1: CONVEYOR BELT ──
 const LEVEL1_ITEMS = [
-  { label: '🎨 Favorite Color', answer: 'share', xp: 10, recap: 'Okay lang na ibahagi ang paborito mong kulay dahil hindi ito magagamit ng iba para malagay sa panganib ang iyong seguridad.' },
-  { label: '🔑 Password', answer: 'private', xp: 10, recap: 'Dapat manatiling lihim ang iyong password at hindi ito dapat ibinabahagi kaninuman sa anumang sitwasyon.' },
-  { label: '📅 Birthday (Full)', answer: 'private', xp: 10, recap: 'Huwag basta-basta ibahagi ang iyong buong kaarawan dahil maaari itong magamit sa pag-access o pag-recover ng iyong mga account.' },
-  { label: '👤 Username', answer: 'share', xp: 10, recap: 'Okay lang na ibahagi ang iyong username dahil ito ay karaniwang nakikita ng publiko, ngunit siguraduhing wala itong sensitibong impormasyon.' },
-  { label: '📞 Phone Number', answer: 'private', xp: 10, recap: 'Dapat manatiling pribado ang iyong numero ng telepono upang maprotektahan ka laban sa mga spam na tawag at panloloko sa pamamagitan ng text o SMS.' },
-  { label: '🎮 Hobby', answer: 'share', xp: 10, recap: 'Magandang paraan at ligtas ang pagbabahagi ng iyong mga hilig o libangan para makakonekta sa iba online nang hindi inilalantad ang personal na impormasyon.' },
+  { label: '🎨 Favorite Color', answer: 'share', xp: 100, recap: 'Okay lang na ibahagi ang paborito mong kulay dahil hindi ito magagamit ng iba para malagay sa panganib ang iyong seguridad.' },
+  { label: '🔑 Password', answer: 'private', xp: 100, recap: 'Dapat manatiling lihim ang iyong password at hindi ito dapat ibinabahagi kaninuman sa anumang sitwasyon.' },
+  { label: '📅 Birthday (Full)', answer: 'private', xp: 100, recap: 'Huwag basta-basta ibahagi ang iyong buong kaarawan dahil maaari itong magamit sa pag-access o pag-recover ng iyong mga account.' },
+  { label: '👤 Username', answer: 'share', xp: 100, recap: 'Okay lang na ibahagi ang iyong username dahil ito ay karaniwang nakikita ng publiko, ngunit siguraduhing wala itong sensitibong impormasyon.' },
+  { label: '📞 Phone Number', answer: 'private', xp: 100, recap: 'Dapat manatiling pribado ang iyong numero ng telepono upang maprotektahan ka laban sa mga spam na tawag at panloloko sa pamamagitan ng text o SMS.' },
+  { label: '🎮 Hobby', answer: 'share', xp: 100, recap: 'Magandang paraan at ligtas ang pagbabahagi ng iyong mga hilig o libangan para makakonekta sa iba online nang hindi inilalantad ang personal na impormasyon.' },
 ];
 
 // ── LEVEL 2: SPOT THE PHISH ──
@@ -135,14 +135,14 @@ const PW_ROUNDS = [
 
 // ── LEVEL 4: SPEED ROUND ──
 const SPEED_SCENARIOS = [
-  { text: 'Isang hindi mo kilalang tao online ang nagtatanong ng address ng iyong paaralan.', icon: '👤', answer: 'unsafe', xp: 5, recap: 'Ang pagbibigay ng school address sa mga hindi mo kilala online ay puwedeng magdulot ng panganib sa iyong kaligtasan sa totoong buhay.' },
-  { text: 'Iisa lang ang password na ginagamit mo sa lahat ng apps.', icon: '🔑', answer: 'unsafe', xp: 5, recap: 'Kapag pare-pareho ang password mo sa lahat ng account, delikado ito dahil kung ma-hack ang isa, puwede ring maapektuhan ang iba.' },
-  { text: 'Lagi kang nagla-log out sa mga shared na computer pagkatapos gamitin ito.', icon: '💻', answer: 'safe', xp: 5, recap: 'Ang pagla-log out sa mga pampubliko o shared computer ay nakakaiwas sa pag-access ng susunod na gagamit sa iyong mga personal na account.' },
-  { text: 'Nag-click ka ng link mula sa isang hindi kilalang email.', icon: '📧', answer: 'unsafe', xp: 5, recap: 'Ang mga link mula sa hindi kilalang email ay maaaring magtungo sa pekeng website o mag-trigger ng awtomatikong pag-download ng malware.' },
-  { text: 'Ina-update mo agad ang apps mo kapag may notification na available na ang update.', icon: '🔄', answer: 'safe', xp: 5, recap: 'Ang pagpapanatiling updated sa iyong software ay nakakatulong para agad maayos ang mga kilalang security loopholes at system vulnerabilities.' },
-  { text: 'Isinusulat mo ang mga password mo sa notebook na puwedeng makita ng iba.', icon: '📓', answer: 'unsafe', xp: 5, recap: 'Ang mga notebook na may passwords ay madaling mawala, manakaw, o makita ng ibang tao na hindi dapat nakakakita.' },
-  { text: 'Tinitingnan mo muna ang mga URL bago mag-click ng mga link.', icon: '🔍', answer: 'safe', xp: 5, recap: 'Kapag chine-check mo ang URL, mas madali mong makikita kung may pekeng spelling at kung tunay ba ang website na pupuntahan mo.' },
-  { text: 'Nagda-download ka ng mga apps mula sa mga hindi opisyal na website.', icon: '⬇️', answer: 'unsafe', xp: 5, recap: 'Ang mga third-party marketplace, ay may mga apps na puwedeng may nakatagong spyware o Trojan.' },
+  { text: 'Isang hindi mo kilalang tao online ang nagtatanong ng address ng iyong paaralan.', icon: '👤', answer: 'unsafe', xp: 50, recap: 'Ang pagbibigay ng school address sa mga hindi mo kilala online ay puwedeng magdulot ng panganib sa iyong kaligtasan sa totoong buhay.' },
+  { text: 'Iisa lang ang password na ginagamit mo sa lahat ng apps.', icon: '🔑', answer: 'unsafe', xp: 50, recap: 'Kapag pare-pareho ang password mo sa lahat ng account, delikado ito dahil kung ma-hack ang isa, puwede ring maapektuhan ang iba.' },
+  { text: 'Lagi kang nagla-log out sa mga shared na computer pagkatapos gamitin ito.', icon: '💻', answer: 'safe', xp: 50, recap: 'Ang pagla-log out sa mga pampubliko o shared computer ay nakakaiwas sa pag-access ng susunod na gagamit sa iyong mga personal na account.' },
+  { text: 'Nag-click ka ng link mula sa isang hindi kilalang email.', icon: '📧', answer: 'unsafe', xp: 50, recap: 'Ang mga link mula sa hindi kilalang email ay maaaring magtungo sa pekeng website o mag-trigger ng awtomatikong pag-download ng malware.' },
+  { text: 'Ina-update mo agad ang apps mo kapag may notification na available na ang update.', icon: '🔄', answer: 'safe', xp: 50, recap: 'Ang pagpapanatiling updated sa iyong software ay nakakatulong para agad maayos ang mga kilalang security loopholes at system vulnerabilities.' },
+  { text: 'Isinusulat mo ang mga password mo sa notebook na puwedeng makita ng iba.', icon: '📓', answer: 'unsafe', xp: 50, recap: 'Ang mga notebook na may passwords ay madaling mawala, manakaw, o makita ng ibang tao na hindi dapat nakakakita.' },
+  { text: 'Tinitingnan mo muna ang mga URL bago mag-click ng mga link.', icon: '🔍', answer: 'safe', xp: 50, recap: 'Kapag chine-check mo ang URL, mas madali mong makikita kung may pekeng spelling at kung tunay ba ang website na pupuntahan mo.' },
+  { text: 'Nagda-download ka ng mga apps mula sa mga hindi opisyal na website.', icon: '⬇️', answer: 'unsafe', xp: 50, recap: 'Ang mga third-party marketplace, ay may mga apps na puwedeng may nakatagong spyware o Trojan.' },
 ];
 
 // ── LEVEL 5: LINK INSPECTOR ──
@@ -773,16 +773,16 @@ function updateHUD() {
   dispXP.textContent = GS.xp;
   dispStreak.textContent = GS.streak;
   const tiers = [
-    { min: 0, max: 150, label: 'ROOKIE TANOD', bg: '#8CBED6' },
-    { min: 151, max: 250, label: 'ACTIVE TANOD', bg: '#6D92A0' },
-    { min: 251, max: 350, label: 'SENIOR TANOD', bg: '#C8A2C8' },
-    { min: 351, max: 9999, label: 'CYBER TANOD ELITE', bg: '#A8A5A6', color: 'var(--white)' },
+    { min: 0, max: 1500, label: 'ROOKIE TANOD', bg: '#8CBED6' },
+    { min: 1501, max: 2500, label: 'ACTIVE TANOD', bg: '#6D92A0' },
+    { min: 2501, max: 3500, label: 'SENIOR TANOD', bg: '#C8A2C8' },
+    { min: 3501, max: 99999, label: 'CYBER TANOD ELITE', bg: '#A8A5A6', color: 'var(--white)' },
   ];
   const tier = tiers.find(t => GS.xp >= t.min && GS.xp <= t.max) || tiers[0];
   dispTier.textContent = tier.label;
   dispTier.style.background = tier.bg;
   dispTier.style.color = tier.color || 'var(--bg3)';
-  const pct = Math.min((GS.xp / 400) * 100, 100);
+  const pct = Math.min((GS.xp / 4000) * 100, 100);
   xpBarInner.style.width = pct + '%';
   const player = GS.playerIndex + 1;
   const emojiEl = document.getElementById('tanod-emoji-disp');
@@ -1115,7 +1115,7 @@ function flashScreen(color) {
 
 function registerCorrect(xpAmount, btn) {
   GS.streak++;
-  if (GS.streak === 5) { addXP(20, btn); } // streak bonus
+  if (GS.streak === 5) { addXP(200, btn); } // streak bonus
   addXP(xpAmount, btn);
   flashScreen('green');
 }
@@ -1368,10 +1368,8 @@ function showRedemptionSelection(lvNum, incorrectQuestions, onSelected) {
       <div class="redemption-selection-subtitle">Choose ONE question to attempt:</div>
       <div class="redemption-selection-list">
         ${selectedQuestions.map((q, idx) => `
-          <button class="redemption-selection-btn" data-idx="${idx}">
-            <span class="selection-number">Q${idx + 1}</span>
-            <span class="selection-text">${q.question.substring(0, 60)}${q.question.length > 60 ? '...' : ''}</span>
-            <span class="selection-arrow">→</span>
+          <button class="redemption-selection-btn" data-idx="${idx}" style="justify-content: center;">
+            <span class="selection-number" style="font-size: clamp(18px, 4.5vw, 28px); min-width: auto;">QUESTION ${idx + 1}</span>
           </button>
         `).join('')}
       </div>
@@ -1837,7 +1835,7 @@ function startLevel1() {
       GS.recapResults[item.label] = false;
       wrong++;
       $('l1-wrong').textContent = wrong;
-      loseXP(5);
+      loseXP(50);
 
       showFeedback(false, 'WRONG!', item.label, item.recap, 15, l1Proceed);
     }
@@ -1850,7 +1848,7 @@ function startLevel1() {
       done = true;
       clearAllTimers();
       document.removeEventListener('keydown', l1Key);
-      if (correct === items.length) addXP(20, null);
+      if (correct === items.length) addXP(200, null);
       setTimeout(() => completeLevel(1), 1200);
     } else {
       answering = false;
@@ -1993,8 +1991,8 @@ function startLevel2() {
       emailDone[idx]++;
       $('phish-found-count').textContent = `FOUND: ${totalFound} / ${totalNeeded}`;
       blip();
-      floatXPCenter('+10 XP');
-      GS.xp += 10; updateHUD();
+      floatXPCenter('+100 XP');
+      GS.xp += 100; updateHUD();
 
       const headerEl = document.querySelector('#phish-wrap .level-header');
       if (headerEl) {
@@ -2021,7 +2019,7 @@ function startLevel2() {
           if (el.classList.contains('wrong') || el.classList.contains('found')) return;
           el.classList.add('wrong');
           wrongClicks++;
-          loseXP(5);
+          loseXP(50);
           if (headerEl) {
             headerEl.textContent = `❌ NOT SUSPICIOUS!`;
             headerEl.style.color = 'var(--red)';
@@ -2054,8 +2052,8 @@ function startLevel2() {
       emailDone[emailIdx]++;
       $('phish-found-count').textContent = `FOUND: ${totalFound} / ${totalNeeded}`;
       blip();
-      floatXPCenter('+10 XP');
-      GS.xp += 10; updateHUD();
+      floatXPCenter('+100 XP');
+      GS.xp += 100; updateHUD();
       const hint = el.dataset.hint || 'Suspicious element!';
       if (headerEl) {
         headerEl.textContent = hint.toUpperCase();
@@ -2073,7 +2071,7 @@ function startLevel2() {
     } else {
       el.classList.add('wrong');
       wrongClicks++;
-      loseXP(5);
+      loseXP(50);
       if (headerEl) {
         headerEl.textContent = `❌ NOT SUSPICIOUS!`;
         headerEl.style.color = 'var(--red)';
@@ -2102,7 +2100,7 @@ function startLevel2() {
 
   function finishPhish() {
     clearAllTimers();
-    const xpEarned = Math.round((totalFound / totalNeeded) * 60);
+    const xpEarned = Math.round((totalFound / totalNeeded) * 600);
     addXP(xpEarned > 0 ? xpEarned : 0, null);
     completeLevel(2);
   }
@@ -2162,29 +2160,29 @@ function startLevel3() {
           optionsEl.querySelectorAll('.pw-option')[round.correct].classList.add('correct');
           roundsCorrect++;
           const fastBonus = timeLeft >= (timePerRound - 8);
-          registerCorrect(20, btn);
-          if (fastBonus) addXP(10, btn);
+          registerCorrect(200, btn);
+          if (fastBonus) addXP(100, btn);
           $('pw-feedback').textContent = '✅ ' + round.explanation;
           $('pw-feedback').style.color = 'var(--green)';
 
           showFeedback(true, 'CORRECT!', pw, round.explanation, 15, () => {
             if (idx + 1 < PW_ROUNDS.length) showRound(idx + 1);
             else {
-              if (roundsCorrect === PW_ROUNDS.length) addXP(20, null);
+              if (roundsCorrect === PW_ROUNDS.length) addXP(200, null);
               completeLevel(3);
             }
           });
         } else {
           GS.recapResults[round.question] = false;
           optionsEl.querySelectorAll('.pw-option')[round.correct].classList.add('correct');
-          loseXP(5);
+          loseXP(50);
           $('pw-feedback').textContent = '❌ ' + round.explanation;
           $('pw-feedback').style.color = 'var(--red)';
 
           showFeedback(false, 'WRONG!', pw, round.explanation, 15, () => {
             if (idx + 1 < PW_ROUNDS.length) showRound(idx + 1);
             else {
-              if (roundsCorrect === PW_ROUNDS.length) addXP(20, null);
+              if (roundsCorrect === PW_ROUNDS.length) addXP(200, null);
               completeLevel(3);
             }
           });
@@ -2211,12 +2209,12 @@ function startLevel3() {
             fbEl.style.color = 'var(--red)';
           }
           optionsEl.querySelectorAll('.pw-option')[round.correct].classList.add('correct');
-          loseXP(5);
+          loseXP(50);
 
           showFeedback(false, 'TIME OUT!', null, round.explanation, 15, () => {
             if (idx + 1 < PW_ROUNDS.length) showRound(idx + 1);
             else {
-              if (roundsCorrect === PW_ROUNDS.length) addXP(20, null);
+              if (roundsCorrect === PW_ROUNDS.length) addXP(200, null);
               completeLevel(3);
             }
           });
@@ -2291,7 +2289,7 @@ function startLevel4() {
         multiplier = 1;
         $('speed-multiplier').textContent = '×' + multiplier;
         GS.recapResults[sc.text] = false;
-        loseXP(5);
+        loseXP(50);
 
         showFeedback(false, 'TIME OUT!', null, sc.recap, 15, () => {
           idx++;
@@ -2326,7 +2324,7 @@ function startLevel4() {
       streakForMultiplier = 0;
       multiplier = 1;
       $('speed-multiplier').textContent = '×' + multiplier;
-      loseXP(5);
+      loseXP(50);
       flashScreen('red');
 
       showFeedback(false, 'WRONG!', sc.text, sc.recap, 15, () => {
@@ -2404,7 +2402,7 @@ function startLevel5() {
         answered = true;
         clearInterval(timerInterval);
         GS.recapResults[item.url] = false;
-        loseXP(5);
+        loseXP(50);
         $('url-browser-content').textContent = item.reason;
         flashScreen('red');
         showFeedback(false, 'TIME OUT!', item.url, item.reason + '\n\n' + item.recap, 15, () => {
@@ -2420,7 +2418,7 @@ function startLevel5() {
       if (choice === item.answer) {
         GS.recapResults[item.url] = true;
         score++;
-        registerCorrect(15, $('btn-url-safe'));
+        registerCorrect(150, $('btn-url-safe'));
         $('url-browser-content').textContent = item.reason;
         flashScreen('green');
 
@@ -2429,7 +2427,7 @@ function startLevel5() {
         });
       } else {
         GS.recapResults[item.url] = false;
-        loseXP(5);
+        loseXP(50);
         $('url-browser-content').textContent = item.reason;
         flashScreen('red');
 
@@ -2508,7 +2506,7 @@ function startLevel6() {
     function showQuizQuestion(index) {
       quizEl.innerHTML = '';
       if (index >= MEMORY_QUESTIONS.length) {
-        if (correct === MEMORY_QUESTIONS.length) addXP(30, null);
+        if (correct === MEMORY_QUESTIONS.length) addXP(300, null);
         completeLevel(6);
         return;
       }
@@ -2533,8 +2531,8 @@ function startLevel6() {
             GS.recapResults[q.text] = true;
             correct++;
             btn.classList.add('correct-ans');
-            GS.xp += 15; GS.streak++; updateHUD();
-            floatXPCenter('+15 XP');
+            GS.xp += 150; GS.streak++; updateHUD();
+            floatXPCenter('+150 XP');
             blip();
             flashScreen('green');
 
@@ -2544,7 +2542,7 @@ function startLevel6() {
             btn.classList.add('wrong-ans');
             const correctBtn = [...div.querySelectorAll('.mem-btn')].find(b => (b.dataset.ans === 'true') === q.answer);
             if (correctBtn) correctBtn.classList.add('correct-ans');
-            loseXP(5);
+            loseXP(50);
 
             showFeedback(false, 'WRONG!', q.text, q.recap, 15, () => showQuizQuestion(index + 1));
           }
@@ -2692,12 +2690,12 @@ function startLevel7() {
     PROFILE_FIELDS.forEach((f, fi) => {
       if (states[fi] === f.correct) {
         GS.recapResults[f.name] = true;
-        correct++; xpEarned += 10;
+        correct++; xpEarned += 100;
       } else {
         GS.recapResults[f.name] = false;
       }
     });
-    if (correct === PROFILE_FIELDS.length) xpEarned += 20;
+    if (correct === PROFILE_FIELDS.length) xpEarned += 200;
     addXP(xpEarned, null);
     if (correct >= 6) {
       flashScreen('green');
@@ -2787,14 +2785,14 @@ function startLevel8() {
       function ans(choice) {
         if (choice === item.answer) {
           GS.recapResults[`STEP 1 PACKET: ${item.label}`] = true;
-          addXP(10, $('boss-private'));
+          addXP(100, $('boss-private'));
           flashScreen('green');
           itemIdx++;
           showItem();
         } else {
           GS.recapResults[`STEP 1 PACKET: ${item.label}`] = false;
           showBreach(() => { showItem(); });
-          loseXP(5);
+          loseXP(50);
         }
       }
       $('boss-private').onclick = () => ans('private');
@@ -2831,12 +2829,12 @@ function startLevel8() {
           el.classList.add('found');
           found++;
           $('boss-found').textContent = found;
-          addXP(10, el);
+          addXP(100, el);
           flashScreen('green');
           if (found >= needed) { stepDone[1] = true; setTimeout(showStep2, 800); }
         } else {
           showBreach(() => { /* same step */ });
-          loseXP(5);
+          loseXP(50);
         }
       });
     });
@@ -2865,7 +2863,7 @@ function startLevel8() {
           btn.classList.add('correct');
           stepDone[2] = true;
           updateStepIndicator(2);
-          addXP(10, btn);
+          addXP(100, btn);
           flashScreen('green');
           clearInterval(timerInterval);
           setTimeout(finishBoss, 1000);
@@ -2873,7 +2871,7 @@ function startLevel8() {
           GS.recapResults[`STEP 3 QUESTION: ${BOSS_STEP3_ITEMS[0].question}`] = false;
           btn.classList.add('wrong');
           showBreach(() => { /* remain on step */ });
-          loseXP(5);
+          loseXP(50);
         }
       });
       $('boss-pw-opts').appendChild(btn);
@@ -2883,10 +2881,10 @@ function startLevel8() {
   function finishBoss() {
     clearInterval(timerInterval);
     let xpBonus = 0;
-    if (mistakes === 0) xpBonus = 30;
-    else if (mistakes <= 2) xpBonus = 20;
-    else xpBonus = 10;
-    addXP(xpBonus + 50, null); // +50 completion bonus
+    if (mistakes === 0) xpBonus = 300;
+    else if (mistakes <= 2) xpBonus = 200;
+    else xpBonus = 100;
+    addXP(xpBonus + 500, null); // +50 completion bonus
     completeLevel(8);
   }
 
@@ -2904,15 +2902,15 @@ function showFinalScreen() {
   const xp = GS.xp;
   let badge, icon, quote;
 
-  if (xp <= 150) {
+  if (xp <= 1500) {
     badge = 'ROOKIE TANOD';
     icon = '🪖';
     quote = '"Magaling! Hindi lang ito ang simula. Patuloy na mag-aral ng cybersecurity!"';
-  } else if (xp <= 250) {
+  } else if (xp <= 2500) {
     badge = 'ACTIVE TANOD';
     icon = '🛡️';
     quote = '"Outstanding! Kaya ng team na ito i-depensa ang barangay digital!"';
-  } else if (xp <= 350) {
+  } else if (xp <= 3500) {
     badge = 'SENIOR TANOD';
     icon = '⭐';
     quote = '"Kahanga-hanga! Mga cyber hero kayo ng barangay!"';
@@ -2928,7 +2926,7 @@ function showFinalScreen() {
   $('final-xp').textContent = xp + ' XP';
   $('final-quote').textContent = quote;
 
-  const pct = Math.min((xp / 400) * 100, 100);
+  const pct = Math.min((xp / 4000) * 100, 100);
   levelUp();
   setTimeout(() => {
     $('final-xp-bar-fill').style.width = pct + '%';

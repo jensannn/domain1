@@ -2353,7 +2353,7 @@ html, body {
    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 #redemption-selection-overlay {
   position: absolute !important; inset: 0 !important; z-index: 999 !important;
-  background: rgba(0,0,0,0.9) !important; display: flex !important;
+  background: rgba(0,0,0,0.9) !important;
   align-items: center !important; justify-content: center !important;
 }
 .redemption-selection-box {
